@@ -2,6 +2,8 @@
 
 An offline Android wheel-of-life app with optional local reflection reminders. No account, server, analytics, or Internet permission. Spanish and English interfaces are included.
 
+**[Download Brújula](https://anderrow.github.io/brujula/)** · [Latest release](https://github.com/anderrow/brujula/releases/latest) · [Direct APK download](https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk)
+
 ![Brújula with an empty wheel of life](docs/images/clean-wheel.png)
 
 ## Install or update
@@ -65,3 +67,9 @@ Keep `.toolchain/brujula-release.jks` and `.toolchain/signing-password.dpapi` on
 See [the 1.1.0 verification report](docs/verification-v1.1.0.md) for the delivered file hash, checks and limitations. Robolectric tests exercise Android scheduling, permission checks, notification construction, cancellation, and receiver behavior on a simulated Android API 33 runtime. Headless Playwright tests exercise first use, score entry, migration, resets, and reminder controls using a test bridge. Neither test environment proves delivery timing, manufacturer battery behavior, or permission-dialog behavior on a physical Android phone.
 
 Headless UI checks use `tools/ui-check.ps1` with the `open`, `reminders`, and `close` stages. Serve `app/src/main/assets/web` at localhost port 8765. Install Playwright CLI or set `BRUJULA_PLAYWRIGHT_CLI` to its `playwright/cli.js`. Screenshots and logs are in `output/playwright/`.
+
+## Download website
+
+The public static download website lives in `docs/` and is served by GitHub Pages. It uses the latest stable GitHub release API to display the current version and download link. Its permanent fallback link works even if JavaScript or the API is unavailable.
+
+When publishing a future release, attach the signed APK under its versioned name and also as **`Brujula.apk`**. Include `Brujula.apk.sha256` for that alias. The permanent `/releases/latest/download/Brujula.apk` URL then follows the newest stable release without a website edit. The page also supports versioned-only APK names when release metadata is available. Publishing a release does not automatically install the update on a phone.
