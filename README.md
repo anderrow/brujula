@@ -1,4 +1,4 @@
-# Brújula 1.1.0
+# Brújula 1.1.1
 
 An offline Android wheel-of-life app with optional local reflection reminders. No account, server, analytics, or Internet permission. Spanish and English interfaces are included.
 
@@ -8,7 +8,7 @@ An offline Android wheel-of-life app with optional local reflection reminders. N
 
 ## Install or update
 
-Download `Brujula-1.1.0.apk` from this repository's **Releases** section, copy it to the phone, open it in Files, and choose Install or Update. Allow installation from that source if Android asks. Requires Android 8.0 / API 26 or later and an up-to-date Android System WebView. The universal APK has no native CPU-specific dependencies. Release checksums are provided alongside the APK.
+Download the latest APK from this repository's **Releases** section, copy it to the phone, open it in Files, and choose Install or Update. Allow installation from that source if Android asks. Requires Android 8.0 / API 26 or later and an up-to-date Android System WebView. The universal APK has no native CPU-specific dependencies. Release checksums are provided alongside the APK.
 
 The APK uses the same application ID and release signing key as earlier versions. Updating in place preserves existing data. **Do not uninstall to update.**
 
@@ -26,7 +26,7 @@ The displayed average uses only rated categories until all eight are complete. A
 
 ## Optional reminders
 
-Open Settings → **Reflection reminder**. Reminders are off by default. Enable the switch, choose one of these schedules, select a local time, and save:
+Tap the **bell labeled Reminders** in the app header, or use the prominent **Reflection reminder** entry near the top of Settings. The shortcut indicates whether a reminder is saved or notifications are blocked. Reminders are off by default. Enable the switch, choose one of these schedules, select a local time, and save:
 
 - Every day.
 - One selected day of the week, Monday through Sunday.
@@ -64,7 +64,7 @@ Keep `.toolchain/brujula-release.jks` and `.toolchain/signing-password.dpapi` on
 
 ## Validation boundaries
 
-See [the 1.1.0 verification report](docs/verification-v1.1.0.md) for the delivered file hash, checks and limitations. Robolectric tests exercise Android scheduling, permission checks, notification construction, cancellation, and receiver behavior on a simulated Android API 33 runtime. Headless Playwright tests exercise first use, score entry, migration, resets, and reminder controls using a test bridge. Neither test environment proves delivery timing, manufacturer battery behavior, or permission-dialog behavior on a physical Android phone.
+See [the latest verification report](docs/verification-v1.1.1.md) for the delivered file hash, checks and limitations. Robolectric tests exercise Android scheduling, permission checks, notification construction, cancellation, and receiver behavior on a simulated Android API 33 runtime. Headless Playwright tests exercise first use, score entry, migration, resets, and reminder controls using a test bridge. Neither test environment proves delivery timing, manufacturer battery behavior, or permission-dialog behavior on a physical Android phone.
 
 Headless UI checks use `tools/ui-check.ps1` with the `open`, `reminders`, and `close` stages. Serve `app/src/main/assets/web` at localhost port 8765. Install Playwright CLI or set `BRUJULA_PLAYWRIGHT_CLI` to its `playwright/cli.js`. Screenshots and logs are in `output/playwright/`.
 

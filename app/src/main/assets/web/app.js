@@ -25,7 +25,7 @@
       deleteCopy:'Se eliminará esta evaluación y sus notas del historial. Tu borrador no cambiará. Esta acción no se puede deshacer.', deleted:'Evaluación eliminada',
       language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
       backup:'Cuida tus recuerdos', backupCopy:'Exporta una copia antes de desinstalar la aplicación o cambiar de teléfono. Al desinstalar se borran los datos locales. La copia contiene tus notas: guárdala en un lugar privado.',
-      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.1.0 · Hecha para volver a ti', exported:'Copia de seguridad exportada',
+      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.1.1 · Hecha para volver a ti', exported:'Copia de seguridad exportada',
       exportFailed:'No se pudo exportar la copia. Inténtalo de nuevo.', importFailed:'No se pudo leer la copia de seguridad.', invalidBackup:'La copia no es válida o no es compatible con esta versión.',
       importTitle:'¿Restaurar esta copia?', importCopy:'Se sustituirán el borrador, las notas y todo el historial de este dispositivo por el contenido de la copia.', importConfirm:'Restaurar los datos', imported:'Copia restaurada',
       storageError:'No se pudo guardar. Conserva esta pantalla y exporta una copia.', limit:'Has alcanzado el límite de 5.000 evaluaciones. Exporta una copia antes de eliminar alguna.',
@@ -34,7 +34,7 @@
       chartLabel:'Rueda de la vida. Ocho puntuaciones de cero a diez.', trendLabel:'Evolución de las evaluaciones guardadas', noteAt:'Las notas pertenecen a esta evaluación.',
       importCount:'Evaluaciones en la copia', exportOriginal:'Exportar los datos conservados',
       unanswered:'Sin valorar', startHint:'Empieza por un área. No hay puntuaciones ni evaluaciones de ejemplo.', completeFirst:'Valora las ocho áreas antes de guardar una evaluación.', partialAverage:'Media de las áreas valoradas',
-      reminders:'Recordatorio de reflexión', reminderIntro:'Un pequeño espacio para volver a ti. Elige cuándo quieres recibir una notificación.', reminderEnabled:'Activar recordatorio', frequency:'Frecuencia', daily:'Cada día', weekly:'Un día de la semana', monthly:'Un día del mes', atTime:'Hora', weekday:'Día de la semana', monthDay:'Día del mes',
+      reminders:'Recordatorio de reflexión', reminderShortcut:'Recordatorios', reminderIntro:'Un pequeño espacio para volver a ti. Elige cuándo quieres recibir una notificación.', reminderEnabled:'Activar recordatorio', frequency:'Frecuencia', daily:'Cada día', weekly:'Un día de la semana', monthly:'Un día del mes', atTime:'Hora', weekday:'Día de la semana', monthDay:'Día del mes',
       monthHint:'Si ese día no existe en un mes, se usará su último día.', timingHint:'La hora es aproximada: Android puede retrasar el aviso por ahorro de batería. Si fuerzas la detención de la app, vuelve a abrirla para reactivar los avisos.',
       reminderApply:'Guardar recordatorio', reminderSaved:'Recordatorio programado', reminderDisabled:'Recordatorio desactivado', reminderFailed:'No se pudo guardar el recordatorio. Inténtalo de nuevo.', reminderBlocked:'Las notificaciones están bloqueadas. Actívalas en los ajustes de Android.', androidNotifications:'Permisos de notificaciones', reminderNext:'Próximo aviso previsto', reminderOff:'Desactivado', reminderStateOn:'Activado',
       clearData:'Borrar datos y empezar de cero', clearTitle:'¿Empezar de cero?', clearCopy:'Se borrarán todas las puntuaciones, notas y evaluaciones de este dispositivo. También se desactivará el recordatorio. Exporta una copia antes si quieres conservarlas. Esta acción no se puede deshacer.', clearConfirm:'Borrar mis datos', cleared:'Tus datos se han borrado. Puedes empezar de cero.',
@@ -60,7 +60,7 @@
       deleteCopy:'This check-in and its notes will be removed from history. Your draft will stay the same. This cannot be undone.', deleted:'Check-in deleted',
       language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
-      export:'Export backup', import:'Restore backup', version:'Brújula 1.1.0 · A place to return to yourself', exported:'Backup exported',
+      export:'Export backup', import:'Restore backup', version:'Brújula 1.1.1 · A place to return to yourself', exported:'Backup exported',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
       storageError:'Could not save. Keep this screen open and export a backup.', limit:'You have reached 5,000 check-ins. Export a backup before removing one.',
@@ -69,7 +69,7 @@
       chartLabel:'Wheel of life. Eight scores from zero to ten.', trendLabel:'Progress across saved check-ins', noteAt:'These notes belong to this check-in.',
       importCount:'Check-ins in this backup', exportOriginal:'Export preserved data',
       unanswered:'Not rated', startHint:'Start with any area. There are no example scores or check-ins.', completeFirst:'Rate all eight areas before saving a check-in.', partialAverage:'Average of your rated areas',
-      reminders:'Reflection reminder', reminderIntro:'A little space to come back to yourself. Choose when you would like a notification.', reminderEnabled:'Enable reminder', frequency:'Frequency', daily:'Every day', weekly:'One day of the week', monthly:'One day of the month', atTime:'Time', weekday:'Day of the week', monthDay:'Day of the month',
+      reminders:'Reflection reminder', reminderShortcut:'Reminders', reminderIntro:'A little space to come back to yourself. Choose when you would like a notification.', reminderEnabled:'Enable reminder', frequency:'Frequency', daily:'Every day', weekly:'One day of the week', monthly:'One day of the month', atTime:'Time', weekday:'Day of the week', monthDay:'Day of the month',
       monthHint:'If the day does not exist in a month, its last day will be used.', timingHint:'The time is approximate: Android may delay the reminder to save battery. If you force-stop the app, reopen it to resume reminders.',
       reminderApply:'Save reminder', reminderSaved:'Reminder scheduled', reminderDisabled:'Reminder disabled', reminderFailed:'Could not save the reminder. Please try again.', reminderBlocked:'Notifications are blocked. Enable them in Android settings.', androidNotifications:'Notification permissions', reminderNext:'Next planned reminder', reminderOff:'Off', reminderStateOn:'On',
       clearData:'Clear data and start fresh', clearTitle:'Start fresh?', clearCopy:'All scores, notes and check-ins on this device will be deleted. The reminder will also be disabled. Export a backup first if you want to keep them. This cannot be undone.', clearConfirm:'Delete my data', cleared:'Your data has been cleared. You can start fresh.',
@@ -81,6 +81,7 @@
     history:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7M12 7v5l3 2"/>',
     notes:'<path d="M5 3h10l4 4v14H5ZM14 3v5h5M8 12h8M8 16h6"/>',
     settings:'<circle cx="12" cy="12" r="3"/><path d="m10 3-1 3-3 1-3 3v4l3 1 1 3 3 3h4l1-3 3-1 3-3v-4l-3-1-1-3-3-3Z"/>',
+    bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4M12 2v2"/>',
     lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
     plus:'<path d="M12 5v14M5 12h14"/>', close:'<path d="m6 6 12 12M6 18 18 6"/>',
     health:'<path d="M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 10 8 15 7-5 12-11 8-15ZM3 11h5l2-3 3 6 2-3h6"/>',
@@ -183,6 +184,7 @@
   function changeTab(next) { tab = next; render(); window.scrollTo(0, 0); }
   function render() {
     document.documentElement.lang = state.locale;
+    renderReminderShortcut();
     $('#settings').ariaLabel = t('settings');
     $('#navigation').ariaLabel = state.locale === 'es' ? 'Navegación principal' : 'Main navigation';
     renderNav();
@@ -332,8 +334,12 @@
     $('#export').onclick=()=>{if(native)native.exportBackup(JSON.stringify(state,null,2));else toast(t('webBackup'));};
     $('#import').onclick=()=>{if(native)native.importBackup();else toast(t('webBackup'));};
     const extra=document.createElement('section');extra.className='settings-section';
-    extra.innerHTML='<h3>'+t('reminders')+'</h3><p>'+t('reminderIntro')+'</p><button class="secondary" id="reminder-settings">'+t('reminders')+'</button><button class="secondary danger" id="clear-data">'+t('clearData')+'</button>';
-    sheet.insertBefore(extra,sheet.lastElementChild);
+    extra.classList.add('settings-reminders');
+    extra.innerHTML='<h3>'+t('reminderShortcut')+'</h3><p>'+t('reminderIntro')+'</p><button class="reminder-entry" id="reminder-settings">'+icon('bell')+'<span>'+t('reminders')+'</span><span aria-hidden="true">›</span></button>';
+    sheet.insertBefore(extra,sheet.children[2]);
+    const reset=document.createElement('section');reset.className='settings-section';
+    reset.innerHTML='<button class="secondary danger" id="clear-data">'+t('clearData')+'</button>';
+    sheet.insertBefore(reset,sheet.lastElementChild);
     $('#reminder-settings').onclick=reminderDialog;
     $('#clear-data').onclick=()=>confirmAction(t('clearTitle'),t('clearCopy'),t('clearConfirm'),()=>{
       const candidate=C.initial();candidate.locale=state.locale;
@@ -347,6 +353,16 @@
   function readReminder() {
     try { if(native?.readReminders)return JSON.parse(native.readReminders()); } catch(_) { }
     return {enabled:false,frequency:'daily',hour:20,minute:0,weekday:1,monthDay:1,canNotify:true,nextAt:0,locale:state.locale};
+  }
+  function renderReminderShortcut() {
+    const config=readReminder(),button=$('#reminder-shortcut');
+    const status=config.enabled?(config.canNotify?'on':'blocked'):'off';
+    button.dataset.status=status;
+    button.classList.toggle('is-active',status==='on');
+    button.classList.toggle('is-blocked',status==='blocked');
+    const label=t('reminders')+': '+t(status==='on'?'reminderStateOn':status==='blocked'?'reminderBlocked':'reminderOff');
+    button.setAttribute('aria-label',label);button.title=label;
+    button.innerHTML='<span class="bell-mark" aria-hidden="true">'+icon('bell')+'<span class="reminder-dot"></span></span><span class="shortcut-label">'+t('reminderShortcut')+'</span>';
   }
   function reminderDialog() {
     const config=readReminder();
@@ -374,10 +390,11 @@
     };
   }
   window.reminderResult=result=>{
+    renderReminderShortcut();
     if(modalKind==='reminder'){reminderDialog();}
     toast(t(result.key));
   };
-  window.reminderRefresh=()=>{if(modalKind==='reminder')reminderDialog();};
+  window.reminderRefresh=()=>{renderReminderShortcut();if(modalKind==='reminder')reminderDialog();};
   window.nativeNotice=key=>toast(t(key));
   window.restoreBackup=text=>{
     let candidate;
@@ -392,6 +409,7 @@
   sheet.addEventListener('close',()=>{if(state)render();});
   sheet.addEventListener('click',e=>{if(e.target===sheet){const b=sheet.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)closeSheet();}});
   $('#settings').innerHTML=icon('settings');$('#settings').onclick=settings;
+  $('#reminder-shortcut').onclick=reminderDialog;
   $('.brand').onclick=e=>{e.preventDefault();changeTab('wheel');};
   try{
     rawState=native?native.read():(localStorage.getItem('brujula-state-v1')||'');
@@ -403,6 +421,7 @@
     state={locale:'es'};
     $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p>'+t('fatal')+'</p>'+(rawState&&native?'<button class="secondary" id="recover">'+t('exportOriginal')+'</button>':'')+'</div>';
     $('#settings').disabled=true;
+    $('#reminder-shortcut').disabled=true;
     if($('#recover'))$('#recover').onclick=()=>native.exportBackup(rawState);
   }
 })();

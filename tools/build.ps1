@@ -7,6 +7,10 @@ $env:ANDROID_HOME = Join-Path $projectRoot '.toolchain/android-sdk'
 $env:ANDROID_USER_HOME = Join-Path $projectRoot '.toolchain/android-user'
 $env:GRADLE_USER_HOME = Join-Path $projectRoot '.toolchain/gradle-home'
 $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+$versionName = [regex]::Match((Get-Content 'app/build.gradle' -Raw), "versionName\s+'([^']+)'").Groups[1].Value
+if (-not $versionName) { throw 'Cannot read app version' }
+$apkName = "Brujula-$versionName.apk"
+$apkPath = Join-Path 'release' $apkName
 $keyPath = Join-Path $projectRoot '.toolchain/brujula-release.jks'
 $passwordFile = Join-Path $projectRoot '.toolchain/signing-password.dpapi'
 if (-not (Test-Path -LiteralPath $passwordFile)) {
@@ -32,13 +36,13 @@ try {
     & '.toolchain/gradle-8.11.1/bin/gradle.bat' @tasks --console=plain
     if ($LASTEXITCODE -ne 0) { throw 'Android build failed' }
     New-Item -ItemType Directory -Path 'release' -Force | Out-Null
-    Copy-Item -LiteralPath 'app/build/outputs/apk/release/app-release.apk' -Destination 'release/Brujula-1.1.0.apk' -Force
-    & "$env:ANDROID_HOME/build-tools/35.0.0/apksigner.bat" verify --verbose --print-certs 'release/Brujula-1.1.0.apk'
+    Copy-Item -LiteralPath 'app/build/outputs/apk/release/app-release.apk' -Destination $apkPath -Force
+    & "$env:ANDROID_HOME/build-tools/35.0.0/apksigner.bat" verify --verbose --print-certs $apkPath
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed' }
-    & "$env:ANDROID_HOME/build-tools/35.0.0/zipalign.exe" -c -v 4 'release/Brujula-1.1.0.apk'
+    & "$env:ANDROID_HOME/build-tools/35.0.0/zipalign.exe" -c -v 4 $apkPath
     if ($LASTEXITCODE -ne 0) { throw 'APK alignment verification failed' }
-    $hash = (Get-FileHash 'release/Brujula-1.1.0.apk' -Algorithm SHA256).Hash.ToLowerInvariant()
-    [IO.File]::WriteAllText((Join-Path $projectRoot 'release/Brujula-1.1.0.apk.sha256'), "$hash  Brujula-1.1.0.apk`n")
+    $hash = (Get-FileHash $apkPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    [IO.File]::WriteAllText((Join-Path $projectRoot "$apkPath.sha256"), "$hash  $apkName`n")
 } finally {
     Remove-Item Env:BRUJULA_STORE_PASSWORD -ErrorAction SilentlyContinue
     Remove-Item Env:BRUJULA_KEYSTORE -ErrorAction SilentlyContinue

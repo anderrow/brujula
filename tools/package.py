@@ -9,7 +9,10 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / 'release'
-APK = RELEASE / 'Brujula-1.1.0.apk'
+gradle = (ROOT / 'app/build.gradle').read_text(encoding='utf-8')
+VERSION = re.search(r"versionName\s+'([^']+)'", gradle).group(1)
+VERSION_CODE = re.search(r'versionCode\s+(\d+)', gradle).group(1)
+APK = RELEASE / f'Brujula-{VERSION}.apk'
 SDK = ROOT / '.toolchain' / 'android-sdk'
 
 with zipfile.ZipFile(APK) as z:
@@ -29,20 +32,20 @@ assert "application-label:'Brújula'" in badging
 lint = (ROOT / 'app/build/reports/lint-results-release.txt').read_text(encoding='utf-8')
 assert 'No issues found.' in lint, 'Android lint is not clean'
 digest = sha256(APK.read_bytes()).hexdigest()
-assert (RELEASE / 'Brujula-1.1.0.apk.sha256').read_text().split()[0] == digest
-assert "versionCode='3'" in badging and "versionName='1.1.0'" in badging
+assert (RELEASE / f'Brujula-{VERSION}.apk.sha256').read_text().split()[0] == digest
+assert f"versionCode='{VERSION_CODE}'" in badging and f"versionName='{VERSION}'" in badging
 test_report = ET.parse(ROOT / 'app/build/test-results/testReleaseUnitTest/TEST-app.brujula.life.RemindersTest.xml').getroot()
 assert test_report.attrib['tests'] == '7' and test_report.attrib['failures'] == '0' and test_report.attrib['errors'] == '0'
-build_log = (ROOT / 'output/build-1.1.0.log').read_text(encoding='utf-8-sig')
+build_log = (ROOT / f'output/build-{VERSION}.log').read_text(encoding='utf-8-sig')
 assert 'Signer #1 certificate SHA-256 digest: 9ba64e260876d4c314f13c747486316bbf6078de623274b35a7151855ef94dbe' in build_log
 ui_log = (ROOT / 'output/playwright/cli.log').read_text(encoding='utf-8-sig')
 assert '"passed":26' in ui_log, 'The current UI checks did not complete'
 
-report = f'''# Brújula 1.1.0 verification
+report = f'''# Brújula {VERSION} verification
 
-- APK: `Brujula-1.1.0.apk`
-- Changes: empty new installations, optional daily/weekly/monthly reflection reminders, confirmed reset of existing data
-- Update compatibility: versionCode 3; same application ID and signing certificate as previous releases
+- APK: `Brujula-{VERSION}.apk`
+- Changes: direct bell shortcut with a visible Reminders label, saved/blocked notification status, and prominent reminder entry in Settings
+- Update compatibility: versionCode {VERSION_CODE}; same application ID and signing certificate as previous releases
 - Data migration: existing version-1 data is validated and migrated to version 2 without erasing scores, notes, or history; backups remain importable
 - Application ID: `app.brujula.life`
 - Size: {APK.stat().st_size:,} bytes
@@ -60,7 +63,7 @@ report = f'''# Brújula 1.1.0 verification
 - Calendar calculation: 15 passing checks against the production Java recurrence calculator (daily, weekly, monthly, leap years, short months, DST, midnight, invalid input)
 - Android host tests: seven passing Robolectric API 33 tests (default-off, one pending alarm, replacement, delivery, cancellation, system-change receivers, permission denial, invalid calendar input)
 - Headless UI checks: 26 passed, including first use, score entry, save/reload, three reminder frequencies, disabling, permission-denied feedback, English localization, reset confirmation, old-data migration, invalid backups and responsive layouts
-- Visual inspection: clean wheel, weekly reminder and monthly reminder screenshots inspected
+- Focused shortcut inspection: direct reminder access, saved and blocked status, English labels, mobile touch targets and header layout
 
 ## Reminder behavior
 
@@ -73,7 +76,7 @@ No Android device was attached to ADB. No physical-device or emulator installati
 The deliverable is a signed release APK. No test data, build toolchain, signing password, or private keystore is included in it.
 '''
 (RELEASE / 'VERIFICATION.md').write_text(report, encoding='utf-8')
-(RELEASE / 'INSTALL.txt').write_text('Brújula 1.1.0\n\n1. Copy Brujula-1.1.0.apk to an Android 8.0+ phone.\n2. Open it from Files and choose Update or Install.\n3. New installations start empty. Existing data is preserved during an update.\n4. To clear an existing installation, use Settings > Clear data and start fresh, then confirm.\n5. To schedule a reflection notification, use Settings > Reflection reminder, enable it, choose frequency/day/time, and save. Allow Android notifications when asked. To stop reminders, turn the switch off and save.\n\nDo not uninstall to update. Export a backup before clearing data if you want to keep previous reflections. Android power management may delay notifications. No login or Internet connection is required.\n', encoding='utf-8')
+(RELEASE / 'INSTALL.txt').write_text(f'Brújula {VERSION}\n\n1. Copy Brujula-{VERSION}.apk to an Android 8.0+ phone.\n2. Open it from Files and choose Update or Install.\n3. New installations start empty. Existing data is preserved during an update.\n4. To configure notifications, tap the bell labeled Reminders in the app header. Settings also contains a prominent bell entry. Choose frequency/day/time and save. To stop reminders, turn the switch off and save.\n5. To clear an existing installation, use Settings > Clear data and start fresh, then confirm.\n\nDo not uninstall to update. Export a backup before clearing data if you want to keep previous reflections. Android power management may delay notifications. No login or Internet connection is required.\n', encoding='utf-8')
 
 includes = [ROOT / n for n in ['README.md', 'CHANGELOG.md', '.gitignore', '.gitattributes', 'settings.gradle', 'build.gradle', 'gradle.properties', 'gradlew', 'gradlew.bat']]
 for directory in ['app/src', 'gradle/wrapper', 'tools', 'tests', '.github', 'docs']:

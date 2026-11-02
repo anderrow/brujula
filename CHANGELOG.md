@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+
+- Open reflection reminders directly from a labeled bell in the app header.
+- Show saved reminder and blocked-notification status on the shortcut.
+- Place the reminder entry near the top of Settings with its own bell icon.
+- Preserve existing scores, notes, history, and reminder schedules when updating.
+
 ## 1.1.0
 
 - Start new installations without preset scores, notes, or evaluations.

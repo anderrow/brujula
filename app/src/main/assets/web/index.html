@@ -14,7 +14,10 @@
 <body>
   <header class="topbar">
     <a class="brand" href="#wheel" aria-label="Brújula"><span class="brand-icon" aria-hidden="true">✧</span> Brújula<span class="brand-dot">.</span></a>
-    <button id="settings" class="icon-button" aria-label="Ajustes"></button>
+    <div class="header-actions">
+      <button id="reminder-shortcut" class="reminder-shortcut" aria-label="Recordatorio de reflexión" aria-haspopup="dialog" aria-controls="sheet"></button>
+      <button id="settings" class="icon-button" aria-label="Ajustes" aria-haspopup="dialog" aria-controls="sheet"></button>
+    </div>
   </header>
   <main id="main"></main>
   <nav id="navigation" aria-label="Navegación principal"></nav>
