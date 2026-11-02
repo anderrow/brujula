@@ -1,0 +1,48 @@
+name: Android checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Validate and build Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Check the local data model
+        run: node --test tests/core.test.cjs
+      - name: Check calendar recurrence
+        run: |
+          mkdir -p build/calendar-tests
+          javac -d build/calendar-tests app/src/main/java/app/brujula/life/ReminderSchedule.java tests/ReminderScheduleTest.java
+          java -cp build/calendar-tests ReminderScheduleTest
+      - name: Run Android tests, lint, and a development build
+        run: ./gradlew --no-daemon testDebugUnitTest lintDebug assembleDebug
+      - name: Upload development APK and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brujula-development-build
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/reports/tests/
+            app/build/reports/lint-results-debug.*
+          if-no-files-found: ignore
