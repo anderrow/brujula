@@ -72,4 +72,6 @@ Headless UI checks use `tools/ui-check.ps1` with the `open`, `reminders`, and `c
 
 The public static download website lives in `docs/` and is served by GitHub Pages. It uses the latest stable GitHub release API to display the current version and download link. Its permanent fallback link works even if JavaScript or the API is unavailable.
 
+The header offers English and Spanish. The first visit follows the browser language, and an explicit selection is remembered locally in that browser. Page content, release dates, metadata, and accessibility labels follow the selected language. Language switching also works when browser storage is unavailable, without persisting the choice.
+
 When publishing a future release, attach the signed APK under its versioned name and also as **`Brujula.apk`**. Include `Brujula.apk.sha256` for that alias. The permanent `/releases/latest/download/Brujula.apk` URL then follows the newest stable release without a website edit. The page also supports versioned-only APK names when release metadata is available. Publishing a release does not automatically install the update on a phone.

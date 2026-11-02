@@ -1,5 +1,44 @@
 (() => {
   'use strict';
+  const translations=window.BRUJULA_TRANSLATIONS;
+  if(!translations?.en||!translations?.es)return;
+  const preferenceKey='brujula-web-locale';
+  const browserLanguage=navigator.language.toLowerCase().startsWith('es')?'es':'en';
+  let locale=browserLanguage;
+  try {
+    const saved=localStorage.getItem(preferenceKey);
+    if(saved==='en'||saved==='es')locale=saved;
+  }catch(_){ /* Language switching still works if browser storage is unavailable. */ }
+  let releaseData=null,releaseFailed=false;
+  const t=key=>translations[locale][key]??translations.en[key];
+  function renderRelease(){
+    document.getElementById('hero-version').textContent=releaseData?.tag_name||t('latest');
+    if(!releaseData){
+      document.getElementById('release-description').textContent=t(releaseFailed?'releaseFallback':'releaseLoading');
+      return;
+    }
+    const pieces=[String(releaseData.tag_name||t('latest'))];
+    const asset=releaseData.selectedAsset;
+    if(Number.isFinite(asset.size)&&asset.size>0)pieces.push(new Intl.NumberFormat(locale,{maximumFractionDigits:1}).format(asset.size/1024)+' KB');
+    if(releaseData.published_at&&Number.isFinite(Date.parse(releaseData.published_at)))pieces.push(t('published')+' '+new Date(releaseData.published_at).toLocaleDateString(locale,{month:'long',day:'numeric',year:'numeric'}));
+    document.getElementById('release-description').textContent=pieces.join(' · ');
+  }
+  function setLanguage(next,remember=false){
+    if(next!=='en'&&next!=='es')return;
+    locale=next;
+    document.documentElement.lang=locale;
+    document.title=t('title');
+    document.querySelector('meta[name="description"]').content=t('description');
+    document.querySelectorAll('[data-i18n]').forEach(element=>{element.textContent=t(element.dataset.i18n);});
+    document.querySelectorAll('[data-i18n-aria]').forEach(element=>{element.setAttribute('aria-label',t(element.dataset.i18nAria));});
+    document.querySelectorAll('[data-i18n-alt]').forEach(element=>{element.alt=t(element.dataset.i18nAlt);});
+    document.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===locale)));
+    if(remember){try{localStorage.setItem(preferenceKey,locale);}catch(_){ /* Keep the current selection for this visit. */ }}
+    renderRelease();
+  }
+  document.querySelectorAll('[data-language]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.language,true)));
+  setLanguage(locale);
+  document.querySelector('.language-switch').hidden=false;
   const repo=window.BRUJULA_REPOSITORY;
   if(!repo||!/^https:\/\/github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/.test(repo))return;
   const release=repo+'/releases/latest';
@@ -19,12 +58,9 @@
       if(asset.name!=='Brujula.apk')document.querySelectorAll('[data-download]').forEach(a=>a.href=asset.browser_download_url);
       const checksum=data.assets.find(a=>a.name===asset.name+'.sha256');
       if(asset.name!=='Brujula.apk'&&checksum&&checksum.browser_download_url.startsWith(repo+'/releases/download/'))document.querySelectorAll('[data-checksum]').forEach(a=>a.href=checksum.browser_download_url);
-      document.getElementById('hero-version').textContent=String(data.tag_name||'Latest stable release');
-      const pieces=[String(data.tag_name||'Latest stable release')];
-      if(Number.isFinite(asset.size)&&asset.size>0)pieces.push(new Intl.NumberFormat('en',{maximumFractionDigits:1}).format(asset.size/1024)+' KB');
-      if(data.published_at&&Number.isFinite(Date.parse(data.published_at)))pieces.push('Published '+new Date(data.published_at).toLocaleDateString('en',{month:'long',day:'numeric',year:'numeric'}));
-      document.getElementById('release-description').textContent=pieces.join(' · ');
+      releaseData={...data,selectedAsset:asset};
+      renderRelease();
     })
-    .catch(()=>{document.getElementById('release-description').textContent='The download still points to the latest stable release. You can also view all versions on GitHub.';})
+    .catch(()=>{releaseFailed=true;renderRelease();})
     .finally(()=>clearTimeout(timeout));
 })();

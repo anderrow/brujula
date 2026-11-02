@@ -8,49 +8,75 @@
   <meta name="color-scheme" content="light">
   <title>Brújula — A moment for yourself</title>
   <link rel="icon" type="image/svg+xml" href="compass.svg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=language-1">
   <script src="config.js" defer></script>
-  <script src="app.js?v=latest-download-2" defer></script>
+  <script src="translations.js?v=language-1" defer></script>
+  <script src="app.js?v=language-1" defer></script>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
   <header class="site-header wrap">
-    <a class="brand" href="#" aria-label="Brújula home"><img src="compass.svg" width="34" height="34" alt=""><span>Brújula<span class="dot">.</span></span></a>
-    <nav aria-label="Main navigation"><a href="#how-to-install">How to install</a><a data-repository href="https://github.com/anderrow/brujula" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    <a class="brand" href="#" aria-label="Brújula home" data-i18n-aria="home"><img src="compass.svg" width="34" height="34" alt=""><span>Brújula<span class="dot">.</span></span></a>
+    <div class="header-tools">
+      <div class="language-switch" role="group" aria-label="Language" data-i18n-aria="language" hidden>
+        <button type="button" data-language="en" lang="en" aria-pressed="true">English</button>
+        <button type="button" data-language="es" lang="es" aria-pressed="false">Español</button>
+      </div>
+      <nav aria-label="Main navigation" data-i18n-aria="navigation"><a href="#how-to-install" data-i18n="navInstall">How to install</a><a data-repository href="https://github.com/anderrow/brujula" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    </div>
   </header>
   <main id="main">
     <section class="hero wrap" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> A MOMENT FOR YOURSELF</p>
-        <h1 id="hero-title">Your life,<br>in perspective.</h1>
-        <p class="intro">Eight areas. A little room to reflect.<br>Find your own direction with Brújula, a private wheel of life for Android.</p>
-        <a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Download for Android<span aria-hidden="true">↗</span></a>
+        <p class="eyebrow"><span aria-hidden="true"></span><span data-i18n="heroEyebrow">A MOMENT FOR YOURSELF</span></p>
+        <h1 id="hero-title"><span data-i18n="heroTitleFirst">Your life,</span><br><span data-i18n="heroTitleLast">in perspective.</span></h1>
+        <p class="intro"><span data-i18n="heroIntroFirst">Eight areas. A little room to reflect.</span><br><span data-i18n="heroIntroLast">Find your own direction with Brújula, a private wheel of life for Android.</span></p>
+        <a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span class="button-text" data-i18n="download">Download for Android</span><span aria-hidden="true">↗</span></a>
         <p class="download-meta"><span id="hero-version">Latest stable release</span><span class="divider">·</span>Android 8.0+</p>
-        <p class="private-line"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg>No account. No ads. No Internet needed in the app.</p>
+        <p class="private-line"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg><span data-i18n="privateLine">No account. No ads. No Internet needed in the app.</span></p>
       </div>
       <div class="hero-visual">
         <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div>
-        <span class="visual-label" aria-hidden="true">YOUR OWN STARTING POINT</span>
-        <div class="phone"><div class="phone-speaker" aria-hidden="true"></div><img src="app-preview.png?v=1.1.1" width="393" height="852" alt="The Brújula app starts with a clean wheel of life and a labeled reminder bell in the header. All eight categories are unrated and no personal data is preloaded."></div>
-        <span class="visual-note">A clean wheel.<br>A space that is yours.</span>
+        <span class="visual-label" aria-hidden="true" data-i18n="visualLabel">YOUR OWN STARTING POINT</span>
+        <div class="phone"><div class="phone-speaker" aria-hidden="true"></div><img src="app-preview.png?v=1.1.1" width="393" height="852" data-i18n-alt="previewAlt" alt="The Brújula app starts with a clean wheel of life and a labeled reminder bell in the header. All eight categories are unrated and no personal data is preloaded."></div>
+        <span class="visual-note"><span data-i18n="visualNoteFirst">A clean wheel.</span><br><span data-i18n="visualNoteLast">A space that is yours.</span></span>
       </div>
     </section>
-    <div class="areas wrap" aria-label="The eight areas of your wheel"><span>Health</span><span>Work</span><span>Finances</span><span>Family</span><span>Friends</span><span>Partner</span><span>Leisure</span><span>Growth</span></div>
+    <div class="areas wrap" aria-label="The eight areas of your wheel" data-i18n-aria="areasLabel"><span data-i18n="health">Health</span><span data-i18n="work">Work</span><span data-i18n="finances">Finances</span><span data-i18n="family">Family</span><span data-i18n="friends">Friends</span><span data-i18n="partner">Partner</span><span data-i18n="leisure">Leisure</span><span data-i18n="growth">Growth</span></div>
     <section class="reflection wrap" aria-labelledby="reflection-title">
-      <div class="section-intro"><p class="eyebrow">LESS NOISE. MORE PERSPECTIVE.</p><h2 id="reflection-title">You don’t need<br>a perfect wheel.</h2><p>Just an honest moment with yourself. Rate each area, add the story behind the number, and notice what changes over time.</p></div>
+      <div class="section-intro"><p class="eyebrow" data-i18n="reflectionEyebrow">LESS NOISE. MORE PERSPECTIVE.</p><h2 id="reflection-title"><span data-i18n="reflectionTitleFirst">You don’t need</span><br><span data-i18n="reflectionTitleLast">a perfect wheel.</span></h2><p data-i18n="reflectionIntro">Just an honest moment with yourself. Rate each area, add the story behind the number, and notice what changes over time.</p></div>
       <div class="feature-list">
-        <article><span class="feature-number">01</span><div><h3>Start with a blank page</h3><p>No sample scores, personal notes or saved evaluations. Your first check-in begins with you.</p></div></article>
-        <article><span class="feature-number">02</span><div><h3>Keep the whole story</h3><p>Explore an interactive wheel, write notes for each area, and compare your saved moments in the history.</p></div></article>
-        <article><span class="feature-number">03</span><div><h3>Find a rhythm that fits</h3><p>Tap the Reminders bell to choose an optional daily, weekly or monthly reminder. Pick a time, or switch it off whenever you like.</p></div></article>
+        <article><span class="feature-number">01</span><div><h3 data-i18n="featureStartTitle">Start with a blank page</h3><p data-i18n="featureStartBody">No sample scores, personal notes or saved evaluations. Your first check-in begins with you.</p></div></article>
+        <article><span class="feature-number">02</span><div><h3 data-i18n="featureHistoryTitle">Keep the whole story</h3><p data-i18n="featureHistoryBody">Explore an interactive wheel, write notes for each area, and compare your saved moments in the history.</p></div></article>
+        <article><span class="feature-number">03</span><div><h3 data-i18n="featureReminderTitle">Find a rhythm that fits</h3><p data-i18n="featureReminderBody">Tap the Reminders bell to choose an optional daily, weekly or monthly reminder. Pick a time, or switch it off whenever you like.</p></div></article>
       </div>
     </section>
     <section id="how-to-install" class="install-section" aria-labelledby="install-title">
-      <div class="wrap install-layout"><div><p class="eyebrow">A SMALL FIRST STEP</p><h2 id="install-title">Make a little<br>space for yourself.</h2><p class="section-copy">Install Brújula directly on your Android phone.</p></div><ol class="install-steps"><li><span>1</span><div><h3>Download the APK</h3><p>Use the download button on this page. It follows the latest published release.</p></div></li><li><span>2</span><div><h3>Open it on your phone</h3><p>Open the file from Downloads or Files. If Android asks, allow installation from that source.</p></div></li><li><span>3</span><div><h3>Install, or update in place</h3><p>Choose Install or Update. Keep your existing app installed to preserve your notes and history.</p></div></li></ol></div>
+      <div class="wrap install-layout">
+        <div><p class="eyebrow" data-i18n="installEyebrow">A SMALL FIRST STEP</p><h2 id="install-title"><span data-i18n="installTitleFirst">Make a little</span><br><span data-i18n="installTitleLast">space for yourself.</span></h2><p class="section-copy" data-i18n="installIntro">Install Brújula directly on your Android phone.</p></div>
+        <ol class="install-steps">
+          <li><span>1</span><div><h3 data-i18n="installDownloadTitle">Download the APK</h3><p data-i18n="installDownloadBody">Use the download button on this page. It follows the latest published release.</p></div></li>
+          <li><span>2</span><div><h3 data-i18n="installOpenTitle">Open it on your phone</h3><p data-i18n="installOpenBody">Open the file from Downloads or Files. If Android asks, allow installation from that source.</p></div></li>
+          <li><span>3</span><div><h3 data-i18n="installUpdateTitle">Install, or update in place</h3><p data-i18n="installUpdateBody">Choose Install or Update. Keep your existing app installed to preserve your notes and history.</p></div></li>
+        </ol>
+      </div>
     </section>
-    <section class="release wrap" aria-labelledby="release-title"><div class="release-card"><div class="release-heading"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="release-title">Your next moment starts here.</h2><p id="release-description" aria-live="polite">The download always points to the latest stable release on GitHub.</p></div><span class="android-mark" aria-hidden="true">✧</span></div><div class="release-actions"><a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk">Download the latest APK <span aria-hidden="true">↓</span></a><a class="text-link" data-releases href="https://github.com/anderrow/brujula/releases/latest" target="_blank" rel="noopener noreferrer">Release notes &amp; previous versions <span aria-hidden="true">↗</span></a></div><div class="release-foot"><a data-checksum href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk.sha256">SHA-256 checksum</a><span>Free to download · Android 8.0+</span></div></div></section>
-    <section class="faq wrap" aria-labelledby="questions-title"><h2 id="questions-title">A few useful things to know.</h2><div><details><summary>Where do my reflections live?</summary><p>On your phone. The Android app works offline, with no account, server or analytics. You can export a local JSON backup from Settings. Back up your reflections before uninstalling or changing phones.</p></details><details><summary>Will an update erase my data?</summary><p>Install the new release over your existing app, without uninstalling it. Your reflections and history are preserved. To start fresh instead, use Settings → Clear data and start fresh and confirm.</p></details><details><summary>How do reminders work?</summary><p>They are off by default. Tap the bell labeled Reminders in the app header, or open Settings → Reflection reminder. Choose a daily, weekly or monthly schedule and a local time, then save. Android will ask for notification permission when needed. You can disable the reminder and save at any time. Battery management may delay delivery.</p></details><details><summary>Does this page stay up to date?</summary><p>The download points to the latest stable GitHub release. Version information is refreshed from GitHub when available. The permanent APK link follows new releases even if version information is temporarily out of date. This page does not update the app on your phone automatically.</p></details></div></section>
+    <section class="release wrap" aria-labelledby="release-title"><div class="release-card">
+      <div class="release-heading"><div><p class="eyebrow" data-i18n="releaseEyebrow">READY WHEN YOU ARE</p><h2 id="release-title" data-i18n="releaseTitle">Your next moment starts here.</h2><p id="release-description" aria-live="polite">The download always points to the latest stable release on GitHub.</p></div><span class="android-mark" aria-hidden="true">✧</span></div>
+      <div class="release-actions"><a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk"><span class="button-text" data-i18n="downloadLatest">Download the latest APK</span><span aria-hidden="true">↓</span></a><a class="text-link" data-releases href="https://github.com/anderrow/brujula/releases/latest" target="_blank" rel="noopener noreferrer"><span data-i18n="releaseNotes">Release notes &amp; previous versions</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="release-foot"><a data-checksum href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk.sha256" data-i18n="checksum">SHA-256 checksum</a><span data-i18n="releaseFoot">Free to download · Android 8.0+</span></div>
+    </div></section>
+    <section class="faq wrap" aria-labelledby="questions-title">
+      <h2 id="questions-title" data-i18n="questionsTitle">A few useful things to know.</h2>
+      <div>
+        <details><summary data-i18n="faqDataTitle">Where do my reflections live?</summary><p data-i18n="faqDataBody">On your phone. The Android app works offline, with no account, server or analytics. You can export a local JSON backup from Settings. Back up your reflections before uninstalling or changing phones.</p></details>
+        <details><summary data-i18n="faqUpdateTitle">Will an update erase my data?</summary><p data-i18n="faqUpdateBody">Install the new release over your existing app, without uninstalling it. Your reflections and history are preserved. To start fresh instead, use Settings → Clear data and start fresh and confirm.</p></details>
+        <details><summary data-i18n="faqReminderTitle">How do reminders work?</summary><p data-i18n="faqReminderBody">They are off by default. Tap the bell labeled Reminders in the app header, or open Settings → Reflection reminder. Choose a daily, weekly or monthly schedule and a local time, then save. Android will ask for notification permission when needed. You can disable the reminder and save at any time. Battery management may delay delivery.</p></details>
+        <details><summary data-i18n="faqLatestTitle">Does this page stay up to date?</summary><p data-i18n="faqLatestBody">The download points to the latest stable GitHub release. Version information is refreshed from GitHub when available. The permanent APK link follows new releases even if version information is temporarily out of date. This page does not update the app on your phone automatically.</p></details>
+      </div>
+    </section>
   </main>
-  <footer class="wrap"><a class="brand" href="#"><img src="compass.svg" width="26" height="26" alt=""><span>Brújula<span class="dot">.</span></span></a><p>A place to return to yourself.</p><a data-repository href="https://github.com/anderrow/brujula" target="_blank" rel="noopener noreferrer">Explore the source <span aria-hidden="true">↗</span></a></footer>
+  <footer class="wrap"><a class="brand" href="#" aria-label="Brújula home" data-i18n-aria="home"><img src="compass.svg" width="26" height="26" alt=""><span>Brújula<span class="dot">.</span></span></a><p data-i18n="footerNote">A place to return to yourself.</p><a data-repository href="https://github.com/anderrow/brujula" target="_blank" rel="noopener noreferrer"><span data-i18n="source">Explore the source</span> <span aria-hidden="true">↗</span></a></footer>
   <noscript><p class="noscript">JavaScript is off. The APK links still download the latest stable release.</p></noscript>
 </body>
 </html>
