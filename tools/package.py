@@ -75,8 +75,8 @@ The deliverable is a signed release APK. No test data, build toolchain, signing 
 (RELEASE / 'VERIFICATION.md').write_text(report, encoding='utf-8')
 (RELEASE / 'INSTALL.txt').write_text('Brújula 1.1.0\n\n1. Copy Brujula-1.1.0.apk to an Android 8.0+ phone.\n2. Open it from Files and choose Update or Install.\n3. New installations start empty. Existing data is preserved during an update.\n4. To clear an existing installation, use Settings > Clear data and start fresh, then confirm.\n5. To schedule a reflection notification, use Settings > Reflection reminder, enable it, choose frequency/day/time, and save. Allow Android notifications when asked. To stop reminders, turn the switch off and save.\n\nDo not uninstall to update. Export a backup before clearing data if you want to keep previous reflections. Android power management may delay notifications. No login or Internet connection is required.\n', encoding='utf-8')
 
-includes = [ROOT / n for n in ['README.md', '.gitignore', 'settings.gradle', 'build.gradle', 'gradle.properties', 'gradlew', 'gradlew.bat']]
-for directory in ['app/src', 'gradle/wrapper', 'tools', 'tests']:
+includes = [ROOT / n for n in ['README.md', 'CHANGELOG.md', '.gitignore', '.gitattributes', 'settings.gradle', 'build.gradle', 'gradle.properties', 'gradlew', 'gradlew.bat']]
+for directory in ['app/src', 'gradle/wrapper', 'tools', 'tests', '.github', 'docs']:
     includes.extend(p for p in (ROOT / directory).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
 includes.append(ROOT / 'app/build.gradle')
 with zipfile.ZipFile(RELEASE / 'Brujula-source.zip', 'w', zipfile.ZIP_DEFLATED) as z:
