@@ -38,6 +38,9 @@ android {
         unitTests.all {
             systemProperty 'user.home', rootProject.file('.toolchain/test-home').absolutePath
             systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+            doFirst {
+                rootProject.file('.toolchain/test-home').mkdirs()
+            }
         }
     }
 }
