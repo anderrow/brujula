@@ -16,7 +16,8 @@ for file in images:
     assert data[:8] == b'\x89PNG\r\n\x1a\n', 'Invalid PNG'
     width, height, depth, color = struct.unpack('>IIBB', data[16:26])
     if file.name == 'icon-512.png':
-        assert (width, height) == (512, 512) and len(data) <= 1024 * 1024
+        assert (width, height, depth, color) == (512, 512, 8, 6), 'Store icon must be a 32-bit PNG with alpha'
+        assert len(data) <= 1024 * 1024
     elif file.name.startswith('feature-'):
         assert (width, height) == (1024, 500) and color == 2, 'Feature graphic must be RGB, without alpha'
     else:
