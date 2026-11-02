@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="theme-color" content="#F7F6F1">
+  <link rel="icon" href="data:,">
+  <title>Brújula</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#wheel" aria-label="Brújula"><span class="brand-icon" aria-hidden="true">✧</span> Brújula<span class="brand-dot">.</span></a>
+    <button id="settings" class="icon-button" aria-label="Ajustes"></button>
+  </header>
+  <main id="main"></main>
+  <nav id="navigation" aria-label="Navegación principal"></nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="sheet" aria-labelledby="sheet-title"></dialog>
+</body>
+</html>

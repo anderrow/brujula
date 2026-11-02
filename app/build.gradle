@@ -1,0 +1,48 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.brujula.life'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'app.brujula.life'
+        minSdk 26
+        targetSdk 35
+        versionCode 3
+        versionName '1.1.0'
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+    signingConfigs {
+        release {
+            def keyPath = System.getenv('BRUJULA_KEYSTORE')
+            if (keyPath) {
+                storeFile file(keyPath)
+                storePassword System.getenv('BRUJULA_STORE_PASSWORD')
+                keyAlias 'brujula'
+                keyPassword System.getenv('BRUJULA_STORE_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    lint { abortOnError true }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            systemProperty 'user.home', rootProject.file('.toolchain/test-home').absolutePath
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+}
