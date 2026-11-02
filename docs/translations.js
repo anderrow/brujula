@@ -26,7 +26,7 @@ window.BRUJULA_TRANSLATIONS = {
     faqUpdateTitle: 'Will an update erase my data?', faqUpdateBody: 'Install the new release over your existing app, without uninstalling it. Your reflections and history are preserved. To start fresh instead, use Settings → Clear data and start fresh and confirm.',
     faqReminderTitle: 'How do reminders work?', faqReminderBody: 'They are off by default. Tap the bell labeled Reminders in the app header, or open Settings → Reflection reminder. Choose a daily, weekly or monthly schedule and a local time, then save. Android will ask for notification permission when needed. You can disable the reminder and save at any time. Battery management may delay delivery.',
     faqLatestTitle: 'Does this page stay up to date?', faqLatestBody: 'The download points to the latest stable GitHub release. Version information is refreshed from GitHub when available. The permanent APK link follows new releases even if version information is temporarily out of date. This page does not update the app on your phone automatically.',
-    footerNote: 'A place to return to yourself.', source: 'Explore the source'
+    footerNote: 'A place to return to yourself.', privacyPolicy: 'Privacy policy', source: 'Explore the source'
   },
   es: {
     title: 'Brújula — Un momento para ti',
@@ -54,6 +54,6 @@ window.BRUJULA_TRANSLATIONS = {
     faqUpdateTitle: '¿Una actualización borrará mis datos?', faqUpdateBody: 'Instala la nueva versión sobre la app que ya tienes, sin desinstalarla. Tus reflexiones e historial se conservan. Si prefieres empezar de cero, usa Ajustes → Borrar datos y empezar de cero y confirma.',
     faqReminderTitle: '¿Cómo funcionan los recordatorios?', faqReminderBody: 'Están desactivados por defecto. Toca la campana Recordatorios de la cabecera o entra en Ajustes → Recordatorio de reflexión. Elige un aviso diario, semanal o mensual y una hora, y guarda. Android pedirá permiso para mostrar notificaciones cuando sea necesario. Puedes desactivar el recordatorio y guardar en cualquier momento. El ahorro de batería puede retrasar los avisos.',
     faqLatestTitle: '¿Esta página se mantiene actualizada?', faqLatestBody: 'La descarga apunta a la última versión estable de GitHub. La información de versión se actualiza desde GitHub cuando está disponible. El enlace permanente al APK sigue las nuevas versiones aunque esa información esté temporalmente desactualizada. Esta página no actualiza automáticamente la app de tu teléfono.',
-    footerNote: 'Un lugar para volver a ti.', source: 'Explorar el código'
+    footerNote: 'Un lugar para volver a ti.', privacyPolicy: 'Política de privacidad', source: 'Explorar el código'
   }
 };

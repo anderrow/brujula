@@ -23,9 +23,9 @@
       useTitle:'Volver a este momento', useCopy:'Se sustituirán las puntuaciones y notas del borrador actual por las de esta evaluación. El historial se conservará.',
       useConfirm:'Sustituir borrador', draftRestored:'Evaluación copiada al borrador', delete:'Eliminar evaluación', deleteTitle:'¿Eliminar este momento?',
       deleteCopy:'Se eliminará esta evaluación y sus notas del historial. Tu borrador no cambiará. Esta acción no se puede deshacer.', deleted:'Evaluación eliminada',
-      language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
+      privacyPolicy:'Política de privacidad', language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
       backup:'Cuida tus recuerdos', backupCopy:'Exporta una copia antes de desinstalar la aplicación o cambiar de teléfono. Al desinstalar se borran los datos locales. La copia contiene tus notas: guárdala en un lugar privado.',
-      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.1.1 · Hecha para volver a ti', exported:'Copia de seguridad exportada',
+      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.2.0 · Hecha para volver a ti', exported:'Copia de seguridad exportada',
       exportFailed:'No se pudo exportar la copia. Inténtalo de nuevo.', importFailed:'No se pudo leer la copia de seguridad.', invalidBackup:'La copia no es válida o no es compatible con esta versión.',
       importTitle:'¿Restaurar esta copia?', importCopy:'Se sustituirán el borrador, las notas y todo el historial de este dispositivo por el contenido de la copia.', importConfirm:'Restaurar los datos', imported:'Copia restaurada',
       storageError:'No se pudo guardar. Conserva esta pantalla y exporta una copia.', limit:'Has alcanzado el límite de 5.000 evaluaciones. Exporta una copia antes de eliminar alguna.',
@@ -58,9 +58,9 @@
       useTitle:'Return to this moment', useCopy:'Replace your current draft scores and notes with this check-in. Your history will be kept.',
       useConfirm:'Replace draft', draftRestored:'Check-in copied to draft', delete:'Delete check-in', deleteTitle:'Delete this moment?',
       deleteCopy:'This check-in and its notes will be removed from history. Your draft will stay the same. This cannot be undone.', deleted:'Check-in deleted',
-      language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
+      privacyPolicy:'Privacy policy', language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
-      export:'Export backup', import:'Restore backup', version:'Brújula 1.1.1 · A place to return to yourself', exported:'Backup exported',
+      export:'Export backup', import:'Restore backup', version:'Brújula 1.2.0 · A place to return to yourself', exported:'Backup exported',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
       storageError:'Could not save. Keep this screen open and export a backup.', limit:'You have reached 5,000 check-ins. Export a backup before removing one.',
@@ -325,8 +325,13 @@
     $('#main').querySelectorAll('[data-note]').forEach(btn=>btn.onclick=()=>editArea(btn.dataset.note));
   }
   function settings() {
-    openSheet(sheetHead(t('settings'))+'<section class="settings-section"><h3>'+t('language')+'</h3><div class="language-options"><button data-lang="es" class="'+(state.locale==='es'?'selected':'')+'">Español</button><button data-lang="en" class="'+(state.locale==='en'?'selected':'')+'">English</button></div></section><section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+t('privacyCopy')+'</p></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+t('backupCopy')+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+t('version')+'</p>','settings');
+    openSheet(sheetHead(t('settings'))+'<section class="settings-section"><h3>'+t('language')+'</h3><div class="language-options"><button data-lang="es" class="'+(state.locale==='es'?'selected':'')+'">Español</button><button data-lang="en" class="'+(state.locale==='en'?'selected':'')+'">English</button></div></section><section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+t('privacyCopy')+'</p><button class="secondary" id="privacy-policy">'+t('privacyPolicy')+'</button></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+t('backupCopy')+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+t('version')+'</p>','settings');
     bindClose();
+    $('#privacy-policy').onclick=()=>{
+      const policy=window.BrujulaPrivacy[state.locale];
+      openSheet(sheetHead(policy.title)+'<p class="section-copy">'+esc(policy.updated)+'</p>'+policy.sections.map(([heading,body])=>'<section class="settings-section"><h3>'+esc(heading)+'</h3><p>'+esc(body)+'</p></section>').join(''),'privacy');
+      bindClose();
+    };
     sheet.querySelectorAll('[data-lang]').forEach(btn=>btn.onclick=()=>{
       const candidate=C.clone(state);candidate.locale=btn.dataset.lang;
       if(commit(candidate)){if(native?.updateReminderLocale)native.updateReminderLocale(state.locale);render();settings();}

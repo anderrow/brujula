@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+
+- Compile and target Android 16 / API 36 while retaining Android 8+ support.
+- Generate a signed Android App Bundle as well as a compatible signed APK.
+- Update Android build tooling and test reminder behavior on Android 16.
+- Apply system-bar, cutout and keyboard insets once in the offline shell.
+- Add an offline English/Spanish privacy policy in Settings and a matching public policy page.
+- Prepare store listing copy and a checklist for a future Google Play submission.
+
 ## 1.1.1
 
 - Open reflection reminders directly from a labeled bell in the app header.

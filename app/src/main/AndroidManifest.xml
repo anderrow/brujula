@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application android:label="Brújula" android:icon="@drawable/ic_compass"
         android:roundIcon="@drawable/ic_compass" android:theme="@style/AppTheme"
         android:allowBackup="false" android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:usesCleartextTraffic="false" android:supportsRtl="true">
+        android:usesCleartextTraffic="false" android:supportsRtl="true"
+        android:enableOnBackInvokedCallback="true" tools:targetApi="33">
         <activity android:name=".MainActivity" android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

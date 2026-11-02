@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 33)
+@Config(sdk = {33, 36})
 public class RemindersTest {
     private Application app;
     private AlarmManager alarms;

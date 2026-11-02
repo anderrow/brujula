@@ -49,16 +49,20 @@ def gradle():
     print('Gradle ready', flush=True)
 
 def java():
-    req = urllib.request.Request('https://api.adoptium.net/v3/assets/latest/17/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse', headers={'User-Agent': 'BrujulaBuild/1.0'})
+    req = urllib.request.Request('https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse', headers={'User-Agent': 'BrujulaBuild/1.2'})
     item = json.load(urllib.request.urlopen(req, timeout=60))[0]
     pkg = item['binary']['package']
-    archive = download(pkg['link'], 'jdk.zip', pkg['checksum'])
+    archive = download(pkg['link'], 'jdk21.zip', pkg['checksum'])
     with zipfile.ZipFile(archive) as z:
         folder = z.namelist()[0].split('/')[0]
         if not (TOOLS / folder / 'bin' / 'java.exe').exists():
             z.extractall(TOOLS)
     (TOOLS / 'java-home.txt').write_text(str(TOOLS / folder), encoding='utf-8')
-    print('JDK 17 ready', flush=True)
+    print('JDK 21 ready (Java 17 application bytecode)', flush=True)
+
+def bundletool():
+    download('https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar', 'bundletool-1.18.3.jar', 'a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29')
+    print('Bundletool ready', flush=True)
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-    list(pool.map(lambda fn: fn(), [android, gradle, java]))
+    list(pool.map(lambda fn: fn(), [android, gradle, java, bundletool]))

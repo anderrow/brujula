@@ -2,13 +2,13 @@ plugins { id 'com.android.application' }
 
 android {
     namespace 'app.brujula.life'
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId 'app.brujula.life'
         minSdk 26
-        targetSdk 35
-        versionCode 4
-        versionName '1.1.1'
+        targetSdk 36
+        versionCode 5
+        versionName '1.2.0'
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
     }
     signingConfigs {
@@ -37,9 +37,11 @@ android {
         unitTests.includeAndroidResources = true
         unitTests.all {
             systemProperty 'user.home', rootProject.file('.toolchain/test-home').absolutePath
+            systemProperty 'java.io.tmpdir', rootProject.file('.toolchain/tmp').absolutePath
             systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
             doFirst {
                 rootProject.file('.toolchain/test-home').mkdirs()
+                rootProject.file('.toolchain/tmp').mkdirs()
             }
         }
     }
@@ -47,5 +49,5 @@ android {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.14.1'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
 }

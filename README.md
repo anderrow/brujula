@@ -1,4 +1,4 @@
-# Brújula 1.1.1
+# Brújula 1.2.0
 
 An offline Android wheel-of-life app with optional local reflection reminders. No account, server, analytics, or Internet permission. Spanish and English interfaces are included.
 
@@ -54,9 +54,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/build.ps1
 python tools/package.py
 ```
 
-The workspace-local toolchain uses JDK 17, Gradle 8.11.1, Android Gradle Plugin 8.9.2, SDK 35, and Build Tools 35.0.0. Runtime code uses Android platform APIs only. JUnit 4.13.2 and Robolectric 4.14.1 are development-only test dependencies; they are not bundled in the APK. `build.ps1` runs release compilation, Android lint, Android host tests, signing verification, and alignment verification.
+The workspace-local toolchain uses JDK 21, Gradle 8.11.1, Android Gradle Plugin 8.10.1, SDK 36, and Build Tools 35.0.0. Runtime code uses Android platform APIs only. JUnit 4.13.2 and Robolectric 4.16.1 are development-only test dependencies; they are not bundled in the APK. `build.ps1` runs release compilation, Android lint, Android host tests, signing verification, alignment verification, and generation/validation of a signed Android App Bundle. Application bytecode remains Java 17; JDK 21 also supports Android 16 host tests.
 
-For a standard Android SDK installation on Linux, macOS, or Windows, set `JAVA_HOME` and `ANDROID_HOME`, install SDK 35 / Build Tools 35.0.0, and run `./gradlew testDebugUnitTest lintDebug assembleDebug` (`gradlew.bat` on Windows). The CI workflow performs these checks without release signing credentials. Its development APK uses a separate debug signature; use the APK from Releases to update an installed release build.
+For a standard Android SDK installation on Linux, macOS, or Windows, set `JAVA_HOME` and `ANDROID_HOME`, install SDK 36 / Build Tools 35.0.0, and run `./gradlew testDebugUnitTest lintDebug assembleDebug` (`gradlew.bat` on Windows). The CI workflow performs these checks without release signing credentials. Its development APK uses a separate debug signature; use the APK from Releases to update an installed release build.
 
 Calendar recurrence is also tested independently by compiling `ReminderSchedule.java` together with `tests/ReminderScheduleTest.java` and running the test main class. It covers daily/weekly/monthly dates, leap years, short months, year transitions, midnight, and daylight-saving changes.
 
@@ -64,7 +64,7 @@ Keep `.toolchain/brujula-release.jks` and `.toolchain/signing-password.dpapi` on
 
 ## Validation boundaries
 
-See [the latest verification report](docs/verification-v1.1.1.md) for the delivered file hash, checks and limitations. Robolectric tests exercise Android scheduling, permission checks, notification construction, cancellation, and receiver behavior on a simulated Android API 33 runtime. Headless Playwright tests exercise first use, score entry, migration, resets, and reminder controls using a test bridge. Neither test environment proves delivery timing, manufacturer battery behavior, or permission-dialog behavior on a physical Android phone.
+See [the latest verification report](docs/verification-v1.2.0.md) for the delivered file hash, checks and limitations. Robolectric tests exercise Android scheduling, permission checks, notification construction, cancellation, and receiver behavior on simulated Android API 33 and API 36 runtimes. Native-shell tests also cover Android 16 cutout/keyboard insets and offline WebView settings. Headless Playwright tests exercise first use, score entry, migration, resets, and reminder controls using a test bridge. Neither test environment proves delivery timing, manufacturer battery behavior, or permission-dialog behavior on a physical Android phone.
 
 Headless UI checks use `tools/ui-check.ps1` with the `open`, `reminders`, and `close` stages. Serve `app/src/main/assets/web` at localhost port 8765. Install Playwright CLI or set `BRUJULA_PLAYWRIGHT_CLI` to its `playwright/cli.js`. Screenshots and logs are in `output/playwright/`.
 
@@ -75,3 +75,9 @@ The public static download website lives in `docs/` and is served by GitHub Page
 The header offers English and Spanish. The first visit follows the browser language, and an explicit selection is remembered locally in that browser. Page content, release dates, metadata, and accessibility labels follow the selected language. Language switching also works when browser storage is unavailable, without persisting the choice.
 
 When publishing a future release, attach the signed APK under its versioned name and also as **`Brujula.apk`**. Include `Brujula.apk.sha256` for that alias. The permanent `/releases/latest/download/Brujula.apk` URL then follows the newest stable release without a website edit. The page also supports versioned-only APK names when release metadata is available. Publishing a release does not automatically install the update on a phone.
+
+## Future Google Play submission
+
+The signed `Brujula-1.2.0.aab` targets API 36 and uses the existing Brújula release certificate. The APK remains available for direct installation. See [Google Play preparation](docs/google-play-preparation.md) for store copy, declarations, signing compatibility, and the account/testing/review steps that remain. No Play Console upload or submission has been performed.
+
+The [public privacy policy](https://anderrow.github.io/brujula/privacy.html) is also bundled offline in Settings in English and Spanish. Run `node tools/generate-privacy.cjs` after changing the canonical app policy to regenerate its public copy. Release packaging verifies that both copies match.

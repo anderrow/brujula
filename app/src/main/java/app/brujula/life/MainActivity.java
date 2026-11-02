@@ -62,8 +62,10 @@ public class MainActivity extends Activity {
                 android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
                 android.graphics.Insets keyboard = insets.getInsets(WindowInsets.Type.ime());
                 view.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, keyboard.bottom));
-                return insets;
+                // The root owns all safe-area padding; do not apply it again in WebView.
+                return WindowInsets.CONSUMED;
             });
+            root.requestApplyInsets();
         }
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);

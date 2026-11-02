@@ -28,4 +28,6 @@ __pycache__/
 .env.*
 !.env.example
 *.apk
+*.aab
+*.apks
 brujula-backup-*.json
