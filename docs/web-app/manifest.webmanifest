@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "Brújula",
+  "short_name": "Brújula",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7F6F1",
+  "theme_color": "#F7F6F1",
+  "icons": [
+    { "src": "icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
+  ]
+}

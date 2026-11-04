@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="theme-color" content="#F7F6F1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Brújula</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="install.css">
+  <script src="core.js" defer></script>
+  <script src="web-platform.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#wheel" aria-label="Brújula"><span class="brand-icon" aria-hidden="true">✧</span> Brújula<span class="brand-dot">.</span></a>
+    <button id="settings" class="icon-button" aria-label="Settings" aria-haspopup="dialog" aria-controls="sheet"></button>
+  </header>
+  <aside class="install-tip" aria-label="Install Brújula on iPhone">
+    <details open>
+      <summary>Add Brújula to your iPhone</summary>
+      <p>Open this page in Safari. Tap <strong>Share</strong>, choose <strong>Add to Home Screen</strong>, then tap <strong>Add</strong>. Enable <strong>Open as Web App</strong> if Safari shows that option.</p>
+      <p>Open the new Home Screen icon once while online before saving your first check-in. The app works offline after that first load. Scheduled reminders are available in the native app.</p>
+    </details>
+  </aside>
+  <main id="main"></main>
+  <nav id="navigation" aria-label="Main navigation"></nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="sheet" aria-labelledby="sheet-title"></dialog>
+  <input id="backup-file" type="file" accept=".json,application/json" hidden>
+  <noscript>Enable JavaScript to use the life wheel.</noscript>
+</body>
+</html>

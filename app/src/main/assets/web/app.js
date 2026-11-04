@@ -97,6 +97,7 @@
   let state, rawState = '', tab = 'wheel', metric = 'overall', modalKind = '', opener = null, toastTimer;
   const sheet = $('#sheet');
   const native = window.BrujulaNative;
+  const web = native ? null : window.BrujulaWeb;
   const t = key => strings[state?.locale || 'es'][key] || key;
   const name = c => c[state.locale];
   const format = n => n === null ? '—' : n.toLocaleString(state.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -325,10 +326,11 @@
     $('#main').querySelectorAll('[data-note]').forEach(btn=>btn.onclick=()=>editArea(btn.dataset.note));
   }
   function settings() {
-    openSheet(sheetHead(t('settings'))+'<section class="settings-section"><h3>'+t('language')+'</h3><div class="language-options"><button data-lang="es" class="'+(state.locale==='es'?'selected':'')+'">Español</button><button data-lang="en" class="'+(state.locale==='en'?'selected':'')+'">English</button></div></section><section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+t('privacyCopy')+'</p><button class="secondary" id="privacy-policy">'+t('privacyPolicy')+'</button></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+t('backupCopy')+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+t('version')+'</p>','settings');
+    const languageOptions = '<section class="settings-section"><h3>'+t('language')+'</h3><div class="language-options"><button data-lang="es" class="'+(state.locale==='es'?'selected':'')+'">Español</button><button data-lang="en" class="'+(state.locale==='en'?'selected':'')+'">English</button></div></section>';
+    openSheet(sheetHead(t('settings'))+(web?'':languageOptions)+'<section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+esc(web?.privacySummary ?? t('privacyCopy'))+'</p><button class="secondary" id="privacy-policy">'+t('privacyPolicy')+'</button></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+esc(web?.backupSummary ?? t('backupCopy'))+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+esc(web?.versionLabel ?? t('version'))+'</p>','settings');
     bindClose();
     $('#privacy-policy').onclick=()=>{
-      const policy=window.BrujulaPrivacy[state.locale];
+      const policy=web?.privacyPolicy ?? window.BrujulaPrivacy[state.locale];
       openSheet(sheetHead(policy.title)+'<p class="section-copy">'+esc(policy.updated)+'</p>'+policy.sections.map(([heading,body])=>'<section class="settings-section"><h3>'+esc(heading)+'</h3><p>'+esc(body)+'</p></section>').join(''),'privacy');
       bindClose();
     };
@@ -336,17 +338,24 @@
       const candidate=C.clone(state);candidate.locale=btn.dataset.lang;
       if(commit(candidate)){if(native?.updateReminderLocale)native.updateReminderLocale(state.locale);render();settings();}
     });
-    $('#export').onclick=()=>{if(native)native.exportBackup(JSON.stringify(state,null,2));else toast(t('webBackup'));};
-    $('#import').onclick=()=>{if(native)native.importBackup();else toast(t('webBackup'));};
-    const extra=document.createElement('section');extra.className='settings-section';
-    extra.classList.add('settings-reminders');
-    extra.innerHTML='<h3>'+t('reminderShortcut')+'</h3><p>'+t('reminderIntro')+'</p><button class="reminder-entry" id="reminder-settings">'+icon('bell')+'<span>'+t('reminders')+'</span><span aria-hidden="true">›</span></button>';
-    sheet.insertBefore(extra,sheet.children[2]);
+    $('#export').onclick=()=>{
+      const backup=JSON.stringify(state,null,2);
+      if(native)native.exportBackup(backup);
+      else if(web)web.exportBackup(backup);
+      else toast(t('webBackup'));
+    };
+    $('#import').onclick=()=>{if(native)native.importBackup();else if(web)web.importBackup();else toast(t('webBackup'));};
+    if(!web){
+      const extra=document.createElement('section');extra.className='settings-section';
+      extra.classList.add('settings-reminders');
+      extra.innerHTML='<h3>'+t('reminderShortcut')+'</h3><p>'+t('reminderIntro')+'</p><button class="reminder-entry" id="reminder-settings">'+icon('bell')+'<span>'+t('reminders')+'</span><span aria-hidden="true">›</span></button>';
+      sheet.insertBefore(extra,sheet.children[2]);
+      $('#reminder-settings').onclick=reminderDialog;
+    }
     const reset=document.createElement('section');reset.className='settings-section';
     reset.innerHTML='<button class="secondary danger" id="clear-data">'+t('clearData')+'</button>';
     sheet.insertBefore(reset,sheet.lastElementChild);
-    $('#reminder-settings').onclick=reminderDialog;
-    $('#clear-data').onclick=()=>confirmAction(t('clearTitle'),t('clearCopy'),t('clearConfirm'),()=>{
+    $('#clear-data').onclick=()=>confirmAction(t('clearTitle'),web?.clearCopy ?? t('clearCopy'),t('clearConfirm'),()=>{
       const candidate=C.initial();candidate.locale=state.locale;
       if(commit(candidate)){
         const disabled={...readReminder(),enabled:false,locale:state.locale};
@@ -360,6 +369,7 @@
     return {enabled:false,frequency:'daily',hour:20,minute:0,weekday:1,monthDay:1,canNotify:true,nextAt:0,locale:state.locale};
   }
   function renderReminderShortcut() {
+    if(web)return;
     const config=readReminder(),button=$('#reminder-shortcut');
     const status=config.enabled?(config.canNotify?'on':'blocked'):'off';
     button.dataset.status=status;
@@ -405,6 +415,7 @@
     let candidate;
     try{candidate=C.migrate(JSON.parse(text));}
     catch(_){toast(t('invalidBackup'));return;}
+    if(web)candidate.locale='en';
     confirmAction(t('importTitle'),t('importCopy')+' '+t('importCount')+': '+candidate.history.length+'.',t('importConfirm'),()=>{
       if(commit(candidate)){closeSheet();render();toast(t('imported'));}
     });
@@ -414,19 +425,20 @@
   sheet.addEventListener('close',()=>{if(state)render();});
   sheet.addEventListener('click',e=>{if(e.target===sheet){const b=sheet.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)closeSheet();}});
   $('#settings').innerHTML=icon('settings');$('#settings').onclick=settings;
-  $('#reminder-shortcut').onclick=reminderDialog;
+  if(!web)$('#reminder-shortcut').onclick=reminderDialog;
   $('.brand').onclick=e=>{e.preventDefault();changeTab('wheel');};
   try{
     rawState=native?native.read():(localStorage.getItem('brujula-state-v1')||'');
     state=rawState?C.migrate(JSON.parse(rawState)):C.initial();
+    if(web)state.locale='en';
     if(!C.validate(state))throw Error('invalid stored data');
     if(!rawState||JSON.parse(rawState).version!==state.version)persist();
     render();
   }catch(_){
-    state={locale:'es'};
-    $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p>'+t('fatal')+'</p>'+(rawState&&native?'<button class="secondary" id="recover">'+t('exportOriginal')+'</button>':'')+'</div>';
+    state={locale:web?'en':'es'};
+    $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p>'+t('fatal')+'</p>'+(rawState&&(native||web)?'<button class="secondary" id="recover">'+t('exportOriginal')+'</button>':'')+'</div>';
     $('#settings').disabled=true;
-    $('#reminder-shortcut').disabled=true;
-    if($('#recover'))$('#recover').onclick=()=>native.exportBackup(rawState);
+    if(!web)$('#reminder-shortcut').disabled=true;
+    if($('#recover'))$('#recover').onclick=()=>(native||web).exportBackup(rawState);
   }
 })();

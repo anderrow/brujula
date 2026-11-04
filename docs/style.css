@@ -34,3 +34,10 @@
 #iphone .release-heading p:last-child {
   max-width: 62ch;
 }
+
+.iphone-steps {
+  margin: 20px 0 0;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.9;
+}

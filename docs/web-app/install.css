@@ -1,0 +1,39 @@
+.topbar {
+  height: auto;
+  min-height: 84px;
+  padding-top: env(safe-area-inset-top);
+}
+
+.install-tip {
+  max-width: 680px;
+  margin: 0 auto 12px;
+  padding: 0 20px;
+}
+
+.install-tip details {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.install-tip summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.install-tip p:last-child {
+  margin-bottom: 0;
+}
+
+.is-standalone .install-tip {
+  display: none;
+}
+
+@media (display-mode: standalone) {
+  .install-tip {
+    display: none;
+  }
+}

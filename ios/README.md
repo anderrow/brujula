@@ -1,5 +1,7 @@
 # Brújula for iPhone
 
+To start using Brújula on an iPhone, open the web app in Safari and choose **Share → Add to Home Screen**. It includes the wheel, notes, history, and backups. Scheduled reminders are available in the native app described below. [Open Brújula on iPhone](https://anderrow.github.io/brujula/web-app/)
+
 The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. The iPhone interface is in English.
 
 ## Run on an iPhone
