@@ -36,7 +36,6 @@ jobs:
           simulator=$(xcrun simctl list devices available --json | python3 -c 'import json,sys; data=json.load(sys.stdin)["devices"]; print(next(d["udid"] for k,ds in reversed(sorted(data.items())) if ".iOS-" in k for d in ds if d["name"].startswith("iPhone")))')
           xcrun simctl boot "$simulator"
           xcrun simctl bootstatus "$simulator" -b
-          xcrun simctl status_bar "$simulator" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 --batteryState unplugged --batteryLevel 100
           xcrun simctl install "$simulator" "$RUNNER_TEMP/brujula-simulator/Build/Products/Debug-iphonesimulator/Brujula.app"
           xcrun simctl launch "$simulator" app.brujula.life.ios
           sleep 4
