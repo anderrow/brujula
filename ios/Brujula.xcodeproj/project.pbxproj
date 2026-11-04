@@ -1,0 +1,71 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {};
+ objectVersion = 56;
+ objects = {
+  000000000000000000000064 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrujulaApp.swift; sourceTree = "<group>"; };
+  0000000000000000000000C8 = {isa = PBXBuildFile; fileRef = 000000000000000000000064; };
+  000000000000000000000065 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionModel.swift; sourceTree = "<group>"; };
+  0000000000000000000000C9 = {isa = PBXBuildFile; fileRef = 000000000000000000000065; };
+  000000000000000000000066 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSchedule.swift; sourceTree = "<group>"; };
+  0000000000000000000000CA = {isa = PBXBuildFile; fileRef = 000000000000000000000066; };
+  000000000000000000000067 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stores.swift; sourceTree = "<group>"; };
+  0000000000000000000000CB = {isa = PBXBuildFile; fileRef = 000000000000000000000067; };
+  000000000000000000000068 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+  0000000000000000000000CC = {isa = PBXBuildFile; fileRef = 000000000000000000000068; };
+  000000000000000000000069 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionViews.swift; sourceTree = "<group>"; };
+  0000000000000000000000CD = {isa = PBXBuildFile; fileRef = 000000000000000000000069; };
+  00000000000000000000006A = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+  0000000000000000000000CE = {isa = PBXBuildFile; fileRef = 00000000000000000000006A; };
+  00000000000000000000006B = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+  0000000000000000000000CF = {isa = PBXBuildFile; fileRef = 00000000000000000000006B; };
+
+  00000000000000000000000A = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Brujula.app; sourceTree = BUILT_PRODUCTS_DIR; };
+  00000000000000000000000B = {isa = PBXGroup; children = (00000000000000000000000C, 00000000000000000000000D); sourceTree = "<group>"; };
+  00000000000000000000000C = {isa = PBXGroup; children = (000000000000000000000064, 000000000000000000000065, 000000000000000000000066, 000000000000000000000067, 000000000000000000000068, 000000000000000000000069, 00000000000000000000006A, 00000000000000000000006B); path = Brujula; sourceTree = "<group>"; };
+  00000000000000000000000D = {isa = PBXGroup; children = (00000000000000000000000A); name = Products; sourceTree = "<group>"; };
+  000000000000000000000014 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000C8, 0000000000000000000000C9, 0000000000000000000000CA, 0000000000000000000000CB, 0000000000000000000000CC, 0000000000000000000000CD); runOnlyForDeploymentPostprocessing = 0; };
+  000000000000000000000015 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  000000000000000000000016 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000CE, 0000000000000000000000CF); runOnlyForDeploymentPostprocessing = 0; };
+  00000000000000000000001E = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000029; buildPhases = (000000000000000000000014, 000000000000000000000015, 000000000000000000000016); buildRules = (); dependencies = (); name = Brujula; productName = Brujula; productReference = 00000000000000000000000A; productType = "com.apple.product-type.application"; };
+  00000000000000000000001F = {isa = PBXProject; attributes = {LastUpgradeCheck = 1600; TargetAttributes = {00000000000000000000001E = {CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = 000000000000000000000028; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = 00000000000000000000000B; productRefGroup = 00000000000000000000000D; projectDirPath = ""; projectRoot = ""; targets = (00000000000000000000001E); };
+  000000000000000000000028 = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000032, 000000000000000000000033); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  000000000000000000000029 = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000034, 000000000000000000000035); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  000000000000000000000032 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {IPHONEOS_DEPLOYMENT_TARGET = 16.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
+  000000000000000000000034 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {
+    ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+    CODE_SIGN_STYLE = Automatic;
+    CURRENT_PROJECT_VERSION = 1;
+    GENERATE_INFOPLIST_FILE = YES;
+    INFOPLIST_KEY_CFBundleDisplayName = "Brújula";
+    INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+    INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+    INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+    INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+    MARKETING_VERSION = 1.0.0;
+    PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios;
+    PRODUCT_NAME = "$(TARGET_NAME)";
+    SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+    TARGETED_DEVICE_FAMILY = 1;
+  }; };
+  000000000000000000000033 = {isa = XCBuildConfiguration; name = Release; buildSettings = {IPHONEOS_DEPLOYMENT_TARGET = 16.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
+  000000000000000000000035 = {isa = XCBuildConfiguration; name = Release; buildSettings = {
+    ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+    CODE_SIGN_STYLE = Automatic;
+    CURRENT_PROJECT_VERSION = 1;
+    GENERATE_INFOPLIST_FILE = YES;
+    INFOPLIST_KEY_CFBundleDisplayName = "Brújula";
+    INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+    INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+    INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+    INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+    MARKETING_VERSION = 1.0.0;
+    PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios;
+    PRODUCT_NAME = "$(TARGET_NAME)";
+    SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+    TARGETED_DEVICE_FAMILY = 1;
+  }; };
+ };
+ rootObject = 00000000000000000000001F;
+}
