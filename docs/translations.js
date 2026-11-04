@@ -2,10 +2,10 @@
 window.BRUJULA_TRANSLATIONS = {
   en: {
     title: 'Brújula — A moment for yourself',
-    description: 'Download Brújula for Android. A private, offline wheel of life with personal reflections, check-in history and optional reminders.',
+    description: 'Get Brújula for Android and iPhone. A private, offline wheel of life with personal reflections, check-in history and optional reminders.',
     skip: 'Skip to content', home: 'Brújula home', navigation: 'Main navigation', language: 'Language', navInstall: 'How to install',
     heroEyebrow: 'A MOMENT FOR YOURSELF', heroTitleFirst: 'Your life,', heroTitleLast: 'in perspective.',
-    heroIntroFirst: 'Eight areas. A little room to reflect.', heroIntroLast: 'Find your own direction with Brújula, a private wheel of life for Android.',
+    heroIntroFirst: 'Eight areas. A little room to reflect.', heroIntroLast: 'Find your own direction with Brújula, a private wheel of life for Android and iPhone.',
     download: 'Download for Android', privateLine: 'No account. No ads. No Internet needed in the app.',
     visualLabel: 'YOUR OWN STARTING POINT', visualNoteFirst: 'A clean wheel.', visualNoteLast: 'A space that is yours.',
     previewAlt: 'The Brújula app starts with a clean wheel of life and a labeled reminder bell in the header. All eight categories are unrated and no personal data is preloaded.',
