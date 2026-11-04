@@ -62,12 +62,12 @@ struct RadarView: View {
             Text(wheel.score(area).map(String.init) ?? "—").font(.caption2.bold()).foregroundStyle(Palette.green)
         }
         .lineLimit(1)
-        .minimumScaleFactor(0.7)
+        .minimumScaleFactor(0.5)
         .frame(width: 61, height: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(area.title)
-        .accessibilityValue(wheel.score(area).map { "\($0) out of 10" } ?? "Not rated")
+        .accessibilityValue(wheel.score(area).map { Text("\($0) out of 10") } ?? Text("Not rated"))
     }
 
     private func point(_ index: Int, _ center: CGPoint, _ radius: CGFloat) -> CGPoint {
@@ -146,7 +146,11 @@ struct HistoryDetail: View {
     private enum Action: String, Identifiable {
         case replace, delete
         var id: String { rawValue }
-        var title: String { self == .replace ? "Replace current draft?" : "Delete this check-in?" }
+        var title: String {
+            self == .replace
+                ? String(localized: "Replace current draft?")
+                : String(localized: "Delete this check-in?")
+        }
     }
 
     var body: some View {
@@ -262,7 +266,7 @@ struct ReminderEditor: View {
                             config.minute = parts.minute ?? 0
                             if await reminders.save(config) { dismiss() }
                             else {
-                                failure = reminders.error ?? "Wait for the current update and try again."
+                                failure = reminders.error ?? String(localized: "Wait for the current update and try again.")
                                 reminders.error = nil
                             }
                         }

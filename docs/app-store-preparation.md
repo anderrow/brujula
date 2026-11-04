@@ -4,7 +4,7 @@ Prepared on November 4, 2026. **No build has been uploaded to App Store Connect,
 
 The first distribution step is internal TestFlight. External testers and the public App Store come after a device pass on that internal build.
 
-The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separate release. The iPhone interface is English.
+The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separate release. English and Spanish follow the iPhone language. Add a later language in the string catalogs and in the Xcode known regions; `ios/Tests/localizations.cjs` fails until every string has that language.
 
 ## Project settings already in the repository
 
@@ -33,7 +33,7 @@ Checked on this Mac on November 4, 2026:
 
 ## Internal TestFlight
 
-1. Use a paid Apple Developer Program membership. In App Store Connect → Business, the Account Holder accepts the current agreements. Complete tax and banking if that account still lists them before a free app with no in-app purchases can be submitted.
+1. Use the existing Prodfact Apple Developer Program membership. Do not create a second account for Brújula. In App Store Connect → Business, the Account Holder accepts the current agreements. Complete tax and banking if that account still lists them before a free app with no in-app purchases can be submitted. Select the Prodfact team in Xcode when archiving. The team ID stays on this Mac and is not stored in the repository.
 2. Register the App ID `app.brujula.life.ios` with no extra capabilities. In Xcode, choose the team and keep automatic signing. Keep this bundle ID for as long as installed copies should retain their local data.
 3. Create the App Store Connect record: name **Brújula**, primary language English (U.S.), bundle ID above, SKU `brujula-ios` (any unique SKU is fine).
 4. Select Any iOS Device (arm64), then Product → Archive, using Release. Distribute to App Store Connect and upload. Wait until the build appears under TestFlight and processing finishes. Check email as well as the TestFlight tab; a processing failure can leave no build.
@@ -64,7 +64,7 @@ Before inviting external testers, enter:
 
 ## App Store listing, after TestFlight
 
-Use English metadata. The Android listing’s Spanish availability sentence describes the Android app.
+Add English (U.S.) and Spanish localizations in App Store Connect. The iPhone interface follows the phone language and has no in-app language picker. Primary language can stay English (U.S.).
 
 | Field | Draft |
 | --- | --- |
@@ -90,7 +90,27 @@ Description:
 >
 > Your reflections stay on your iPhone. No sign-in, ads, analytics, or Internet connection are required. Export and restore local JSON backups when you choose, including a backup made on Android. Export before deleting the app or changing phones. Exported files include your notes and are not encrypted by Brújula.
 >
-> The iPhone app is in English. Brújula is a personal reflection tool, not a medical device. It does not diagnose, treat, cure, or prevent any condition, and it does not replace professional advice.
+> English and Spanish follow the language of your iPhone. Brújula is a personal reflection tool, not a medical device. It does not diagnose, treat, cure, or prevent any condition, and it does not replace professional advice.
+
+Spanish subtitle: **Rueda de la vida privada**.
+
+Spanish promotional text:
+
+> Una rueda privada para ocho áreas de tu vida. Puntuaciones, notas e historial se quedan en el iPhone. Recordatorios locales opcionales. Sin cuenta.
+
+Spanish keywords: `reflexión,diario,rueda de la vida,notas,evaluación,sin conexión,privado,recordatorio,estilo de vida`
+
+Spanish description:
+
+> Encuentra un pequeño espacio para ti con Brújula. Reflexiona sobre ocho áreas de tu vida: salud, trabajo, finanzas, familia, amistades, pareja, ocio y crecimiento.
+>
+> Empieza con una rueda vacía y valora cada área de 0 a 10. Escribe una nota, guarda una evaluación y compara tus reflexiones con el tiempo. El historial conserva las puntuaciones y notas de cada momento guardado.
+>
+> Elige un recordatorio diario, semanal o mensual a una hora local, o desactívalo cuando quieras. Se aplican los ajustes de notificaciones y Concentración de iOS. Del 29 al 31, si ese día no existe, se usa el último día del mes.
+>
+> Tus reflexiones se quedan en el iPhone. Sin inicio de sesión, anuncios, analítica ni conexión a Internet. Exporta y restaura copias locales JSON cuando tú decidas, también una copia hecha en Android. Exporta antes de borrar la app o cambiar de teléfono. Las copias incluyen tus notas y Brújula no las cifra.
+>
+> El iPhone usa el idioma del teléfono: español e inglés. Brújula es una herramienta de reflexión personal, no un producto sanitario. No diagnostica, trata, cura ni previene enfermedades y no sustituye el consejo profesional.
 
 ### Age rating questionnaire
 

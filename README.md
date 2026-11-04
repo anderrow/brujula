@@ -84,4 +84,4 @@ The [public privacy policy](https://anderrow.github.io/brujula/privacy.html) is 
 
 ## Future App Store submission
 
-The iPhone app in `ios/` is version 1.0.0 (build 1), separate from Android 1.2.0. Its release settings declare exempt encryption so a TestFlight upload is not held for the export questionnaire. See [App Store preparation](docs/app-store-preparation.md) for the internal TestFlight path, listing copy, and the account steps that remain. Nothing has been uploaded to App Store Connect or submitted for review. The iPhone interface is English.
+The iPhone app in `ios/` is version 1.0.0 (build 1), separate from Android 1.2.0. Its release settings declare exempt encryption so a TestFlight upload is not held for the export questionnaire. See [App Store preparation](docs/app-store-preparation.md) for the internal TestFlight path, listing copy, and the account steps that remain. Nothing has been uploaded to App Store Connect or submitted for review. The iPhone interface follows the phone language, with English and Spanish included.
