@@ -80,7 +80,7 @@ struct HomeView: View {
             case .reminders: ReminderEditor(schedule: reminders.schedule)
             }
         }
-        .alert("Save check-in", isPresented: $savingCheckIn) {
+        .alert(localized("Save check-in"), isPresented: $savingCheckIn) {
             TextField("Title (optional)", text: $saveTitle)
             Button("Save") {
                 let title = String(decoding: saveTitle.utf16.prefix(80), as: UTF16.self)
@@ -88,14 +88,14 @@ struct HomeView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: { Text("Keep a snapshot of your current scores and notes.") }
-        .alert("Restore backup?", isPresented: $restore) {
+        .alert(localized("Restore backup?"), isPresented: $restore) {
             Button("Restore", role: .destructive) {
                 if let imported, store.commit(imported) { notice = localized("Backup restored.") }
                 imported = nil
             }
             Button("Cancel", role: .cancel) { imported = nil }
         } message: { Text("This replaces the scores, notes, and check-ins on this device.") }
-        .alert("Clear local data?", isPresented: $reset) {
+        .alert(localized("Clear local data?"), isPresented: $reset) {
             Button("Clear data", role: .destructive) {
                 Task {
                     let previous = reminders.schedule
@@ -109,7 +109,7 @@ struct HomeView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: { Text("This deletes your local scores, notes, and check-ins and turns off reminders. Export a backup first if you want to keep them.") }
-        .alert("Brújula", isPresented: messagePresented) {
+        .alert(localized("Brújula"), isPresented: messagePresented) {
             Button("OK") { clearMessages() }
         } message: { Text(store.error ?? reminders.error ?? notice ?? "") }
         .fileImporter(isPresented: $importFile, allowedContentTypes: [.json], onCompletion: loadBackup)
@@ -495,7 +495,7 @@ struct HomeView: View {
                 }
             }
             .id(language)
-            .navigationTitle("Settings")
+            .navigationTitle(localized("Settings"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -532,7 +532,7 @@ struct HomeView: View {
                 Text("Support issues are public. Do not include private notes, scores, or backups.")
             }
         }
-        .navigationTitle("Privacy policy")
+        .navigationTitle(localized("Privacy policy"))
         .navigationBarTitleDisplayMode(.inline)
     }
 

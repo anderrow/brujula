@@ -434,7 +434,7 @@ struct ReminderEditor: View {
             }
             .scrollContentBackground(.hidden)
             .background(Palette.background)
-            .navigationTitle("Reflection reminder")
+            .navigationTitle(localized("Reflection reminder"))
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(reminders.busy)
             .toolbar {
