@@ -424,7 +424,7 @@ struct HomeView: View {
         NavigationStack {
             Form {
                 Section("Reminders") {
-                    Button { sheet = .reminders } label: {
+                    Button { dismissSettings { sheet = .reminders } } label: {
                         HStack(spacing: 12) {
                             Image(systemName: "bell").foregroundStyle(Palette.green)
                             VStack(alignment: .leading, spacing: 4) {

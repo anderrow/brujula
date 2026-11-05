@@ -40,12 +40,12 @@ final class InteractionTests: XCTestCase {
         let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.buttons["Allow"]
         if permission.waitForExistence(timeout: 5) { permission.tap() }
         XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.buttons["reminder-shortcut"].value as? String, "On")
+        waitForValue("On", of: app.buttons["reminder-shortcut"])
 
         app.terminate()
         app.launch()
         XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.buttons["reminder-shortcut"].value as? String, "On")
+        waitForValue("On", of: app.buttons["reminder-shortcut"])
         XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-health").firstMatch.value as? String, "10 out of 10")
         app.buttons["wheel-area-health"].tap()
         XCTAssertEqual(app.textViews["area-note"].value as? String, "A quiet walk.")
@@ -57,12 +57,17 @@ final class InteractionTests: XCTestCase {
         app.switches["reminder-enabled"].tap()
         app.buttons["save-reminder"].tap()
         XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.buttons["reminder-shortcut"].value as? String, "Off")
+        waitForValue("Off", of: app.buttons["reminder-shortcut"])
 
         app.buttons["tab-notes"].tap()
         XCTAssertTrue(app.staticTexts["A quiet walk."].exists)
         app.buttons["tab-history"].tap()
         XCTAssertTrue(app.staticTexts["Every moment counts."].exists)
+    }
+
+    private func waitForValue(_ value: String, of element: XCUIElement) {
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", value), object: element)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 10), .completed)
     }
 
     private func screenshot(_ name: String) {

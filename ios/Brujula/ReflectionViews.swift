@@ -38,8 +38,11 @@ struct RadarView: View {
     var comparison: Wheel?
     var select: ((Area) -> Void)?
     var update: ((Area, Int) -> Bool)?
-    @State private var draggedArea: Area?
-    @State private var draggedScore: Int?
+    private struct DragPreview {
+        let area: Area
+        let score: Int
+    }
+    @GestureState private var drag: DragPreview?
 
     var body: some View {
         GeometryReader { geometry in
@@ -68,7 +71,7 @@ struct RadarView: View {
                         context.stroke(outline, with: .color(Palette.color(0xC9A58A)),
                                        style: StrokeStyle(lineWidth: 1.8, dash: [4, 4]))
                     }
-                    if wheel.average != nil || draggedScore != nil {
+                    if wheel.average != nil || drag != nil {
                         let shape = polygon(center: center, radius: radius) { CGFloat(score($0) ?? 0) / 10 }
                         context.fill(shape, with: .color(Palette.green.opacity(0.16)))
                         context.stroke(shape, with: .color(Palette.color(0x427F69)), lineWidth: 2)
@@ -103,7 +106,7 @@ struct RadarView: View {
                     let mark = point(index, center, radius * CGFloat(value ?? 5) / 10)
                     if let update {
                         ZStack {
-                            Circle().fill(area.color.opacity(draggedArea == area ? 0.15 : 0.001))
+                            Circle().fill(area.color.opacity(drag?.area == area ? 0.15 : 0.001))
                             Circle().fill(value == nil ? Palette.paper : area.color)
                                 .frame(width: value == nil ? 10 : 9, height: value == nil ? 10 : 9)
                                 .overlay(Circle().stroke(value == nil ? area.color : Palette.paper, lineWidth: 2))
@@ -111,18 +114,20 @@ struct RadarView: View {
                         .frame(width: 44, height: 44)
                         .contentShape(Circle())
                         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("radar"))
-                            .onChanged { gesture in
+                            .updating($drag) { gesture, preview, _ in
                                 guard hypot(gesture.translation.width, gesture.translation.height) >= 4 else { return }
-                                draggedArea = area
-                                draggedScore = WheelInteraction.score(
+                                preview = DragPreview(area: area, score: WheelInteraction.score(
                                     x: Double(gesture.location.x - center.x), y: Double(gesture.location.y - center.y),
-                                    radius: Double(radius), area: area)
+                                    radius: Double(radius), area: area))
                             }
-                            .onEnded { _ in
-                                if draggedArea == area, let draggedScore { _ = update(area, draggedScore) }
-                                else { select?(area) }
-                                draggedArea = nil
-                                draggedScore = nil
+                            .onEnded { gesture in
+                                guard hypot(gesture.translation.width, gesture.translation.height) >= 4 else {
+                                    select?(area)
+                                    return
+                                }
+                                _ = update(area, WheelInteraction.score(
+                                    x: Double(gesture.location.x - center.x), y: Double(gesture.location.y - center.y),
+                                    radius: Double(radius), area: area))
                             })
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel("\(area.title) score")
@@ -147,12 +152,12 @@ struct RadarView: View {
             .coordinateSpace(name: "radar")
         }
         .aspectRatio(360.0 / 337.0, contentMode: .fit)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-wheel")
-        .onDisappear { draggedArea = nil; draggedScore = nil }
     }
 
     private func score(_ area: Area) -> Int? {
-        draggedArea == area ? draggedScore : wheel.score(area)
+        drag?.area == area ? drag?.score : wheel.score(area)
     }
 
     private func areaLabel(_ area: Area) -> some View {
