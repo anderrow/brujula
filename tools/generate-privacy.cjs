@@ -13,7 +13,7 @@ fs.writeFileSync(path.join(root,'docs/privacy.html'),`<!doctype html>
 <meta name="description" content="Brújula privacy policy: offline reflections, optional reminders, local backups and deletion.">
 <title>Brújula — Privacy policy</title><link rel="icon" href="compass.svg"><link rel="stylesheet" href="style.css?v=language-1">
 <style>.policy{max-width:760px;padding:55px 0}.policy h1{font-size:48px;letter-spacing:-1.5px}.policy h2{font:600 21px system-ui;letter-spacing:0;margin:32px 0 12px}.policy p{font-size:15px;line-height:1.9;color:var(--muted)}.policy a{text-decoration:underline}.policy footer{margin-top:40px}</style>
-<script src="privacy-copy.js?v=1.2.0" defer></script><script src="privacy.js?v=1.2.0" defer></script></head><body>
+<script src="privacy-copy.js?v=2026-11-05" defer></script><script src="privacy.js?v=2026-11-05" defer></script></head><body>
 <header class="site-header wrap"><a class="brand" href="./"><img src="compass.svg" width="34" height="34" alt="">Brújula.</a>
 <div class="language-switch" role="group" aria-label="Language" hidden><button type="button" data-language="en" lang="en" aria-pressed="true">English</button><button type="button" data-language="es" lang="es" aria-pressed="false">Español</button></div></header>
 <main class="policy wrap"><h1 id="policy-title">${esc(policy.title)}</h1><p id="policy-updated">${esc(policy.updated)}</p>
