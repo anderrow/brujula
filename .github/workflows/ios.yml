@@ -38,7 +38,8 @@ jobs:
           echo "BRUJULA_SIMULATOR=$simulator" >> "$GITHUB_ENV"
           xcrun simctl boot "$simulator"
           xcrun simctl bootstatus "$simulator" -b
-          xcrun simctl install "$simulator" "$RUNNER_TEMP/brujula-simulator/Build/Products/Debug-iphonesimulator/Brujula.app"
+          app=$(python3 -c 'import os; from pathlib import Path; apps=list((Path(os.environ["RUNNER_TEMP"])/"brujula-simulator/Build/Products/Debug-iphonesimulator").glob("*.app")); assert len(apps)==1, "Expected one simulator app"; print(apps[0])')
+          xcrun simctl install "$simulator" "$app"
           xcrun simctl launch "$simulator" app.brujula.life.ios
           sleep 4
           xcrun simctl io "$simulator" screenshot "$RUNNER_TEMP/brujula-iphone.png"

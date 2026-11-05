@@ -8,13 +8,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brújula"
+            "value": "Brújula: Wheel of Life"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brújula"
+            "value": "Brújula: Rueda de la vida"
           }
         }
       }
@@ -26,13 +26,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brujula"
+            "value": "BrujulaLife"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brujula"
+            "value": "BrujulaLife"
           }
         }
       }

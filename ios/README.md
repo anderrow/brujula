@@ -16,7 +16,7 @@ Open the labeled **Reminders** bell in the header or **Settings → Reflection r
 2. In the Brujula target, open **Signing & Capabilities**. Enable automatic signing and select your Apple development team. If the bundle identifier is unavailable for your team, change it to a unique identifier. An installed app's local data stays associated with its original bundle identifier and signing team.
 3. Connect and select your iPhone. Follow Xcode's prompts to trust the device and enable Developer Mode if needed, then click **Run**. For a simulator, select any available iPhone simulator instead.
 
-A build made without signing cannot be installed on a physical iPhone. App Store or TestFlight distribution needs the appropriate Apple account, signing and submission steps. This project is not submitted to either service.
+A build made without signing cannot be installed on a physical iPhone. TestFlight and App Store distribution still need a paid Apple Developer team, a signed archive, and the steps in [App Store preparation](../docs/app-store-preparation.md). Nothing has been uploaded to App Store Connect. An upload needs Xcode 26 or later; the current SDK minimum is recorded in that checklist. The project sets `ITSAppUsesNonExemptEncryption` to false so a TestFlight build is not held for the export-compliance questionnaire.
 
 ## Transfer reflections from Android
 

@@ -17,10 +17,11 @@ jobs:
           xcodebuild -project ios/Brujula.xcodeproj -scheme Brujula -configuration Release -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/brujula-interactive" ARCHS=arm64 ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO build
       - name: Verify and package the simulator app
         run: |
-          app="$RUNNER_TEMP/brujula-interactive/Build/Products/Release-iphonesimulator/Brujula.app"
+          app=$(python3 -c 'import os; from pathlib import Path; apps=list((Path(os.environ["RUNNER_TEMP"])/"brujula-interactive/Build/Products/Release-iphonesimulator").glob("*.app")); assert len(apps)==1, "Expected one simulator app"; print(apps[0])')
+          executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app/Info.plist")
           output="$RUNNER_TEMP/interactive-package"
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleSupportedPlatforms:0' "$app/Info.plist")" = 'iPhoneSimulator'
-          test "$(xcrun lipo -archs "$app/Brujula")" = 'arm64'
+          test "$(xcrun lipo -archs "$app/$executable")" = 'arm64'
           mkdir -p "$output"
           ditto -c -k --keepParent "$app" "$output/Brujula-iOS-Simulator.zip"
           (
