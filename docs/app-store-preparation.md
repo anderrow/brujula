@@ -8,7 +8,7 @@ The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separa
 
 ## Project settings already in the repository
 
-- Bundle ID: `app.brujula.life.ios`. Display name: Brújula. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`).
+- Bundle ID: `app.brujula.life.ios`. Display name: Brújula. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
 - Version: `MARKETING_VERSION` 1.0.0. Build: `CURRENT_PROJECT_VERSION` 1. After App Store Connect accepts an upload, increment the build number before the next upload.
 - Minimum iOS: 16.0. That meets Apple’s current minimum of iOS 13 (since September 9, 2026) and the April 2027 minimum of iOS 15.
 - `ITSAppUsesNonExemptEncryption` is `false` in Debug and Release. The app does not call CryptoKit, CommonCrypto, or its own network stack. Local files use Apple’s complete file protection, which is operating-system encryption. Standard exempt encryption is why the flag is false. Leaving it false lets TestFlight skip the Missing Compliance stop on every upload. If a later change adds non-exempt cryptography, remove this assumption and follow Apple’s export questionnaire.
@@ -29,7 +29,13 @@ Checked on this Mac on November 4, 2026:
 - The Release `Info.plist` contains `ITSAppUsesNonExemptEncryption = false`, version `1.0.0`, build `1`, bundle `app.brujula.life.ios`, and minimum OS `16.0`.
 - The bundled privacy manifest matches the source file.
 - The Release executable’s undefined symbols do not include the C entry points Apple lists for required-reason APIs (`stat`, `getattrlist`, `statfs`, `sysctl`, `mach_absolute_time`, UserDefaults). The app source does not call those APIs. Before the first upload, open the Organizer archive’s privacy report and confirm it still shows no missing reasons.
-- Model, backup, and reminder date checks passed. Notification delivery on a physical iPhone has not been tested. This was not a signed archive.
+- Model, backup, and reminder date checks passed. Notification delivery on a physical iPhone has not been tested.
+- On November 5, 2026 a Release archive of 1.0.0 (1) was signed with Apple Distribution for Prodfact BV and exported to an IPA. Upload is waiting on an App Store Connect app record. The current API key can upload a build and cannot create that record.
+
+Checked on the iPhone 17 simulator on November 5, 2026, in English:
+
+- Portrait: the wheel, empty history, notes for all eight areas, Settings, and the reminder sheet all open. The reminder switch starts off.
+- Landscape left and landscape right put the floating tab bar across the wheel, so the first TestFlight build stays portrait.
 
 ## Internal TestFlight
 

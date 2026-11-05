@@ -53,7 +53,7 @@ struct RadarView: View {
                 .position(label)
             }
         }
-        .frame(height: 275)
+        .frame(height: 220)
     }
 
     private func areaLabel(_ area: Area) -> some View {

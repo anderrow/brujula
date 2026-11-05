@@ -180,6 +180,7 @@ struct HomeView: View {
                 }
             }
             .padding()
+            .padding(.bottom, 88)
             .frame(maxWidth: 640)
             .frame(maxWidth: .infinity)
         }
