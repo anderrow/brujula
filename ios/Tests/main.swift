@@ -8,6 +8,24 @@ func require(_ condition: Bool, _ message: String) {
 }
 
 let empty = ReflectionState()
+for (index, area) in Area.allCases.enumerated() {
+    let angle = Double(index) * .pi / 4 - .pi / 2
+    let x = cos(angle), y = sin(angle)
+    require(WheelInteraction.area(x: x, y: y) == area, "A wheel tap must select the nearest area on every axis.")
+    for value in 0...10 {
+        require(WheelInteraction.score(x: x * Double(value) * 11.3, y: y * Double(value) * 11.3,
+                                       radius: 113, area: area) == value,
+                "Dragging must preserve intentional zero and all ten score levels on every axis.")
+        require(WheelInteraction.score(x: x * Double(value) * 5.65, y: y * Double(value) * 5.65,
+                                       radius: 56.5, area: area) == value,
+                "The drag score must be independent of screen size.")
+    }
+    require(WheelInteraction.score(x: -x * 200, y: -y * 200, radius: 113, area: area) == 0,
+            "Dragging across the center must clamp to zero.")
+    require(WheelInteraction.score(x: x * 300, y: y * 300, radius: 113, area: area) == 10,
+            "Dragging beyond the wheel must clamp to ten.")
+}
+require(empty.draft.scores.values.allSatisfy { $0 == nil }, "Interactive handles must not prepopulate draft scores.")
 let encoded = try empty.encoded()
 let decoded = try ReflectionState.decode(encoded)
 require(decoded == empty && decoded.draft.average == nil, "A new install must be empty after a disk round trip.")

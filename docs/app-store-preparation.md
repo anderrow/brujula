@@ -1,4 +1,4 @@
-# App Store preparation — Brújula for iPhone 1.0.0 (5)
+# App Store preparation — Brújula for iPhone 1.1.0 (5)
 
 Prepared on November 4, 2026. On November 5, 2026 the App Store Connect record **Brújula: Wheel of Life** (`6831086667`) was created. Builds 1 and 2 were rejected with ITMS-90129 because the icon name was already used by another app. Build 4 is in internal TestFlight. The icon name is **Brújula: Wheel of Life** in English and **Brújula: Rueda de la vida** in Spanish. External testing and App Review have not started. Recheck the linked Apple pages before uploading.
 
@@ -9,7 +9,7 @@ The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separa
 ## Project settings already in the repository
 
 - Bundle ID: `app.brujula.life.ios`. Icon name (`CFBundleDisplayName`): Brújula: Wheel of Life (English) and Brújula: Rueda de la vida (Spanish). Short bundle name (`CFBundleName`): BrujulaLife. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
-- Version: `MARKETING_VERSION` 1.0.0. Build: `CURRENT_PROJECT_VERSION` 5. Builds 1 and 2 were rejected, build 3 was cancelled before the binary arrived, and build 4 is the internal TestFlight build. Apple keeps those build numbers.
+- Version: `MARKETING_VERSION` 1.1.0. Build: `CURRENT_PROJECT_VERSION` 5. Version 1.0.0 used builds 1 through 4: 1 and 2 were rejected, 3 was cancelled, and 4 is the internal TestFlight build. Apple keeps those build numbers.
 - Minimum iOS: 16.0. That meets Apple’s current minimum of iOS 13 (since September 9, 2026) and the April 2027 minimum of iOS 15.
 - `ITSAppUsesNonExemptEncryption` is `false` in Debug and Release. The app does not call CryptoKit, CommonCrypto, or its own network stack. Local files use Apple’s complete file protection, which is operating-system encryption. Standard exempt encryption is why the flag is false. Leaving it false lets TestFlight skip the Missing Compliance stop on every upload. If a later change adds non-exempt cryptography, remove this assumption and follow Apple’s export questionnaire.
 - `PrivacyInfo.xcprivacy` is in the app bundle. Tracking is off, collected-data types are empty, and required-reason API entries are empty.

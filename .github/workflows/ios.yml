@@ -35,6 +35,7 @@ jobs:
       - name: Launch on an iPhone Simulator
         run: |
           simulator=$(xcrun simctl list devices available --json | python3 -c 'import json,sys; data=json.load(sys.stdin)["devices"]; print(next(d["udid"] for k,ds in reversed(sorted(data.items())) if ".iOS-" in k for d in ds if d["name"].startswith("iPhone")))')
+          echo "BRUJULA_SIMULATOR=$simulator" >> "$GITHUB_ENV"
           xcrun simctl boot "$simulator"
           xcrun simctl bootstatus "$simulator" -b
           xcrun simctl install "$simulator" "$RUNNER_TEMP/brujula-simulator/Build/Products/Debug-iphonesimulator/Brujula.app"
@@ -42,8 +43,29 @@ jobs:
           sleep 4
           xcrun simctl io "$simulator" screenshot "$RUNNER_TEMP/brujula-iphone.png"
           xcrun simctl terminate "$simulator" app.brujula.life.ios
+      - name: Exercise wheel gestures, persistence, and reminder controls
+        run: |
+          xcodebuild -project ios/Brujula.xcodeproj -scheme Brujula -configuration Debug -destination "platform=iOS Simulator,id=$BRUJULA_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/brujula-simulator" -resultBundlePath "$RUNNER_TEMP/brujula-ui.xcresult" CODE_SIGNING_ALLOWED=NO test
+      - name: Export simulator screenshots
+        if: always()
+        run: |
+          if [ -d "$RUNNER_TEMP/brujula-ui.xcresult" ]; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/brujula-ui.xcresult" --output-path "$RUNNER_TEMP/brujula-ui-screenshots"
+          fi
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: brujula-iphone-simulator-preview
-          path: ${{ runner.temp }}/brujula-iphone.png
+          path: |
+            ${{ runner.temp }}/brujula-iphone.png
+            ${{ runner.temp }}/brujula-ui-screenshots/*.png
+            ${{ runner.temp }}/brujula-ui-screenshots/*.txt
+            ${{ runner.temp }}/brujula-ui-screenshots/manifest.json
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: brujula-iphone-test-results
+          path: |
+            ${{ runner.temp }}/brujula-ui.xcresult/
+          if-no-files-found: ignore

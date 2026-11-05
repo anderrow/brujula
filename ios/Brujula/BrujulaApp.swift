@@ -25,6 +25,7 @@ struct BrujulaApp: App {
                 .environmentObject(store)
                 .environmentObject(reminders)
                 .tint(Palette.green)
+                .preferredColorScheme(.light)
                 .task(id: phase) {
                     if phase == .active { await reminders.refresh() }
                 }
@@ -36,9 +37,26 @@ struct BrujulaApp: App {
 }
 
 enum Palette {
-    static let green = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.49, green: 0.81, blue: 0.69, alpha: 1)
-            : UIColor(red: 0.125, green: 0.404, blue: 0.333, alpha: 1)
-    })
+    static let green = color(0x206755)
+    static let background = color(0xF7F6F1)
+    static let paper = color(0xFFFEFA)
+    static let ink = color(0x263E35)
+    static let muted = color(0x778178)
+    static let line = color(0xE3E6DC)
+    static let pale = color(0xE8EEE4)
+    static let warm = color(0xF0DFCD)
+
+    static func color(_ hex: UInt32) -> Color {
+        Color(red: Double((hex >> 16) & 255) / 255,
+              green: Double((hex >> 8) & 255) / 255,
+              blue: Double(hex & 255) / 255)
+    }
+}
+
+extension View {
+    func reflectionCard() -> some View {
+        padding(18)
+            .background(Palette.paper, in: RoundedRectangle(cornerRadius: 22))
+            .overlay(RoundedRectangle(cornerRadius: 22).stroke(Palette.line, lineWidth: 1))
+    }
 }

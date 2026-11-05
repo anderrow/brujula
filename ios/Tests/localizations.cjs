@@ -60,7 +60,7 @@ for (const literal of literals) {
   if (!strings[literal]) fail(`UI string is missing from the catalog: ${JSON.stringify(literal)}`);
 }
 
-const sameInEveryLanguage = new Set(['Brújula', '%lld / 10', '%lld/10', '%lld / 4000']);
+const sameInEveryLanguage = new Set(['Brújula', '.', '/ 10', '%lld / 10', '%lld/10', '%lld / 4000']);
 for (const [key, entry] of Object.entries(strings)) {
   for (const language of languages) {
     const unit = entry.localizations?.[language]?.stringUnit;

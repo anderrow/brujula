@@ -4,6 +4,20 @@
  classes = {};
  objectVersion = 56;
  objects = {
+  000000000000000000000070 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionTests.swift; sourceTree = "<group>"; };
+  000000000000000000000071 = {isa = PBXBuildFile; fileRef = 000000000000000000000070; };
+  000000000000000000000072 = {isa = PBXGroup; children = (000000000000000000000070); path = UITests; sourceTree = "<group>"; };
+  000000000000000000000073 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = BrujulaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+  000000000000000000000074 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000071); runOnlyForDeploymentPostprocessing = 0; };
+  000000000000000000000075 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  000000000000000000000076 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  000000000000000000000077 = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000078; buildPhases = (000000000000000000000074, 000000000000000000000075, 000000000000000000000076); buildRules = (); dependencies = (00000000000000000000007B); name = BrujulaUITests; productName = BrujulaUITests; productReference = 000000000000000000000073; productType = "com.apple.product-type.bundle.ui-testing"; };
+  000000000000000000000078 = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000079, 00000000000000000000007A); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  000000000000000000000079 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; TARGETED_DEVICE_FAMILY = 1; TEST_TARGET_NAME = Brujula; }; };
+  00000000000000000000007A = {isa = XCBuildConfiguration; name = Release; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; TARGETED_DEVICE_FAMILY = 1; TEST_TARGET_NAME = Brujula; }; };
+  00000000000000000000007B = {isa = PBXTargetDependency; target = 00000000000000000000001E; targetProxy = 00000000000000000000007C; };
+  00000000000000000000007C = {isa = PBXContainerItemProxy; containerPortal = 00000000000000000000001F; proxyType = 1; remoteGlobalIDString = 00000000000000000000001E; remoteInfo = Brujula; };
+
   000000000000000000000064 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrujulaApp.swift; sourceTree = "<group>"; };
   0000000000000000000000C8 = {isa = PBXBuildFile; fileRef = 000000000000000000000064; };
   000000000000000000000065 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionModel.swift; sourceTree = "<group>"; };
@@ -26,14 +40,14 @@
   0000000000000000000000D1 = {isa = PBXBuildFile; fileRef = 00000000000000000000006D; };
 
   00000000000000000000000A = {isa = PBXFileReference; explicitFileType = wrapper.application; path = BrujulaLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
-  00000000000000000000000B = {isa = PBXGroup; children = (00000000000000000000000C, 00000000000000000000000D); sourceTree = "<group>"; };
+  00000000000000000000000B = {isa = PBXGroup; children = (00000000000000000000000C, 000000000000000000000072, 00000000000000000000000D); sourceTree = "<group>"; };
   00000000000000000000000C = {isa = PBXGroup; children = (000000000000000000000064, 000000000000000000000065, 000000000000000000000066, 000000000000000000000067, 000000000000000000000068, 000000000000000000000069, 00000000000000000000006A, 00000000000000000000006B, 00000000000000000000006C, 00000000000000000000006D); path = Brujula; sourceTree = "<group>"; };
-  00000000000000000000000D = {isa = PBXGroup; children = (00000000000000000000000A); name = Products; sourceTree = "<group>"; };
+  00000000000000000000000D = {isa = PBXGroup; children = (00000000000000000000000A, 000000000000000000000073); name = Products; sourceTree = "<group>"; };
   000000000000000000000014 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000C8, 0000000000000000000000C9, 0000000000000000000000CA, 0000000000000000000000CB, 0000000000000000000000CC, 0000000000000000000000CD); runOnlyForDeploymentPostprocessing = 0; };
   000000000000000000000015 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
   000000000000000000000016 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000CE, 0000000000000000000000CF, 0000000000000000000000D0, 0000000000000000000000D1); runOnlyForDeploymentPostprocessing = 0; };
   00000000000000000000001E = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000029; buildPhases = (000000000000000000000014, 000000000000000000000015, 000000000000000000000016); buildRules = (); dependencies = (); name = Brujula; productName = Brujula; productReference = 00000000000000000000000A; productType = "com.apple.product-type.application"; };
-  00000000000000000000001F = {isa = PBXProject; attributes = {LastUpgradeCheck = 1600; TargetAttributes = {00000000000000000000001E = {CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = 000000000000000000000028; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, es, Base); mainGroup = 00000000000000000000000B; productRefGroup = 00000000000000000000000D; projectDirPath = ""; projectRoot = ""; targets = (00000000000000000000001E); };
+  00000000000000000000001F = {isa = PBXProject; attributes = {LastUpgradeCheck = 1600; TargetAttributes = {00000000000000000000001E = {CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = 000000000000000000000028; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, es, Base); mainGroup = 00000000000000000000000B; productRefGroup = 00000000000000000000000D; projectDirPath = ""; projectRoot = ""; targets = (00000000000000000000001E, 000000000000000000000077); };
   000000000000000000000028 = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000032, 000000000000000000000033); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
   000000000000000000000029 = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000034, 000000000000000000000035); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
   000000000000000000000032 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; IPHONEOS_DEPLOYMENT_TARGET = 16.0; LOCALIZATION_PREFERS_STRING_CATALOGS = YES; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
@@ -49,7 +63,7 @@
     INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
     INFOPLIST_KEY_UILaunchScreen_Generation = YES;
     INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-    MARKETING_VERSION = 1.0.0;
+    MARKETING_VERSION = 1.1.0;
     PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios;
     PRODUCT_NAME = BrujulaLife;
     SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -68,7 +82,7 @@
     INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
     INFOPLIST_KEY_UILaunchScreen_Generation = YES;
     INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-    MARKETING_VERSION = 1.0.0;
+    MARKETING_VERSION = 1.1.0;
     PRODUCT_BUNDLE_IDENTIFIER = app.brujula.life.ios;
     PRODUCT_NAME = BrujulaLife;
     SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

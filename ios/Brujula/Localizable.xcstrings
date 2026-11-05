@@ -1944,6 +1944,198 @@
           }
         }
       }
+    },
+    "On": {
+      "comment": "Reminder status when notifications are allowed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "On" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Activado" } }
+      }
+    },
+    "Notifications blocked": {
+      "comment": "Reminder status when iPhone notifications are denied.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Notifications blocked" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Notificaciones bloqueadas" } }
+      }
+    },
+    ".": {
+      "comment": "Decorative mark after the Brújula wordmark. Keep the period.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "." } },
+        "es": { "stringUnit": { "state": "translated", "value": "." } }
+      }
+    },
+    "YOUR WHEEL OF LIFE": {
+      "comment": "Small heading above the life wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "YOUR WHEEL OF LIFE" } },
+        "es": { "stringUnit": { "state": "translated", "value": "TU RUEDA DE LA VIDA" } }
+      }
+    },
+    "Tap an area or drag a point to adjust its score": {
+      "comment": "Hint under the life wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Tap an area or drag a point to adjust its score" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Toca un área o arrastra un punto para ajustar su valor" } }
+      }
+    },
+    "Eight areas, your own perspective": {
+      "comment": "Footnote under the personal average when every area is rated.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Eight areas, your own perspective" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Ocho áreas, tu propia perspectiva" } }
+      }
+    },
+    "Your eight areas": {
+      "comment": "Heading above the area list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your eight areas" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Tus ocho áreas" } }
+      }
+    },
+    "0–10 · tap to edit": {
+      "comment": "Hint beside the area list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "0–10 · tap to edit" } },
+        "es": { "stringUnit": { "state": "translated", "value": "0–10 · toca para editar" } }
+      }
+    },
+    "Changes saved automatically": {
+      "comment": "Status after a complete wheel is saved locally.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Changes saved automatically" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Cambios guardados automáticamente" } }
+      }
+    },
+    "Only on this device. No accounts or connection.": {
+      "comment": "Privacy line under the wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Only on this device. No accounts or connection." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Solo en este dispositivo. Sin cuentas ni conexión." } }
+      }
+    },
+    "/ 10": {
+      "comment": "Score suffix. Keep the slash and number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "/ 10" } },
+        "es": { "stringUnit": { "state": "translated", "value": "/ 10" } }
+      }
+    },
+    "What’s behind\na number.": {
+      "comment": "Notes screen title. Preserve the line break.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "What’s behind\na number." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Lo que hay detrás\nde un número." } }
+      }
+    },
+    "Draft notes are saved as you write. Save a check-in to keep that reflection in your history too.": {
+      "comment": "Notes screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Draft notes are saved as you write. Save a check-in to keep that reflection in your history too." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Las notas de tu borrador se guardan al escribir. Guarda una evaluación para conservar también esa reflexión en el historial." } }
+      }
+    },
+    "Every moment counts.": {
+      "comment": "History screen title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Every moment counts." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Cada momento cuenta." } }
+      }
+    },
+    "See how your priorities change. Your history tells your story, without judging it.": {
+      "comment": "History screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "See how your priorities change. Your history tells your story, without judging it." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Observa cómo cambian tus prioridades. Tu historial cuenta tu historia, sin juzgarla." } }
+      }
+    },
+    "Your saved check-ins will appear here. Save a moment from My wheel.": {
+      "comment": "Empty history message.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your saved check-ins will appear here. Save a moment from My wheel." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Aquí aparecerán tus evaluaciones guardadas. Guarda un momento desde Mi rueda." } }
+      }
+    },
+    "Your progress": {
+      "comment": "Heading above the history trend.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your progress" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Tu evolución" } }
+      }
+    },
+    "Choose a daily, weekly, or monthly moment to come back to yourself.": {
+      "comment": "Settings explanation for reminders.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose a daily, weekly, or monthly moment to come back to yourself." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Elige un momento diario, semanal o mensual para volver a ti." } }
+      }
+    },
+    "0 · Not at all satisfied": {
+      "comment": "Low end of the area score slider.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "0 · Not at all satisfied" } },
+        "es": { "stringUnit": { "state": "translated", "value": "0 · Nada satisfecho/a" } }
+      }
+    },
+    "10 · Very satisfied": {
+      "comment": "High end of the area score slider.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "10 · Very satisfied" } },
+        "es": { "stringUnit": { "state": "translated", "value": "10 · Muy satisfecho/a" } }
+      }
+    },
+    "Changes could not be saved": {
+      "comment": "Area editor error when a score or note cannot be stored.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Changes could not be saved" } },
+        "es": { "stringUnit": { "state": "translated", "value": "No se pudieron guardar los cambios" } }
+      }
+    },
+    "A little space to come back to yourself.": {
+      "comment": "Reminder screen introduction.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "A little space to come back to yourself." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Un pequeño espacio para volver a ti." } }
+      }
+    },
+    "Choose a daily, weekly, or monthly reminder. Notifications contain no scores or notes.": {
+      "comment": "Reminder screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose a daily, weekly, or monthly reminder. Notifications contain no scores or notes." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Elige un recordatorio diario, semanal o mensual. Las notificaciones no incluyen puntuaciones ni notas." } }
+      }
+    },
+    "When you save an enabled reminder, iPhone asks for notification permission. If notifications are blocked, enable them in Settings.": {
+      "comment": "Reminder permission explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "When you save an enabled reminder, iPhone asks for notification permission. If notifications are blocked, enable them in Settings." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Al guardar un recordatorio activado, el iPhone pide permiso de notificaciones. Si las notificaciones están bloqueadas, actívalas en Ajustes." } }
+      }
     }
   },
   "version": "1.0"

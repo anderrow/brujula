@@ -17,6 +17,23 @@ enum Area: String, CaseIterable, Identifiable, Codable {
     }
 }
 
+// Shared by touch interaction and the platform-independent geometry checks.
+enum WheelInteraction {
+    static func area(x: Double, y: Double) -> Area {
+        let turn = (atan2(y, x) + .pi / 2 + 2 * .pi).truncatingRemainder(dividingBy: 2 * .pi)
+        let index = Int((turn / (.pi / 4)).rounded()) % Area.allCases.count
+        return Area.allCases[index]
+    }
+
+    static func score(x: Double, y: Double, radius: Double, area: Area) -> Int {
+        guard radius > 0, radius.isFinite, x.isFinite, y.isFinite else { return 0 }
+        let index = Area.allCases.firstIndex(of: area)!
+        let angle = Double(index) * .pi / 4 - .pi / 2
+        let projection = x * cos(angle) + y * sin(angle)
+        return Int(max(0, min(10, (projection / radius * 10).rounded())))
+    }
+}
+
 struct Wheel: Codable, Equatable {
     var scores = Dictionary(uniqueKeysWithValues: Area.allCases.map { ($0.rawValue, nil as Int?) })
     var notes = Dictionary(uniqueKeysWithValues: Area.allCases.map { ($0.rawValue, "") })

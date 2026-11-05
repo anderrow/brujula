@@ -1,0 +1,98 @@
+import XCTest
+
+final class InteractionTests: XCTestCase {
+    func testWheelEditingAndReminderAccess() {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+
+        let healthLabel = app.buttons["wheel-area-health"]
+        XCTAssertTrue(healthLabel.waitForExistence(timeout: 10))
+        screenshot("Empty wheel")
+        healthLabel.tap()
+        let slider = app.sliders["score-slider"]
+        XCTAssertTrue(slider.waitForExistence(timeout: 5))
+        slider.adjust(toNormalizedSliderPosition: 0.7)
+        let note = app.textViews["area-note"]
+        note.tap()
+        note.typeText("A quiet walk.")
+        app.navigationBars.buttons["Done"].tap()
+
+        let handle = app.descendants(matching: .any).matching(identifier: "wheel-handle-health").firstMatch
+        XCTAssertTrue(handle.waitForExistence(timeout: 5))
+        XCTAssertEqual(handle.value as? String, "7 out of 10")
+        // Use real screen coordinates so this exercises the gesture, not just its score formula.
+        let radar = app.descendants(matching: .any).matching(identifier: "life-wheel").firstMatch
+        let start = handle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = start.withOffset(CGVector(dx: 0, dy: -radar.frame.width * 113 / 360 * 0.3))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertEqual(handle.value as? String, "10 out of 10")
+        screenshot("Edited wheel")
+        // Scroll in the page margin so the swipe cannot drag a wheel handle.
+        let scroll = app.scrollViews.firstMatch
+        scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.8))
+            .press(forDuration: 0.1, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.25)))
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-friends").firstMatch.value as? String, "Not rated")
+        screenshot("Area icons")
+
+        app.buttons["reminder-shortcut"].tap()
+        let toggle = app.switches["reminder-enabled"]
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        // SwiftUI exposes the full row as a switch; its midpoint can be empty space.
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        waitForValue("1", of: toggle)
+        XCTAssertTrue(app.descendants(matching: .any).matching(identifier: "reminder-frequency").firstMatch.waitForExistence(timeout: 5))
+        screenshot("Reminder controls")
+        app.buttons["save-reminder"].tap()
+        let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.buttons["Allow"]
+        if permission.waitForExistence(timeout: 5) { permission.tap() }
+        XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
+        waitForValue("On", of: app.buttons["reminder-shortcut"])
+
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
+        waitForValue("On", of: app.buttons["reminder-shortcut"])
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-health").firstMatch.value as? String, "10 out of 10")
+        app.buttons["wheel-area-health"].tap()
+        XCTAssertEqual(app.textViews["area-note"].value as? String, "A quiet walk.")
+        app.navigationBars.buttons["Done"].tap()
+
+        app.buttons["settings"].tap()
+        app.buttons["reminder-settings"].tap()
+        screenshot("Saved reminder")
+        XCTAssertTrue(app.staticTexts["reminder-next-date"].waitForExistence(timeout: 5))
+        app.switches["reminder-enabled"].coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        waitForValue("0", of: app.switches["reminder-enabled"])
+        app.buttons["save-reminder"].tap()
+        XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
+        waitForValue("Off", of: app.buttons["reminder-shortcut"])
+
+        app.buttons["tab-notes"].tap()
+        XCTAssertTrue((app.buttons["note-health"].value as? String)?.contains("A quiet walk.") == true)
+        app.buttons["tab-history"].tap()
+        XCTAssertTrue(app.staticTexts["Every moment counts."].exists)
+    }
+
+    override func tearDownWithError() throws {
+        screenshot("End of interaction check")
+        let tree = XCTAttachment(string: XCUIApplication().debugDescription)
+        tree.name = "Accessibility tree"
+        tree.lifetime = .keepAlways
+        add(tree)
+        try super.tearDownWithError()
+    }
+
+    private func waitForValue(_ value: String, of element: XCUIElement) {
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", value), object: element)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 10), .completed)
+    }
+
+    private func screenshot(_ name: String) {
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+}

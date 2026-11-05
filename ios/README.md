@@ -4,6 +4,10 @@ To start using Brújula on an iPhone, open the web app in Safari and choose **Sh
 
 The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. English and Spanish follow the iPhone language. Add another language in `Localizable.xcstrings`, `InfoPlist.xcstrings`, and the project’s known regions; iOS then offers it in Settings → Brújula: Wheel of Life → Language. The Spanish iPhone shows Brújula: Rueda de la vida. There is no language picker inside the app. The `locale` field in a backup is the Android interface language and is not used for the iPhone interface.
 
+The native interface follows the Android app's cream and green palette, serif headings, summary cards, area colors and icons, and three-tab navigation. Tap a wheel label or sector to open an area, or drag its point to change its score directly. Hollow points on an empty wheel are touch targets; they do not assign sample scores. VoiceOver users can adjust each point with swipe-up/down actions. Scores and notes save automatically, and dragging commits when the gesture ends.
+
+Open the labeled **Reminders** bell in the header or **Settings → Reflection reminder**. Both open the same daily, weekly and monthly scheduling controls. The header announces whether reminders are off, on, or blocked by notification permissions.
+
 ## Run on an iPhone
 
 1. On a Mac, clone this repository and open `ios/Brujula.xcodeproj` in Xcode 16 or later.
@@ -25,6 +29,8 @@ Reflections and reminder settings live in protected app files excluded from auto
 ## Build and verify
 
 The iPhone workflow compiles the app for the simulator and for iPhone hardware without signing, checks data and reminder logic using an Android-generated backup, and launches the app on an iPhone simulator. Real-device acceptance still includes notification delivery, Files integration and signing with the selected Apple team.
+
+The simulator UI check also edits scores and notes, drags a wheel point, relaunches to verify persistence, grants notification permission, saves a reminder, and cancels it through Settings. Screenshots and the test result bundle are uploaded with the workflow. These checks verify the controls and stored schedule; physical-device notification delivery still needs acceptance on the phone.
 
 From the repository root on macOS:
 
