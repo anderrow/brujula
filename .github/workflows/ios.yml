@@ -57,6 +57,13 @@ jobs:
           name: brujula-iphone-simulator-preview
           path: |
             ${{ runner.temp }}/brujula-iphone.png
-            ${{ runner.temp }}/brujula-ui-screenshots/
-            ${{ runner.temp }}/brujula-ui.xcresult/
+            ${{ runner.temp }}/brujula-ui-screenshots/*.png
+            ${{ runner.temp }}/brujula-ui-screenshots/manifest.json
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: brujula-iphone-test-results
+          path: |
+            ${{ runner.temp }}/brujula-ui.xcresult/
+          if-no-files-found: ignore

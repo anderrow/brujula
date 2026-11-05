@@ -29,12 +29,16 @@ final class InteractionTests: XCTestCase {
         start.press(forDuration: 0.1, thenDragTo: end)
         XCTAssertEqual(handle.value as? String, "10 out of 10")
         screenshot("Edited wheel")
+        app.scrollViews.firstMatch.swipeUp()
+        screenshot("Area icons")
 
         app.buttons["reminder-shortcut"].tap()
         let toggle = app.switches["reminder-enabled"]
         XCTAssertTrue(toggle.waitForExistence(timeout: 5))
-        toggle.tap()
-        XCTAssertTrue(app.buttons["reminder-frequency"].exists)
+        // SwiftUI exposes the full row as a switch; its midpoint can be empty space.
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        waitForValue("1", of: toggle)
+        XCTAssertTrue(app.descendants(matching: .any).matching(identifier: "reminder-frequency").firstMatch.waitForExistence(timeout: 5))
         screenshot("Reminder controls")
         app.buttons["save-reminder"].tap()
         let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.buttons["Allow"]
@@ -54,7 +58,8 @@ final class InteractionTests: XCTestCase {
         app.buttons["settings"].tap()
         app.buttons["reminder-settings"].tap()
         XCTAssertTrue(app.staticTexts["Next scheduled reminder"].waitForExistence(timeout: 5))
-        app.switches["reminder-enabled"].tap()
+        app.switches["reminder-enabled"].coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        waitForValue("0", of: app.switches["reminder-enabled"])
         app.buttons["save-reminder"].tap()
         XCTAssertTrue(app.buttons["reminder-shortcut"].waitForExistence(timeout: 10))
         waitForValue("Off", of: app.buttons["reminder-shortcut"])
