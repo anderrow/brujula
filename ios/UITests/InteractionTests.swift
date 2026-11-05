@@ -57,7 +57,8 @@ final class InteractionTests: XCTestCase {
 
         app.buttons["settings"].tap()
         app.buttons["reminder-settings"].tap()
-        XCTAssertTrue(app.staticTexts["Next scheduled reminder"].waitForExistence(timeout: 5))
+        screenshot("Saved reminder")
+        XCTAssertTrue(app.staticTexts["reminder-next-date"].waitForExistence(timeout: 5))
         app.switches["reminder-enabled"].coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
         waitForValue("0", of: app.switches["reminder-enabled"])
         app.buttons["save-reminder"].tap()
@@ -65,9 +66,18 @@ final class InteractionTests: XCTestCase {
         waitForValue("Off", of: app.buttons["reminder-shortcut"])
 
         app.buttons["tab-notes"].tap()
-        XCTAssertTrue(app.staticTexts["A quiet walk."].exists)
+        XCTAssertTrue((app.buttons["note-health"].value as? String)?.contains("A quiet walk.") == true)
         app.buttons["tab-history"].tap()
         XCTAssertTrue(app.staticTexts["Every moment counts."].exists)
+    }
+
+    override func tearDownWithError() throws {
+        screenshot("End of interaction check")
+        let tree = XCTAttachment(string: XCUIApplication().debugDescription)
+        tree.name = "Accessibility tree"
+        tree.lifetime = .keepAlways
+        add(tree)
+        try super.tearDownWithError()
     }
 
     private func waitForValue(_ value: String, of element: XCUIElement) {

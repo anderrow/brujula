@@ -342,6 +342,9 @@ struct HomeView: View {
                         .reflectionCard()
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(item.title)
+                    .accessibilityValue("\(store.state.draft.score(item).map { "\($0) out of 10" } ?? "Not rated"). \(store.state.draft.note(item).isEmpty ? "Add a reflection" : store.state.draft.note(item))")
+                    .accessibilityIdentifier("note-\(item.rawValue)")
                 }
             }
             .padding(24).frame(maxWidth: 640).frame(maxWidth: .infinity)
