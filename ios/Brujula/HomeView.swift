@@ -76,13 +76,13 @@ struct HomeView: View {
             TextField("Title (optional)", text: $saveTitle)
             Button("Save") {
                 let title = String(decoding: saveTitle.utf16.prefix(80), as: UTF16.self)
-                if store.saveCheckIn(title) { notice = "Check-in saved." }
+                if store.saveCheckIn(title) { notice = String(localized: "Check-in saved.") }
             }
             Button("Cancel", role: .cancel) {}
         } message: { Text("Keep a snapshot of your current scores and notes.") }
         .alert("Restore backup?", isPresented: $restore) {
             Button("Restore", role: .destructive) {
-                if let imported, store.commit(imported) { notice = "Backup restored." }
+                if let imported, store.commit(imported) { notice = String(localized: "Backup restored.") }
                 imported = nil
             }
             Button("Cancel", role: .cancel) { imported = nil }
@@ -92,10 +92,10 @@ struct HomeView: View {
                 Task {
                     let previous = reminders.schedule
                     guard await reminders.save(ReminderSchedule()) else {
-                        if reminders.error == nil { notice = "Wait for the reminder update to finish and try again." }
+                        if reminders.error == nil { notice = String(localized: "Wait for the reminder update to finish and try again.") }
                         return
                     }
-                    if store.commit(ReflectionState()) { notice = "Local data cleared." }
+                    if store.commit(ReflectionState()) { notice = String(localized: "Local data cleared.") }
                     else if previous.enabled { _ = await reminders.save(previous) }
                 }
             }
@@ -508,6 +508,6 @@ struct HomeView: View {
             defer { if accessed { url.stopAccessingSecurityScopedResource() } }
             imported = try ReflectionState.decode(LocalFiles.read(url))
             restore = true
-        } catch { notice = "Could not open the backup. Choose a valid Brújula JSON file under 8 MB." }
+        } catch { notice = String(localized: "Could not open the backup. Choose a valid Brújula JSON file under 8 MB.") }
     }
 }

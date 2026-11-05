@@ -1,0 +1,2142 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Saved reflections could not be opened.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved reflections could not be opened."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron abrir las reflexiones guardadas."
+          }
+        }
+      }
+    },
+    "Open settings": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir ajustes"
+          }
+        }
+      }
+    },
+    "Brújula": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brújula"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brújula"
+          }
+        }
+      }
+    },
+    "Reminders": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorios"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
+          }
+        }
+      }
+    },
+    "My wheel": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My wheel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi rueda"
+          }
+        }
+      }
+    },
+    "History": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historial"
+          }
+        }
+      }
+    },
+    "Add a reflection": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a reflection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añade una reflexión"
+          }
+        }
+      }
+    },
+    "Notes": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas"
+          }
+        }
+      }
+    },
+    "Save check-in": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save check-in"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar evaluación"
+          }
+        }
+      }
+    },
+    "Title (optional)": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title (optional)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Título (opcional)"
+          }
+        }
+      }
+    },
+    "Save": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar"
+          }
+        }
+      }
+    },
+    "Check-in saved.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in saved."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evaluación guardada."
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        }
+      }
+    },
+    "Keep a snapshot of your current scores and notes.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep a snapshot of your current scores and notes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guarda una instantánea de tus puntuaciones y notas actuales."
+          }
+        }
+      }
+    },
+    "Restore backup?": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore backup?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Restaurar la copia de seguridad?"
+          }
+        }
+      }
+    },
+    "Restore": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar"
+          }
+        }
+      }
+    },
+    "Backup restored.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup restored."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia de seguridad restaurada."
+          }
+        }
+      }
+    },
+    "This replaces the scores, notes, and check-ins on this device.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This replaces the scores, notes, and check-ins on this device."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esto sustituye las puntuaciones, las notas y las evaluaciones de este dispositivo."
+          }
+        }
+      }
+    },
+    "Clear local data?": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear local data?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Borrar los datos locales?"
+          }
+        }
+      }
+    },
+    "Clear data": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear data"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar datos"
+          }
+        }
+      }
+    },
+    "Wait for the reminder update to finish and try again.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wait for the reminder update to finish and try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espera a que termine la actualización del recordatorio y vuelve a intentarlo."
+          }
+        }
+      }
+    },
+    "Local data cleared.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local data cleared."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos locales borrados."
+          }
+        }
+      }
+    },
+    "This deletes your local scores, notes, and check-ins and turns off reminders. Export a backup first if you want to keep them.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This deletes your local scores, notes, and check-ins and turns off reminders. Export a backup first if you want to keep them."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esto borra las puntuaciones, las notas y las evaluaciones locales y desactiva los recordatorios. Exporta una copia antes si quieres conservarlas."
+          }
+        }
+      }
+    },
+    "OK": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aceptar"
+          }
+        }
+      }
+    },
+    "A MOMENT FOR YOURSELF": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A MOMENT FOR YOURSELF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UN MOMENTO PARA TI"
+          }
+        }
+      }
+    },
+    "Your life,\nin perspective.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your life,\nin perspective."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu vida,\nen perspectiva."
+          }
+        }
+      }
+    },
+    "You don’t need a perfect wheel. Just a moment to listen to how you feel.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You don’t need a perfect wheel. Just a moment to listen to how you feel."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No necesitas una rueda perfecta. Solo un momento para escuchar cómo estás."
+          }
+        }
+      }
+    },
+    "Your wheel of life": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your wheel of life"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rueda de la vida"
+          }
+        }
+      }
+    },
+    "Tap an area to rate it and write a note.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap an area to rate it and write a note."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca un área para valorarla y escribir una nota."
+          }
+        }
+      }
+    },
+    "Average of rated areas": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average of rated areas"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Media de las áreas valoradas"
+          }
+        }
+      }
+    },
+    "Not rated": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not rated"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin valorar"
+          }
+        }
+      }
+    },
+    "Rate all eight areas to save a check-in.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate all eight areas to save a check-in."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valora las ocho áreas para guardar una evaluación."
+          }
+        }
+      }
+    },
+    "Your saved check-ins will appear here.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved check-ins will appear here."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquí aparecerán tus evaluaciones guardadas."
+          }
+        }
+      }
+    },
+    "Recent trend": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent trend"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evolución reciente"
+          }
+        }
+      }
+    },
+    "Area": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Área"
+          }
+        }
+      }
+    },
+    "Overall average": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overall average"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Media general"
+          }
+        }
+      }
+    },
+    "Privacy": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacidad"
+          }
+        }
+      }
+    },
+    "Your reflections stay on this device. Brújula has no account, ads, or analytics.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your reflections stay on this device. Brújula has no account, ads, or analytics."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus reflexiones se quedan en este dispositivo. Brújula no tiene cuenta, anuncios ni analítica."
+          }
+        }
+      }
+    },
+    "Privacy policy": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        }
+      }
+    },
+    "Backups": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backups"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copias de seguridad"
+          }
+        }
+      }
+    },
+    "Export backup": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export backup"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar copia de seguridad"
+          }
+        }
+      }
+    },
+    "Restore backup": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore backup"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar copia de seguridad"
+          }
+        }
+      }
+    },
+    "Backups include your notes and are not encrypted by Brújula. They work on iPhone and Android.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backups include your notes and are not encrypted by Brújula. They work on iPhone and Android."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las copias incluyen tus notas y Brújula no las cifra. Funcionan en iPhone y Android."
+          }
+        }
+      }
+    },
+    "Clear data and start fresh": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear data and start fresh"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar datos y empezar de cero"
+          }
+        }
+      }
+    },
+    "Done": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
+          }
+        }
+      }
+    },
+    "Local data": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local data"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos locales"
+          }
+        }
+      }
+    },
+    "Brújula stores scores, notes, history, and reminder settings in protected files inside the app. These files are excluded from automatic device backups. The app does not collect or send your reflections.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brújula stores scores, notes, history, and reminder settings in protected files inside the app. These files are excluded from automatic device backups. The app does not collect or send your reflections."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brújula guarda las puntuaciones, las notas, el historial y los ajustes del recordatorio en archivos protegidos dentro de la app. Esos archivos quedan fuera de las copias automáticas del dispositivo. La app no recopila ni envía tus reflexiones."
+          }
+        }
+      }
+    },
+    "Reminders are off by default. If you enable one, iOS schedules it locally. Notifications never include scores or notes.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders are off by default. If you enable one, iOS schedules it locally. Notifications never include scores or notes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios están desactivados por defecto. Si activas uno, iOS lo programa en el dispositivo. Las notificaciones nunca incluyen puntuaciones ni notas."
+          }
+        }
+      }
+    },
+    "Retention and deletion": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retention and deletion"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conservación y borrado"
+          }
+        }
+      }
+    },
+    "Use Settings → Clear data and start fresh or remove the app to delete its local data. Exported backups are separate. You choose where to save them and are responsible for deleting them.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Settings → Clear data and start fresh or remove the app to delete its local data. Exported backups are separate. You choose where to save them and are responsible for deleting them."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa Ajustes → Borrar datos y empezar de cero, o elimina la app, para borrar sus datos locales. Las copias exportadas son independientes. Tú eliges dónde guardarlas y eres responsable de borrarlas."
+          }
+        }
+      }
+    },
+    "Contact": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacto"
+          }
+        }
+      }
+    },
+    "Brújula project and support": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brújula project and support"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proyecto y soporte de Brújula"
+          }
+        }
+      }
+    },
+    "Support issues are public. Do not include private notes, scores, or backups.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support issues are public. Do not include private notes, scores, or backups."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las incidencias de soporte son públicas. No incluyas notas, puntuaciones ni copias privadas."
+          }
+        }
+      }
+    },
+    "Could not open the backup. Choose a valid Brújula JSON file under 8 MB.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the backup. Choose a valid Brújula JSON file under 8 MB."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo abrir la copia. Elige un archivo JSON válido de Brújula de menos de 8 MB."
+          }
+        }
+      }
+    },
+    "Health": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salud"
+          }
+        }
+      }
+    },
+    "Work": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trabajo"
+          }
+        }
+      }
+    },
+    "Finances": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finances"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finanzas"
+          }
+        }
+      }
+    },
+    "Family": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Family"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Familia"
+          }
+        }
+      }
+    },
+    "Friends": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amistades"
+          }
+        }
+      }
+    },
+    "Partner": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pareja"
+          }
+        }
+      }
+    },
+    "Leisure": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leisure"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocio"
+          }
+        }
+      }
+    },
+    "Growth": {
+      "comment": "Life-area name. Use the same word as the Android app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Growth"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crecimiento"
+          }
+        }
+      }
+    },
+    "This file is not a valid Brújula backup.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This file is not a valid Brújula backup."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este archivo no es una copia de seguridad válida de Brújula."
+          }
+        }
+      }
+    },
+    "This data exceeds Brújula’s 8 MB limit.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This data exceeds Brújula’s 8 MB limit."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estos datos superan el límite de 8 MB de Brújula."
+          }
+        }
+      }
+    },
+    "Rate all eight areas before saving a check-in.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate all eight areas before saving a check-in."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valora las ocho áreas antes de guardar una evaluación."
+          }
+        }
+      }
+    },
+    "The history is full. Export a backup before deleting an older check-in.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The history is full. Export a backup before deleting an older check-in."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El historial está lleno. Exporta una copia de seguridad antes de eliminar una evaluación antigua."
+          }
+        }
+      }
+    },
+    "How do you feel about this area?": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How do you feel about this area?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Cómo te sientes en esta área?"
+          }
+        }
+      }
+    },
+    "Score": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puntuación"
+          }
+        }
+      }
+    },
+    "Your reflection": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your reflection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu reflexión"
+          }
+        }
+      }
+    },
+    "Could not save. Your edits are still on this screen.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save. Your edits are still on this screen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo guardar. Tus cambios siguen en esta pantalla."
+          }
+        }
+      }
+    },
+    "Replace current draft?": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace current draft?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Sustituir el borrador actual?"
+          }
+        }
+      }
+    },
+    "Delete this check-in?": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this check-in?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar esta evaluación?"
+          }
+        }
+      }
+    },
+    "Compare with": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare with"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparar con"
+          }
+        }
+      }
+    },
+    "No comparison": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No comparison"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin comparación"
+          }
+        }
+      }
+    },
+    "Use as draft": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use as draft"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar como borrador"
+          }
+        }
+      }
+    },
+    "Delete check-in": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete check-in"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar evaluación"
+          }
+        }
+      }
+    },
+    "Your current scores and notes will be replaced. History will be kept.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your current scores and notes will be replaced. History will be kept."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se sustituirán las puntuaciones y notas actuales. El historial se conservará."
+          }
+        }
+      }
+    },
+    "This check-in and its notes will be removed from history.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This check-in and its notes will be removed from history."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se eliminará esta evaluación y sus notas del historial."
+          }
+        }
+      }
+    },
+    "Replace draft": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace draft"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sustituir borrador"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
+          }
+        }
+      }
+    },
+    "Enable reminder": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable reminder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activar recordatorio"
+          }
+        }
+      }
+    },
+    "Frequency": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frequency"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia"
+          }
+        }
+      }
+    },
+    "Day of the week": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day of the week"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día de la semana"
+          }
+        }
+      }
+    },
+    "Day of the month": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day of the month"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día del mes"
+          }
+        }
+      }
+    },
+    "If the chosen day does not exist, the reminder uses the last day of the month.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If the chosen day does not exist, the reminder uses the last day of the month."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si el día elegido no existe, el recordatorio usa el último día del mes."
+          }
+        }
+      }
+    },
+    "Time": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora"
+          }
+        }
+      }
+    },
+    "Next scheduled reminder": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next scheduled reminder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximo recordatorio previsto"
+          }
+        }
+      }
+    },
+    "Open iPhone Settings": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open iPhone Settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes del iPhone"
+          }
+        }
+      }
+    },
+    "Reflection reminder": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reflection reminder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de reflexión"
+          }
+        }
+      }
+    },
+    "Wait for the current update and try again.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wait for the current update and try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espera a que termine la actualización actual y vuelve a intentarlo."
+          }
+        }
+      }
+    },
+    "Daily": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diario"
+          }
+        }
+      }
+    },
+    "Weekly": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanal"
+          }
+        }
+      }
+    },
+    "Monthly": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensual"
+          }
+        }
+      }
+    },
+    "Your saved reflections could not be opened. The original file has not been changed.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved reflections could not be opened. The original file has not been changed."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron abrir tus reflexiones guardadas. El archivo original no se ha modificado."
+          }
+        }
+      }
+    },
+    "Local storage is unavailable. Try opening Brújula again.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local storage is unavailable. Try opening Brújula again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El almacenamiento local no está disponible. Vuelve a abrir Brújula."
+          }
+        }
+      }
+    },
+    "My check-in": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My check-in"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi evaluación"
+          }
+        }
+      }
+    },
+    "The saved reminder could not be opened.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The saved reminder could not be opened."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo abrir el recordatorio guardado."
+          }
+        }
+      }
+    },
+    "The reminder could not be refreshed. Open Reminders and save it again.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder could not be refreshed. Open Reminders and save it again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo actualizar el recordatorio. Abre Recordatorios y vuelve a guardarlo."
+          }
+        }
+      }
+    },
+    "Notifications are disabled. You can enable them in iPhone Settings.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are disabled. You can enable them in iPhone Settings."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones están desactivadas. Puedes activarlas en Ajustes del iPhone."
+          }
+        }
+      }
+    },
+    "The reminder could not be saved.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder could not be saved."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo guardar el recordatorio."
+          }
+        }
+      }
+    },
+    "Take a moment to check in with yourself.": {
+      "comment": "iPhone interface. Preserve line breaks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a moment to check in with yourself."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tómate un momento para estar contigo."
+          }
+        }
+      }
+    },
+    "%lld/10 · compared with %lld/10": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/10 · compared with %lld/10"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/10 · comparado con %lld/10"
+          }
+        }
+      }
+    },
+    "%lld out of 10": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld out of 10"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld de 10"
+          }
+        }
+      }
+    },
+    "Dashed line: %@": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dashed line: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Línea discontinua: %@"
+          }
+        }
+      }
+    },
+    "%lld / 10": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld / 10"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld / 10"
+          }
+        }
+      }
+    },
+    "%lld/10": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/10"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/10"
+          }
+        }
+      }
+    },
+    "%lld / 4000": {
+      "comment": "Format string. Preserve every placeholder and its order unless Spanish grammar requires a different order.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld / 4000"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld / 4000"
+          }
+        }
+      }
+    },
+    "On": {
+      "comment": "Reminder status when notifications are allowed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "On" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Activado" } }
+      }
+    },
+    "Notifications blocked": {
+      "comment": "Reminder status when iPhone notifications are denied.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Notifications blocked" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Notificaciones bloqueadas" } }
+      }
+    },
+    ".": {
+      "comment": "Decorative mark after the Brújula wordmark. Keep the period.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "." } },
+        "es": { "stringUnit": { "state": "translated", "value": "." } }
+      }
+    },
+    "YOUR WHEEL OF LIFE": {
+      "comment": "Small heading above the life wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "YOUR WHEEL OF LIFE" } },
+        "es": { "stringUnit": { "state": "translated", "value": "TU RUEDA DE LA VIDA" } }
+      }
+    },
+    "Tap an area or drag a point to adjust its score": {
+      "comment": "Hint under the life wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Tap an area or drag a point to adjust its score" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Toca un área o arrastra un punto para ajustar su valor" } }
+      }
+    },
+    "Eight areas, your own perspective": {
+      "comment": "Footnote under the personal average when every area is rated.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Eight areas, your own perspective" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Ocho áreas, tu propia perspectiva" } }
+      }
+    },
+    "Your eight areas": {
+      "comment": "Heading above the area list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your eight areas" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Tus ocho áreas" } }
+      }
+    },
+    "0–10 · tap to edit": {
+      "comment": "Hint beside the area list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "0–10 · tap to edit" } },
+        "es": { "stringUnit": { "state": "translated", "value": "0–10 · toca para editar" } }
+      }
+    },
+    "Changes saved automatically": {
+      "comment": "Status after a complete wheel is saved locally.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Changes saved automatically" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Cambios guardados automáticamente" } }
+      }
+    },
+    "Only on this device. No accounts or connection.": {
+      "comment": "Privacy line under the wheel.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Only on this device. No accounts or connection." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Solo en este dispositivo. Sin cuentas ni conexión." } }
+      }
+    },
+    "/ 10": {
+      "comment": "Score suffix. Keep the slash and number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "/ 10" } },
+        "es": { "stringUnit": { "state": "translated", "value": "/ 10" } }
+      }
+    },
+    "What’s behind\na number.": {
+      "comment": "Notes screen title. Preserve the line break.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "What’s behind\na number." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Lo que hay detrás\nde un número." } }
+      }
+    },
+    "Draft notes are saved as you write. Save a check-in to keep that reflection in your history too.": {
+      "comment": "Notes screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Draft notes are saved as you write. Save a check-in to keep that reflection in your history too." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Las notas de tu borrador se guardan al escribir. Guarda una evaluación para conservar también esa reflexión en el historial." } }
+      }
+    },
+    "Every moment counts.": {
+      "comment": "History screen title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Every moment counts." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Cada momento cuenta." } }
+      }
+    },
+    "See how your priorities change. Your history tells your story, without judging it.": {
+      "comment": "History screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "See how your priorities change. Your history tells your story, without judging it." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Observa cómo cambian tus prioridades. Tu historial cuenta tu historia, sin juzgarla." } }
+      }
+    },
+    "Your saved check-ins will appear here. Save a moment from My wheel.": {
+      "comment": "Empty history message.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your saved check-ins will appear here. Save a moment from My wheel." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Aquí aparecerán tus evaluaciones guardadas. Guarda un momento desde Mi rueda." } }
+      }
+    },
+    "Your progress": {
+      "comment": "Heading above the history trend.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your progress" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Tu evolución" } }
+      }
+    },
+    "Choose a daily, weekly, or monthly moment to come back to yourself.": {
+      "comment": "Settings explanation for reminders.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose a daily, weekly, or monthly moment to come back to yourself." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Elige un momento diario, semanal o mensual para volver a ti." } }
+      }
+    },
+    "0 · Not at all satisfied": {
+      "comment": "Low end of the area score slider.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "0 · Not at all satisfied" } },
+        "es": { "stringUnit": { "state": "translated", "value": "0 · Nada satisfecho/a" } }
+      }
+    },
+    "10 · Very satisfied": {
+      "comment": "High end of the area score slider.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "10 · Very satisfied" } },
+        "es": { "stringUnit": { "state": "translated", "value": "10 · Muy satisfecho/a" } }
+      }
+    },
+    "Changes could not be saved": {
+      "comment": "Area editor error when a score or note cannot be stored.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Changes could not be saved" } },
+        "es": { "stringUnit": { "state": "translated", "value": "No se pudieron guardar los cambios" } }
+      }
+    },
+    "A little space to come back to yourself.": {
+      "comment": "Reminder screen introduction.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "A little space to come back to yourself." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Un pequeño espacio para volver a ti." } }
+      }
+    },
+    "Choose a daily, weekly, or monthly reminder. Notifications contain no scores or notes.": {
+      "comment": "Reminder screen explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose a daily, weekly, or monthly reminder. Notifications contain no scores or notes." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Elige un recordatorio diario, semanal o mensual. Las notificaciones no incluyen puntuaciones ni notas." } }
+      }
+    },
+    "When you save an enabled reminder, iPhone asks for notification permission. If notifications are blocked, enable them in Settings.": {
+      "comment": "Reminder permission explanation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "When you save an enabled reminder, iPhone asks for notification permission. If notifications are blocked, enable them in Settings." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Al guardar un recordatorio activado, el iPhone pide permiso de notificaciones. Si las notificaciones están bloqueadas, actívalas en Ajustes." } }
+      }
+    }
+  },
+  "version": "1.0"
+}

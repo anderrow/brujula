@@ -309,7 +309,11 @@ struct HistoryDetail: View {
     private enum Action: String, Identifiable {
         case replace, delete
         var id: String { rawValue }
-        var title: String { self == .replace ? "Replace current draft?" : "Delete this check-in?" }
+        var title: String {
+            self == .replace
+                ? String(localized: "Replace current draft?")
+                : String(localized: "Delete this check-in?")
+        }
     }
 
     var body: some View {
@@ -448,7 +452,7 @@ struct ReminderEditor: View {
                             config.minute = parts.minute ?? 0
                             if await reminders.save(config) { dismiss() }
                             else {
-                                failure = reminders.error ?? "Wait for the current update and try again."
+                                failure = reminders.error ?? String(localized: "Wait for the current update and try again.")
                                 reminders.error = nil
                             }
                         }

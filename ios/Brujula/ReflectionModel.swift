@@ -3,7 +3,18 @@ import Foundation
 enum Area: String, CaseIterable, Identifiable, Codable {
     case health, work, finances, family, friends, partner, leisure, growth
     var id: String { rawValue }
-    var title: String { rawValue.capitalized }
+    var title: String {
+        switch self {
+        case .health: String(localized: "Health")
+        case .work: String(localized: "Work")
+        case .finances: String(localized: "Finances")
+        case .family: String(localized: "Family")
+        case .friends: String(localized: "Friends")
+        case .partner: String(localized: "Partner")
+        case .leisure: String(localized: "Leisure")
+        case .growth: String(localized: "Growth")
+        }
+    }
 }
 
 // Shared by touch interaction and the platform-independent geometry checks.
@@ -107,10 +118,10 @@ enum ReflectionError: LocalizedError {
     case invalidBackup, tooLarge, incomplete, historyFull
     var errorDescription: String? {
         switch self {
-        case .invalidBackup: return "This file is not a valid Brújula backup."
-        case .tooLarge: return "This data exceeds Brújula’s 8 MB limit."
-        case .incomplete: return "Rate all eight areas before saving a check-in."
-        case .historyFull: return "The history is full. Export a backup before deleting an older check-in."
+        case .invalidBackup: String(localized: "This file is not a valid Brújula backup.")
+        case .tooLarge: String(localized: "This data exceeds Brújula’s 8 MB limit.")
+        case .incomplete: String(localized: "Rate all eight areas before saving a check-in.")
+        case .historyFull: String(localized: "The history is full. Export a backup before deleting an older check-in.")
         }
     }
 }

@@ -81,3 +81,7 @@ When publishing a future release, attach the signed APK under its versioned name
 The signed `Brujula-1.2.0.aab` targets API 36 and uses the existing Brújula release certificate. The APK remains available for direct installation. See [Google Play preparation](docs/google-play-preparation.md) for store copy, declarations, signing compatibility, and the account/testing/review steps that remain. No Play Console upload or submission has been performed.
 
 The [public privacy policy](https://anderrow.github.io/brujula/privacy.html) is also bundled offline in Settings in English and Spanish. Run `node tools/generate-privacy.cjs` after changing the canonical app policy to regenerate its public copy. Release packaging verifies that both copies match.
+
+## Future App Store submission
+
+The iPhone app in `ios/` is version 1.0.0 (build 1), separate from Android 1.2.0. Its release settings declare exempt encryption so a TestFlight upload is not held for the export questionnaire. See [App Store preparation](docs/app-store-preparation.md) for the internal TestFlight path, listing copy, and the account steps that remain. Nothing has been uploaded to App Store Connect or submitted for review. The iPhone interface follows the phone language, with English and Spanish included.
