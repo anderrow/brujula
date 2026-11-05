@@ -1,73 +1,173 @@
 import SwiftUI
 
+extension Area {
+    var symbol: String {
+        switch self {
+        case .health: return "heart.text.square"
+        case .work: return "briefcase"
+        case .finances: return "wallet.pass"
+        case .family: return "house"
+        case .friends: return "person.2"
+        case .partner: return "heart"
+        case .leisure: return "sun.max"
+        case .growth: return "leaf"
+        }
+    }
+
+    var color: Color {
+        let colors: [UInt32] = [0x427F69, 0x608FA3, 0xB38A45, 0xC48469,
+                                0x9B8AAD, 0xB56F80, 0x6F9B8E, 0x8C9755]
+        return Palette.color(colors[Area.allCases.firstIndex(of: self)!])
+    }
+}
+
+struct AreaBadge: View {
+    let area: Area
+    var body: some View {
+        Image(systemName: area.symbol)
+            .font(.system(size: 18, weight: .regular))
+            .foregroundStyle(area.color)
+            .frame(width: 34, height: 34)
+            .background(area.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 11))
+            .accessibilityHidden(true)
+    }
+}
+
 struct RadarView: View {
     let wheel: Wheel
     var comparison: Wheel?
     var select: ((Area) -> Void)?
+    var update: ((Area, Int) -> Bool)?
+    @State private var draggedArea: Area?
+    @State private var draggedScore: Int?
 
     var body: some View {
         GeometryReader { geometry in
-            let size = geometry.size
-            let radius = min(max(20, size.width / 2 - 56), size.height / 2 - 38)
-            let center = CGPoint(x: size.width / 2, y: size.height / 2)
-            Canvas { context, _ in
-                for level in [2, 4, 6, 8, 10] {
-                    let grid = polygon(center: center, radius: radius) { _ in CGFloat(level) / 10 }
-                    context.stroke(grid, with: .color(.secondary.opacity(0.23)), lineWidth: 1)
-                }
-                for index in Area.allCases.indices {
-                    var spoke = Path()
-                    spoke.move(to: center)
-                    spoke.addLine(to: point(index, center, radius))
-                    context.stroke(spoke, with: .color(.secondary.opacity(0.23)), lineWidth: 1)
-                }
-                if let comparison, comparison.average != nil {
-                    let outline = polygon(center: center, radius: radius) {
-                        CGFloat(comparison.score($0) ?? 0) / 10
+            let scale = geometry.size.width / 360
+            let radius = 113 * scale
+            let center = CGPoint(x: geometry.size.width / 2, y: 168 * scale)
+            ZStack(alignment: .topLeading) {
+                Canvas { context, _ in
+                    for level in [2, 4, 6, 8, 10] {
+                        let grid = polygon(center: center, radius: radius) { _ in CGFloat(level) / 10 }
+                        context.stroke(grid, with: .color(Palette.line), lineWidth: 1)
+                        context.draw(Text("\(level)").font(.system(size: 7)).foregroundColor(Palette.muted),
+                                     at: CGPoint(x: center.x + 8 * scale, y: center.y - radius * CGFloat(level) / 10))
                     }
-                    context.stroke(outline, with: .color(.orange), style: StrokeStyle(lineWidth: 2, dash: [4, 4]))
+                    for index in Area.allCases.indices {
+                        var spoke = Path()
+                        spoke.move(to: center)
+                        spoke.addLine(to: point(index, center, radius))
+                        context.stroke(spoke, with: .color(Palette.line), lineWidth: 1)
+                    }
+                    if let comparison, comparison.average != nil {
+                        let outline = polygon(center: center, radius: radius) {
+                            CGFloat(comparison.score($0) ?? 0) / 10
+                        }
+                        context.fill(outline, with: .color(Palette.color(0xC9A58A).opacity(0.08)))
+                        context.stroke(outline, with: .color(Palette.color(0xC9A58A)),
+                                       style: StrokeStyle(lineWidth: 1.8, dash: [4, 4]))
+                    }
+                    if wheel.average != nil || draggedScore != nil {
+                        let shape = polygon(center: center, radius: radius) { CGFloat(score($0) ?? 0) / 10 }
+                        context.fill(shape, with: .color(Palette.green.opacity(0.16)))
+                        context.stroke(shape, with: .color(Palette.color(0x427F69)), lineWidth: 2)
+                    }
                 }
-                if wheel.average != nil {
-                    let shape = polygon(center: center, radius: radius) { CGFloat(wheel.score($0) ?? 0) / 10 }
-                    context.fill(shape, with: .color(Palette.green.opacity(0.18)))
-                    context.stroke(shape, with: .color(Palette.green), lineWidth: 2)
-                    for (index, area) in Area.allCases.enumerated() {
-                        guard let score = wheel.score(area) else { continue }
-                        let mark = point(index, center, radius * CGFloat(score) / 10)
-                        context.fill(Path(ellipseIn: CGRect(x: mark.x - 3, y: mark.y - 3, width: 6, height: 6)),
-                                     with: .color(Palette.green))
+                .contentShape(Rectangle())
+                .gesture(SpatialTapGesture().onEnded { tap in
+                    let dx = tap.location.x - center.x
+                    let dy = tap.location.y - center.y
+                    guard hypot(dx, dy) <= radius + 12 else { return }
+                    select?(WheelInteraction.area(x: Double(dx), y: Double(dy)))
+                })
+                .accessibilityHidden(true)
+
+                ForEach(Array(Area.allCases.enumerated()), id: \.element) { index, area in
+                    let label = point(index, center, 145 * scale)
+                    Group {
+                        if let select {
+                            Button { select(area) } label: { areaLabel(area) }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("wheel-area-\(area.rawValue)")
+                        } else {
+                            areaLabel(area)
+                        }
+                    }
+                    .position(label)
+                }
+
+                ForEach(Array(Area.allCases.enumerated()), id: \.element) { index, area in
+                    let value = score(area)
+                    // Hollow handles invite a first rating without assigning a sample score.
+                    let mark = point(index, center, radius * CGFloat(value ?? 5) / 10)
+                    if let update {
+                        ZStack {
+                            Circle().fill(area.color.opacity(draggedArea == area ? 0.15 : 0.001))
+                            Circle().fill(value == nil ? Palette.paper : area.color)
+                                .frame(width: value == nil ? 10 : 9, height: value == nil ? 10 : 9)
+                                .overlay(Circle().stroke(value == nil ? area.color : Palette.paper, lineWidth: 2))
+                        }
+                        .frame(width: 44, height: 44)
+                        .contentShape(Circle())
+                        .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("radar"))
+                            .onChanged { gesture in
+                                guard hypot(gesture.translation.width, gesture.translation.height) >= 4 else { return }
+                                draggedArea = area
+                                draggedScore = WheelInteraction.score(
+                                    x: Double(gesture.location.x - center.x), y: Double(gesture.location.y - center.y),
+                                    radius: Double(radius), area: area)
+                            }
+                            .onEnded { _ in
+                                if draggedArea == area, let draggedScore { _ = update(area, draggedScore) }
+                                else { select?(area) }
+                                draggedArea = nil
+                                draggedScore = nil
+                            })
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("\(area.title) score")
+                        .accessibilityValue(value.map { "\($0) out of 10" } ?? "Not rated")
+                        .accessibilityHint("Swipe up or down to adjust, or tap the area name to add a reflection.")
+                        .accessibilityAdjustableAction { direction in
+                            switch direction {
+                            case .increment: _ = update(area, min(10, (wheel.score(area) ?? 0) + 1))
+                            case .decrement: _ = update(area, max(0, (wheel.score(area) ?? 0) - 1))
+                            @unknown default: break
+                            }
+                        }
+                        .accessibilityIdentifier("wheel-handle-\(area.rawValue)")
+                        .position(mark)
+                    } else if value != nil {
+                        Circle().fill(area.color).frame(width: 8, height: 8)
+                            .overlay(Circle().stroke(Palette.paper, lineWidth: 2))
+                            .position(mark).accessibilityHidden(true)
                     }
                 }
             }
-            .accessibilityHidden(true)
-            ForEach(Array(Area.allCases.enumerated()), id: \.element) { index, area in
-                let label = point(index, center, radius + 28)
-                Group {
-                    if let select {
-                        Button { select(area) } label: { areaLabel(area) }
-                            .buttonStyle(.plain)
-                    } else {
-                        areaLabel(area)
-                    }
-                }
-                .position(label)
-            }
+            .coordinateSpace(name: "radar")
         }
-        .frame(height: 275)
+        .aspectRatio(360.0 / 337.0, contentMode: .fit)
+        .accessibilityIdentifier("life-wheel")
+        .onDisappear { draggedArea = nil; draggedScore = nil }
+    }
+
+    private func score(_ area: Area) -> Int? {
+        draggedArea == area ? draggedScore : wheel.score(area)
     }
 
     private func areaLabel(_ area: Area) -> some View {
-        VStack(spacing: 1) {
-            Text(area.title).font(.caption2)
-            Text(wheel.score(area).map(String.init) ?? "—").font(.caption2.bold()).foregroundStyle(Palette.green)
+        VStack(spacing: 3) {
+            Text(area.title).font(.system(size: 10))
+            Text(score(area).map(String.init) ?? "—")
+                .font(.system(size: 10, weight: .bold)).foregroundStyle(area.color)
         }
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
-        .frame(width: 61, height: 44)
+        .foregroundStyle(Palette.ink)
+        .lineLimit(1).minimumScaleFactor(0.7)
+        .frame(width: 68, height: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(area.title)
-        .accessibilityValue(wheel.score(area).map { "\($0) out of 10" } ?? "Not rated")
+        .accessibilityValue(score(area).map { "\($0) out of 10" } ?? "Not rated")
     }
 
     private func point(_ index: Int, _ center: CGPoint, _ radius: CGFloat) -> CGPoint {
@@ -104,36 +204,94 @@ struct AreaEditor: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("How do you feel about this area?") {
-                    Picker("Score", selection: $score) {
-                        Text("Not rated").tag(nil as Int?)
-                        ForEach(0...10, id: \.self) { value in Text("\(value) / 10").tag(Optional(value)) }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    HStack {
+                        AreaBadge(area: area)
+                        Text("Changes saved automatically").font(.system(size: 11)).foregroundStyle(Palette.muted)
+                        Spacer()
                     }
-                }
-                Section("Your reflection") {
+                    Text("How do you feel about this area?")
+                        .font(.system(size: 13)).foregroundStyle(Palette.muted)
+                    HStack {
+                        Button { score = max(0, (score ?? 0) - 1) } label: { stepper("minus") }
+                            .accessibilityLabel("\(area.title) minus one")
+                        Spacer()
+                        HStack(alignment: .firstTextBaseline, spacing: 5) {
+                            Text(score.map(String.init) ?? "—").font(.system(size: 72, design: .serif))
+                                .accessibilityIdentifier("editor-score")
+                            Text("/ 10").font(.system(size: 18)).foregroundStyle(Palette.muted)
+                        }
+                        Spacer()
+                        Button { score = min(10, (score ?? 0) + 1) } label: { stepper("plus") }
+                            .accessibilityLabel("\(area.title) plus one")
+                    }
+                    .buttonStyle(.plain)
+                    Slider(value: Binding(get: { Double(score ?? 0) }, set: { score = Int($0) }), in: 0...10, step: 1)
+                        .accessibilityLabel("\(area.title) score")
+                        .accessibilityValue(score.map { "\($0) out of 10" } ?? "Not rated")
+                        .accessibilityIdentifier("score-slider")
+                    HStack {
+                        Text("0 · Not at all satisfied")
+                        Spacer()
+                        Text("10 · Very satisfied")
+                    }
+                    .font(.system(size: 10)).foregroundStyle(Palette.muted)
+                    Text("Your reflection").font(.system(size: 12, weight: .semibold)).padding(.top, 8)
                     TextEditor(text: $note)
-                        .frame(minHeight: 150)
+                        .scrollContentBackground(.hidden)
+                        .font(.system(size: 16)).padding(8).frame(minHeight: 155)
+                        .background(Palette.background, in: RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Palette.line, lineWidth: 1))
                         .accessibilityLabel("Your reflection")
-                    Text("\(note.utf16.count) / 4000")
-                        .font(.caption).foregroundStyle(.secondary)
-                    if failed { Text("Could not save. Your edits are still on this screen.").foregroundStyle(.red) }
+                        .accessibilityIdentifier("area-note")
+                    HStack {
+                        Text(failed ? "Changes could not be saved" : "Changes saved automatically")
+                        Spacer()
+                        Text("\(note.utf16.count) / 4000")
+                    }
+                    .font(.system(size: 10)).foregroundStyle(failed ? .red : Palette.muted)
+                    if failed {
+                        Text(note.utf16.count > 4000 ? "Keep your reflection to 4,000 characters or fewer." :
+                             "Your edits are still here. Tap Done to try saving again.")
+                            .font(.footnote).foregroundStyle(.red)
+                    }
+                    Button {
+                        if persist() { dismiss() }
+                    } label: {
+                        Text("Done").font(.system(size: 13, weight: .semibold)).frame(maxWidth: .infinity, minHeight: 36)
+                    }
+                    .buttonStyle(.borderedProminent).buttonBorderShape(.roundedRectangle(radius: 14))
+                    .accessibilityIdentifier("editor-done")
                 }
+                .padding(24)
             }
+            .background(Palette.paper).foregroundStyle(Palette.ink)
             .navigationTitle(area.title)
             .navigationBarTitleDisplayMode(.inline)
-            .interactiveDismissDisabled()
+            .interactiveDismissDisabled(failed)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        if save(score, note) { dismiss() }
-                        else { failed = true }
-                    }
-                    .disabled(note.utf16.count > 4000)
+                    Button("Done") { if persist() { dismiss() } }
                 }
             }
+            .onChange(of: score) { _ in _ = persist() }
+            .onChange(of: note) { _ in _ = persist() }
         }
+        .presentationDragIndicator(.visible)
+    }
+
+    private func stepper(_ symbol: String) -> some View {
+        Image(systemName: symbol).font(.system(size: 20))
+            .frame(width: 47, height: 47).foregroundStyle(Palette.green)
+            .background(Palette.pale, in: Circle())
+    }
+
+    @discardableResult
+    private func persist() -> Bool {
+        guard note.utf16.count <= 4000 else { failed = true; return false }
+        failed = !save(score, note)
+        return !failed
     }
 }
 
@@ -163,7 +321,10 @@ struct HistoryDetail: View {
                 if let other { Label("Dashed line: \(other.title)", systemImage: "minus").foregroundStyle(.secondary) }
                 ForEach(Area.allCases) { area in
                     VStack(alignment: .leading, spacing: 8) {
-                        LabeledContent(area.title) {
+                        HStack {
+                            AreaBadge(area: area)
+                            Text(area.title)
+                            Spacer()
                             if let score = entry.wheel.score(area) {
                                 if let otherScore = other?.wheel.score(area) { Text("\(score)/10 · compared with \(otherScore)/10") }
                                 else { Text("\(score)/10") }
@@ -180,6 +341,8 @@ struct HistoryDetail: View {
         }
         .navigationTitle(entry.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
+        .background(Palette.background)
         .alert(item: $action) { action in
             Alert(title: Text(action.title),
                   message: Text(action == .replace ? "Your current scores and notes will be replaced. History will be kept." : "This check-in and its notes will be removed from history."),
@@ -213,11 +376,19 @@ struct ReminderEditor: View {
         NavigationStack {
             Form {
                 Section {
+                    Label("A little space to come back to yourself.", systemImage: "bell")
+                        .foregroundStyle(Palette.green)
+                    Text("Choose a daily, weekly, or monthly reminder. Notifications contain no scores or notes.")
+                        .font(.footnote).foregroundStyle(Palette.muted)
+                }
+                Section {
                     Toggle("Enable reminder", isOn: $config.enabled)
+                        .accessibilityIdentifier("reminder-enabled")
                     if config.enabled {
                         Picker("Frequency", selection: $config.frequency) {
                             ForEach(ReminderSchedule.Frequency.allCases) { item in Text(item.title).tag(item) }
                         }
+                        .accessibilityIdentifier("reminder-frequency")
                         if config.frequency == .weekly {
                             Picker("Day of the week", selection: $config.weekday) {
                                 ForEach(Array(Calendar.current.weekdaySymbols.enumerated()), id: \.offset) { index, day in
@@ -233,6 +404,7 @@ struct ReminderEditor: View {
                                 .font(.footnote).foregroundStyle(.secondary)
                         }
                         DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
+                            .accessibilityIdentifier("reminder-time")
                     }
                 }
                 if reminders.schedule.enabled, let next = reminders.nextDate {
@@ -242,11 +414,17 @@ struct ReminderEditor: View {
                     Section { Text(failure).foregroundStyle(.red) }
                 }
                 Section {
+                    if !reminders.canNotify {
+                        Text("When you save an enabled reminder, iPhone asks for notification permission. If notifications are blocked, enable them in Settings.")
+                            .font(.footnote).foregroundStyle(Palette.muted)
+                    }
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         Link("Open iPhone Settings", destination: url)
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Palette.background)
             .navigationTitle("Reflection reminder")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(reminders.busy)
@@ -268,6 +446,7 @@ struct ReminderEditor: View {
                         }
                     }
                     .disabled(reminders.busy)
+                    .accessibilityIdentifier("save-reminder")
                 }
             }
         }
