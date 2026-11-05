@@ -58,6 +58,7 @@ jobs:
           path: |
             ${{ runner.temp }}/brujula-iphone.png
             ${{ runner.temp }}/brujula-ui-screenshots/*.png
+            ${{ runner.temp }}/brujula-ui-screenshots/*.txt
             ${{ runner.temp }}/brujula-ui-screenshots/manifest.json
           if-no-files-found: error
       - uses: actions/upload-artifact@v4

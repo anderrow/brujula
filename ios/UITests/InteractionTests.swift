@@ -29,7 +29,11 @@ final class InteractionTests: XCTestCase {
         start.press(forDuration: 0.1, thenDragTo: end)
         XCTAssertEqual(handle.value as? String, "10 out of 10")
         screenshot("Edited wheel")
-        app.scrollViews.firstMatch.swipeUp()
+        // Scroll in the page margin so the swipe cannot drag a wheel handle.
+        let scroll = app.scrollViews.firstMatch
+        scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.8))
+            .press(forDuration: 0.1, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.25)))
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-friends").firstMatch.value as? String, "Not rated")
         screenshot("Area icons")
 
         app.buttons["reminder-shortcut"].tap()
