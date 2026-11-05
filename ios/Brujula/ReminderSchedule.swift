@@ -4,7 +4,13 @@ struct ReminderSchedule: Codable, Equatable {
     enum Frequency: String, CaseIterable, Identifiable, Codable {
         case daily, weekly, monthly
         var id: String { rawValue }
-        var title: String { rawValue.capitalized }
+        var title: String {
+            switch self {
+            case .daily: return localized("Daily")
+            case .weekly: return localized("Weekly")
+            case .monthly: return localized("Monthly")
+            }
+        }
     }
 
     var enabled = false

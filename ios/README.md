@@ -2,7 +2,9 @@
 
 To start using Brújula on an iPhone, open the web app in Safari and choose **Share → Add to Home Screen**. It includes the wheel, notes, history, and backups. Scheduled reminders are available in the native app described below. [Open Brújula on iPhone](https://anderrow.github.io/brujula/web-app/)
 
-The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. The iPhone interface is in English.
+The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. English and Spanish are available in **Settings → Language**. Choose the phone's language or select a language explicitly; the interface changes immediately and remembers the selection after relaunch.
+
+Language preferences are specific to this installation and are separate from reflection backups. Changing the interface language preserves notes, scores, and saved check-in titles. Future reminder text follows the selected language. System permission dialogs follow the iPhone's settings. Translations live in the Xcode string catalogs; source keys, comments, and documentation remain in English.
 
 The native interface follows the Android app's cream and green palette, serif headings, summary cards, area colors and icons, and three-tab navigation. Tap a wheel label or sector to open an area, or drag its point to change its score directly. Hollow points on an empty wheel are touch targets; they do not assign sample scores. VoiceOver users can adjust each point with swipe-up/down actions. Scores and notes save automatically, and dragging commits when the gesture ends.
 
@@ -30,13 +32,14 @@ Reflections and reminder settings live in protected app files excluded from auto
 
 The iPhone workflow compiles the app for the simulator and for iPhone hardware without signing, checks data and reminder logic using an Android-generated backup, and launches the app on an iPhone simulator. Real-device acceptance still includes notification delivery, Files integration and signing with the selected Apple team.
 
-The simulator UI check also edits scores and notes, drags a wheel point, relaunches to verify persistence, grants notification permission, saves a reminder, and cancels it through Settings. Screenshots and the test result bundle are uploaded with the workflow. These checks verify the controls and stored schedule; physical-device notification delivery still needs acceptance on the phone.
+The simulator UI check also edits scores and notes, drags a wheel point, relaunches to verify persistence, grants notification permission, saves a reminder, and cancels it through Settings. It switches to Spanish, checks the translated interface and unchanged note, relaunches to check the saved language, and switches back to English. Screenshots and the test result bundle are uploaded with the workflow. These checks verify the controls and stored schedule; physical-device notification delivery still needs acceptance on the phone.
 
 From the repository root on macOS:
 
 ```sh
+node ios/Tests/localizations.cjs
 node ios/Tests/android-fixture.cjs /tmp/brujula-android-backup.json
-swiftc ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Tests/main.swift -o /tmp/brujula-ios-checks
+swiftc ios/Brujula/Localization.swift ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Tests/main.swift -o /tmp/brujula-ios-checks
 /tmp/brujula-ios-checks /tmp/brujula-android-backup.json
 xcodebuild -project ios/Brujula.xcodeproj -scheme Brujula -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 ```

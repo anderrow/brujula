@@ -73,6 +73,33 @@ final class InteractionTests: XCTestCase {
         XCTAssertTrue((app.buttons["note-health"].value as? String)?.contains("A quiet walk.") == true)
         app.buttons["tab-history"].tap()
         XCTAssertTrue(app.staticTexts["Every moment counts."].exists)
+
+        app.buttons["settings"].tap()
+        app.buttons["language-es"].tap()
+        XCTAssertTrue(app.navigationBars["Ajustes"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["language-es"].isSelected)
+        screenshot("Spanish language settings")
+        app.buttons["settings-done"].tap()
+        app.buttons["tab-wheel"].tap()
+        XCTAssertTrue(app.buttons["wheel-area-health"].label.contains("Salud"))
+        XCTAssertTrue(app.staticTexts["wheel-heading"].label.contains("Tu vida"))
+        app.buttons["wheel-area-health"].tap()
+        XCTAssertEqual(app.textViews["area-note"].value as? String, "A quiet walk.")
+        app.buttons["editor-toolbar-done"].tap()
+        screenshot("Spanish wheel")
+
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.buttons["wheel-area-health"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["wheel-area-health"].label.contains("Salud"))
+        app.buttons["settings"].tap()
+        XCTAssertTrue(app.buttons["language-es"].isSelected)
+        app.buttons["language-en"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["language-en"].isSelected)
+        app.buttons["settings-done"].tap()
+        XCTAssertTrue(app.buttons["wheel-area-health"].label.contains("Health"))
+        screenshot("English restored")
     }
 
     override func tearDownWithError() throws {

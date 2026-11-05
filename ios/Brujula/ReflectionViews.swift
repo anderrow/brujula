@@ -130,8 +130,8 @@ struct RadarView: View {
                                     radius: Double(radius), area: area))
                             })
                         .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("\(area.title) score")
-                        .accessibilityValue(value.map { "\($0) out of 10" } ?? "Not rated")
+                        .accessibilityLabel(localizedFormat("%@ score", area.title))
+                        .accessibilityValue(localizedScore(value))
                         .accessibilityHint("Swipe up or down to adjust, or tap the area name to add a reflection.")
                         .accessibilityAdjustableAction { direction in
                             switch direction {
@@ -172,7 +172,7 @@ struct RadarView: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(area.title)
-        .accessibilityValue(score(area).map { "\($0) out of 10" } ?? "Not rated")
+        .accessibilityValue(localizedScore(score(area)))
     }
 
     private func point(_ index: Int, _ center: CGPoint, _ radius: CGFloat) -> CGPoint {
@@ -213,14 +213,14 @@ struct AreaEditor: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         AreaBadge(area: area)
-                        Text("Changes saved automatically").font(.system(size: 11)).foregroundStyle(Palette.muted)
+                        Text(localized("Changes saved automatically")).font(.system(size: 11)).foregroundStyle(Palette.muted)
                         Spacer()
                     }
                     Text("How do you feel about this area?")
                         .font(.system(size: 13)).foregroundStyle(Palette.muted)
                     HStack {
                         Button { score = max(0, (score ?? 0) - 1) } label: { stepper("minus") }
-                            .accessibilityLabel("\(area.title) minus one")
+                            .accessibilityLabel(localizedFormat("%@ minus one", area.title))
                         Spacer()
                         HStack(alignment: .firstTextBaseline, spacing: 5) {
                             Text(score.map(String.init) ?? "—").font(.system(size: 72, design: .serif))
@@ -229,12 +229,12 @@ struct AreaEditor: View {
                         }
                         Spacer()
                         Button { score = min(10, (score ?? 0) + 1) } label: { stepper("plus") }
-                            .accessibilityLabel("\(area.title) plus one")
+                            .accessibilityLabel(localizedFormat("%@ plus one", area.title))
                     }
                     .buttonStyle(.plain)
                     Slider(value: Binding(get: { Double(score ?? 0) }, set: { score = Int($0) }), in: 0...10, step: 1)
-                        .accessibilityLabel("\(area.title) score")
-                        .accessibilityValue(score.map { "\($0) out of 10" } ?? "Not rated")
+                        .accessibilityLabel(localizedFormat("%@ score", area.title))
+                        .accessibilityValue(localizedScore(score))
                         .accessibilityIdentifier("score-slider")
                     HStack {
                         Text("0 · Not at all satisfied")
@@ -251,14 +251,14 @@ struct AreaEditor: View {
                         .accessibilityLabel("Your reflection")
                         .accessibilityIdentifier("area-note")
                     HStack {
-                        Text(failed ? "Changes could not be saved" : "Changes saved automatically")
+                        Text(failed ? localized("Changes could not be saved") : localized("Changes saved automatically"))
                         Spacer()
                         Text("\(note.utf16.count) / 4000")
                     }
                     .font(.system(size: 10)).foregroundStyle(failed ? .red : Palette.muted)
                     if failed {
-                        Text(note.utf16.count > 4000 ? "Keep your reflection to 4,000 characters or fewer." :
-                             "Your edits are still here. Tap Done to try saving again.")
+                        Text(note.utf16.count > 4000 ? localized("Keep your reflection to 4,000 characters or fewer.") :
+                             localized("Your edits are still here. Tap Done to try saving again."))
                             .font(.footnote).foregroundStyle(.red)
                     }
                     Button {
@@ -278,6 +278,7 @@ struct AreaEditor: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { if persist() { dismiss() } }
+                        .accessibilityIdentifier("editor-toolbar-done")
                 }
             }
             .onChange(of: score) { _ in _ = persist() }
@@ -309,7 +310,7 @@ struct HistoryDetail: View {
     private enum Action: String, Identifiable {
         case replace, delete
         var id: String { rawValue }
-        var title: String { self == .replace ? "Replace current draft?" : "Delete this check-in?" }
+        var title: String { self == .replace ? localized("Replace current draft?") : localized("Delete this check-in?") }
     }
 
     var body: some View {
@@ -350,8 +351,8 @@ struct HistoryDetail: View {
         .background(Palette.background)
         .alert(item: $action) { action in
             Alert(title: Text(action.title),
-                  message: Text(action == .replace ? "Your current scores and notes will be replaced. History will be kept." : "This check-in and its notes will be removed from history."),
-                  primaryButton: .destructive(Text(action == .replace ? "Replace draft" : "Delete")) {
+                  message: Text(action == .replace ? localized("Your current scores and notes will be replaced. History will be kept.") : localized("This check-in and its notes will be removed from history.")),
+                  primaryButton: .destructive(Text(action == .replace ? localized("Replace draft") : localized("Delete"))) {
                 var candidate = store.state
                 switch action {
                 case .replace: candidate.draft = entry.wheel
@@ -396,7 +397,7 @@ struct ReminderEditor: View {
                         .accessibilityIdentifier("reminder-frequency")
                         if config.frequency == .weekly {
                             Picker("Day of the week", selection: $config.weekday) {
-                                ForEach(Array(Calendar.current.weekdaySymbols.enumerated()), id: \.offset) { index, day in
+                                ForEach(Array(AppLanguage.load().calendar.weekdaySymbols.enumerated()), id: \.offset) { index, day in
                                     Text(day).tag(index + 1)
                                 }
                             }
@@ -448,7 +449,7 @@ struct ReminderEditor: View {
                             config.minute = parts.minute ?? 0
                             if await reminders.save(config) { dismiss() }
                             else {
-                                failure = reminders.error ?? "Wait for the current update and try again."
+                                failure = reminders.error ?? localized("Wait for the current update and try again.")
                                 reminders.error = nil
                             }
                         }

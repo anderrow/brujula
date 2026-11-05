@@ -17,6 +17,7 @@ struct BrujulaApp: App {
     @UIApplicationDelegateAdaptor(ApplicationDelegate.self) private var delegate
     @StateObject private var store = ReflectionStore()
     @StateObject private var reminders = ReminderStore()
+    @AppStorage(AppLanguage.preferenceKey) private var language = AppLanguage.system.rawValue
     @Environment(\.scenePhase) private var phase
 
     var body: some Scene {
@@ -24,9 +25,13 @@ struct BrujulaApp: App {
             HomeView()
                 .environmentObject(store)
                 .environmentObject(reminders)
+                .environment(\.locale, (AppLanguage(rawValue: language) ?? .system).locale)
                 .tint(Palette.green)
                 .preferredColorScheme(.light)
                 .task(id: phase) {
+                    if phase == .active { await reminders.refresh() }
+                }
+                .task(id: language) {
                     if phase == .active { await reminders.refresh() }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in

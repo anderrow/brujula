@@ -22,8 +22,9 @@ jobs:
           node-version: '22'
       - name: Verify backup compatibility and reminder dates
         run: |
+          node ios/Tests/localizations.cjs
           node ios/Tests/android-fixture.cjs "$RUNNER_TEMP/android-backup.json"
-          swiftc ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Tests/main.swift -o "$RUNNER_TEMP/ios-checks"
+          swiftc ios/Brujula/Localization.swift ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Tests/main.swift -o "$RUNNER_TEMP/ios-checks"
           "$RUNNER_TEMP/ios-checks" "$RUNNER_TEMP/android-backup.json"
       - name: Build for iPhone Simulator
         run: |

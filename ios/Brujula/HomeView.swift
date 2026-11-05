@@ -18,11 +18,18 @@ struct HomeView: View {
     @State private var savingCheckIn = false
     @State private var trendArea: Area?
     @State private var afterSettings: (() -> Void)?
+    @AppStorage(AppLanguage.preferenceKey) private var language = AppLanguage.system.rawValue
     @State private var tab = Tab.wheel
 
     private enum Tab: String, CaseIterable {
         case wheel, history, notes
-        var title: String { self == .wheel ? "My wheel" : rawValue.capitalized }
+        var title: String {
+            switch self {
+            case .wheel: return localized("My wheel")
+            case .history: return localized("History")
+            case .notes: return localized("Notes")
+            }
+        }
         var symbol: String {
             switch self {
             case .wheel: return "chart.pie"
@@ -56,6 +63,7 @@ struct HomeView: View {
                     }
                 }
             }
+            .id(language)
             .background(Palette.background)
             .foregroundStyle(Palette.ink)
             .toolbar(.hidden, for: .navigationBar)
@@ -76,13 +84,13 @@ struct HomeView: View {
             TextField("Title (optional)", text: $saveTitle)
             Button("Save") {
                 let title = String(decoding: saveTitle.utf16.prefix(80), as: UTF16.self)
-                if store.saveCheckIn(title) { notice = "Check-in saved." }
+                if store.saveCheckIn(title) { notice = localized("Check-in saved.") }
             }
             Button("Cancel", role: .cancel) {}
         } message: { Text("Keep a snapshot of your current scores and notes.") }
         .alert("Restore backup?", isPresented: $restore) {
             Button("Restore", role: .destructive) {
-                if let imported, store.commit(imported) { notice = "Backup restored." }
+                if let imported, store.commit(imported) { notice = localized("Backup restored.") }
                 imported = nil
             }
             Button("Cancel", role: .cancel) { imported = nil }
@@ -92,10 +100,10 @@ struct HomeView: View {
                 Task {
                     let previous = reminders.schedule
                     guard await reminders.save(ReminderSchedule()) else {
-                        if reminders.error == nil { notice = "Wait for the reminder update to finish and try again." }
+                        if reminders.error == nil { notice = localized("Wait for the reminder update to finish and try again.") }
                         return
                     }
-                    if store.commit(ReflectionState()) { notice = "Local data cleared." }
+                    if store.commit(ReflectionState()) { notice = localized("Local data cleared.") }
                     else if previous.enabled { _ = await reminders.save(previous) }
                 }
             }
@@ -113,8 +121,8 @@ struct HomeView: View {
     }
 
     private var reminderStatus: String {
-        guard reminders.schedule.enabled else { return "Off" }
-        return reminders.canNotify ? "On" : "Notifications blocked"
+        guard reminders.schedule.enabled else { return localized("Off") }
+        return reminders.canNotify ? localized("On") : localized("Notifications blocked")
     }
 
     private var header: some View {
@@ -200,6 +208,7 @@ struct HomeView: View {
                 Text("Your life,\nin perspective.").font(.system(size: 41, design: .serif))
                     .tracking(-1.4).lineSpacing(-2).padding(.top, 9).padding(.bottom, 14)
                     .accessibilityAddTraits(.isHeader)
+                    .accessibilityIdentifier("wheel-heading")
                 Text("You don’t need a perfect wheel. Just a moment to listen to how you feel.")
                     .font(.system(size: 13)).lineSpacing(5).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true).padding(.bottom, 22)
@@ -218,7 +227,7 @@ struct HomeView: View {
                 .overlay(RoundedRectangle(cornerRadius: 22).stroke(Palette.line, lineWidth: 1))
                 HStack(alignment: .top, spacing: 12) {
                     statistic("PERSONAL AVERAGE", value: store.state.draft.average.map {
-                        $0.formatted(.number.precision(.fractionLength(1)))
+                        $0.formatted(.number.precision(.fractionLength(1)).locale(AppLanguage.load().locale))
                     } ?? "—", foot: store.state.draft.complete ? "Eight areas, your own perspective" : "Average of rated areas",
                               color: Palette.pale, numeric: true)
                     statistic("A LITTLE MORE CARE", value: lowestArea?.title ?? "—",
@@ -246,7 +255,7 @@ struct HomeView: View {
                                             }
                                     }
                                     .frame(width: 75, height: 4)
-                                    Text(store.state.draft.note(item).isEmpty ? "Add a reflection…" : store.state.draft.note(item))
+                                    Text(store.state.draft.note(item).isEmpty ? localized("Add a reflection…") : store.state.draft.note(item))
                                         .font(.system(size: 10)).foregroundStyle(Palette.muted).lineLimit(1)
                                 }
                                 Spacer()
@@ -259,7 +268,7 @@ struct HomeView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("\(item.title), \(store.state.draft.score(item).map { "\($0) out of 10" } ?? "Not rated")")
+                        .accessibilityLabel("\(item.title), \(localizedScore(store.state.draft.score(item)))")
                         .accessibilityIdentifier("area-\(item.rawValue)")
                         if item != .growth { Divider().overlay(Palette.line) }
                     }
@@ -276,7 +285,7 @@ struct HomeView: View {
                     .disabled(!store.state.draft.complete)
                     .accessibilityIdentifier("save-check-in")
                     .padding(.top, 20)
-                Text(store.state.draft.complete ? "Changes saved automatically" : "Rate all eight areas to save a check-in.")
+                Text(store.state.draft.complete ? localized("Changes saved automatically") : localized("Rate all eight areas to save a check-in."))
                     .font(.system(size: 10)).foregroundStyle(Palette.muted)
                     .frame(maxWidth: .infinity).padding(.top, 12)
                 Label("Only on this device. No accounts or connection.", systemImage: "lock")
@@ -298,20 +307,20 @@ struct HomeView: View {
     private func eyebrow(_ text: String) -> some View {
         HStack(spacing: 7) {
             Circle().fill(Palette.color(0x9AA76D)).frame(width: 6, height: 6)
-            Text(text).font(.system(size: 10, weight: .bold)).tracking(2)
+            Text(localized(text)).font(.system(size: 10, weight: .bold)).tracking(2)
         }
         .foregroundStyle(Palette.green)
     }
 
     private func statistic(_ title: String, value: String, foot: String, color: Color, numeric: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.system(size: 9, weight: .bold)).tracking(1).foregroundStyle(Palette.muted)
+            Text(localized(title)).font(.system(size: 9, weight: .bold)).tracking(1).foregroundStyle(Palette.muted)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value).font(.system(size: numeric ? 31 : 24, design: .serif))
                     .lineLimit(1).minimumScaleFactor(0.7)
                 if numeric { Text("/ 10").font(.system(size: 12)).foregroundStyle(Palette.muted) }
             }
-            Text(foot).font(.system(size: 10)).foregroundStyle(Palette.muted)
+            Text(localized(foot)).font(.system(size: 10)).foregroundStyle(Palette.muted)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16).frame(maxWidth: .infinity, minHeight: 112, alignment: .topLeading)
@@ -335,7 +344,7 @@ struct HomeView: View {
                                 Text(store.state.draft.score(item).map(String.init) ?? "—")
                                     .font(.system(size: 22, design: .serif))
                             }
-                            Text(store.state.draft.note(item).isEmpty ? "Add a reflection…" : store.state.draft.note(item))
+                            Text(store.state.draft.note(item).isEmpty ? localized("Add a reflection…") : store.state.draft.note(item))
                                 .font(.system(size: 13)).foregroundStyle(Palette.muted)
                                 .lineSpacing(5).frame(maxWidth: .infinity, alignment: .leading)
                         }
@@ -343,7 +352,7 @@ struct HomeView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(item.title)
-                    .accessibilityValue("\(store.state.draft.score(item).map { "\($0) out of 10" } ?? "Not rated"). \(store.state.draft.note(item).isEmpty ? "Add a reflection" : store.state.draft.note(item))")
+                    .accessibilityValue("\(localizedScore(store.state.draft.score(item))). \(store.state.draft.note(item).isEmpty ? localized("Add a reflection") : store.state.draft.note(item))")
                     .accessibilityIdentifier("note-\(item.rawValue)")
                 }
             }
@@ -375,7 +384,7 @@ struct HomeView: View {
                         Chart {
                             ForEach(Array(entries.prefix(90).reversed().map { $0.0 })) { entry in
                                 if let date = entry.date, let value = trendValue(entry) {
-                                    LineMark(x: .value("Date", date), y: .value("Score", value))
+                                    LineMark(x: .value(localized("Date"), date), y: .value(localized("Score"), value))
                                         .symbol(.circle).foregroundStyle(Palette.green)
                                 }
                             }
@@ -426,6 +435,27 @@ struct HomeView: View {
     private var settings: some View {
         NavigationStack {
             Form {
+                Section("Language") {
+                    ForEach(AppLanguage.allCases) { item in
+                        Button { language = item.rawValue } label: {
+                            HStack {
+                                Text(item.title)
+                                Spacer()
+                                if language == item.rawValue {
+                                    Image(systemName: "checkmark").foregroundStyle(Palette.green)
+                                }
+                            }
+                            .frame(minHeight: 32)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(language == item.rawValue ? [.isSelected] : [])
+                        .accessibilityIdentifier("language-\(item.rawValue)")
+                        .disabled(reminders.busy)
+                    }
+                    Text("Changes apply immediately. Your notes and saved check-ins keep their original text.")
+                        .font(.footnote).foregroundStyle(Palette.muted)
+                }
                 Section("Reminders") {
                     Button { dismissSettings { sheet = .reminders } } label: {
                         HStack(spacing: 12) {
@@ -464,9 +494,14 @@ struct HomeView: View {
                         .disabled(!store.ready || reminders.busy)
                 }
             }
+            .id(language)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { sheet = nil } } }
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { sheet = nil }.accessibilityIdentifier("settings-done")
+                }
+            }
         }
     }
 
@@ -508,6 +543,6 @@ struct HomeView: View {
             defer { if accessed { url.stopAccessingSecurityScopedResource() } }
             imported = try ReflectionState.decode(LocalFiles.read(url))
             restore = true
-        } catch { notice = "Could not open the backup. Choose a valid Brújula JSON file under 8 MB." }
+        } catch { notice = localized("Could not open the backup. Choose a valid Brújula JSON file under 8 MB.") }
     }
 }

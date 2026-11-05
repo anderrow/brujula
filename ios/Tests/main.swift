@@ -8,6 +8,15 @@ func require(_ condition: Bool, _ message: String) {
 }
 
 let empty = ReflectionState()
+let languageDomain = "BrujulaLanguageTests.\(UUID().uuidString)"
+let languageDefaults = UserDefaults(suiteName: languageDomain)!
+defer { languageDefaults.removePersistentDomain(forName: languageDomain) }
+require(AppLanguage.load(from: languageDefaults) == .system, "A new language preference must follow the phone.")
+languageDefaults.set("es", forKey: AppLanguage.preferenceKey)
+require(AppLanguage.load(from: languageDefaults) == .spanish, "An explicit Spanish preference must persist.")
+languageDefaults.set("unsupported", forKey: AppLanguage.preferenceKey)
+require(AppLanguage.load(from: languageDefaults) == .system, "Unsupported language preferences must fall back safely.")
+require(AppLanguage.english.code == "en" && AppLanguage.spanish.code == "es", "Language preferences must map to supported resources.")
 for (index, area) in Area.allCases.enumerated() {
     let angle = Double(index) * .pi / 4 - .pi / 2
     let x = cos(angle), y = sin(angle)

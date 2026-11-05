@@ -18,14 +18,14 @@ final class ReflectionStore: ObservableObject {
             }
             ready = true
         } catch {
-            self.error = "Your saved reflections could not be opened. The original file has not been changed."
+            self.error = localized("Your saved reflections could not be opened. The original file has not been changed.")
         }
     }
 
     @discardableResult
     func commit(_ candidate: ReflectionState) -> Bool {
         guard let url else {
-            error = "Local storage is unavailable. Try opening Brújula again."
+            error = localized("Local storage is unavailable. Try opening Brújula again.")
             return false
         }
         do {
@@ -44,7 +44,7 @@ final class ReflectionStore: ObservableObject {
         candidate.draft.scores.updateValue(score, forKey: area.rawValue)
         candidate.draft.notes[area.rawValue] = note
         guard candidate.draft.valid(allowUnanswered: true) else {
-            error = "Keep notes to 4,000 characters or fewer."
+            error = localized("Keep notes to 4,000 characters or fewer.")
             return false
         }
         return commit(candidate)
@@ -61,7 +61,7 @@ final class ReflectionStore: ObservableObject {
         }
         var candidate = state
         let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        candidate.history.append(CheckIn(wheel: state.draft, title: title.isEmpty ? "My check-in" : title))
+        candidate.history.append(CheckIn(wheel: state.draft, title: title.isEmpty ? localized("My check-in") : title))
         return commit(candidate)
     }
 }
@@ -100,7 +100,7 @@ final class ReminderStore: ObservableObject {
                 schedule = stored
             }
         } catch {
-            self.error = "The saved reminder could not be opened."
+            self.error = localized("The saved reminder could not be opened.")
         }
     }
 
@@ -119,7 +119,7 @@ final class ReminderStore: ObservableObject {
         do {
             if !schedule.enabled || canNotify { try await reconcile(schedule) }
             else { nextDate = nil }
-        } catch { self.error = "The reminder could not be refreshed. Open Reminders and save it again." }
+        } catch { self.error = localized("The reminder could not be refreshed. Open Reminders and save it again.") }
     }
 
     func save(_ next: ReminderSchedule) async -> Bool {
@@ -133,7 +133,7 @@ final class ReminderStore: ObservableObject {
                 }
                 canNotify = await allowed()
                 guard canNotify else {
-                    error = "Notifications are disabled. You can enable them in iPhone Settings."
+                    error = localized("Notifications are disabled. You can enable them in iPhone Settings.")
                     return false
                 }
             }
@@ -147,7 +147,7 @@ final class ReminderStore: ObservableObject {
             return true
         } catch {
             try? await reconcile(schedule)
-            self.error = "The reminder could not be saved."
+            self.error = localized("The reminder could not be saved.")
             return false
         }
     }
@@ -156,7 +156,7 @@ final class ReminderStore: ObservableObject {
         guard config.enabled else { return [] }
         let content = UNMutableNotificationContent()
         content.title = "Brújula"
-        content.body = "Take a moment to check in with yourself."
+        content.body = localized("Take a moment to check in with yourself.")
         content.sound = .default
         if var match = config.repeatingComponents() {
             match.calendar = Calendar(identifier: .gregorian)
@@ -182,8 +182,10 @@ final class ReminderStore: ObservableObject {
         if !obsolete.isEmpty { center.removePendingNotificationRequests(withIdentifiers: obsolete) }
         for request in desired {
             let trigger = request.trigger as? UNCalendarNotificationTrigger
-            let previous = existing.first { $0.identifier == request.identifier }?.trigger as? UNCalendarNotificationTrigger
-            if previous?.dateComponents != trigger?.dateComponents || previous?.repeats != trigger?.repeats {
+            let previousRequest = existing.first { $0.identifier == request.identifier }
+            let previous = previousRequest?.trigger as? UNCalendarNotificationTrigger
+            let sameText = previousRequest?.content.title == request.content.title && previousRequest?.content.body == request.content.body
+            if previous?.dateComponents != trigger?.dateComponents || previous?.repeats != trigger?.repeats || !sameText {
                 try await center.add(request)
             }
         }
