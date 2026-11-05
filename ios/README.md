@@ -2,7 +2,7 @@
 
 To start using Brújula on an iPhone, open the web app in Safari and choose **Share → Add to Home Screen**. It includes the wheel, notes, history, and backups. Scheduled reminders are available in the native app described below. [Open Brújula on iPhone](https://anderrow.github.io/brujula/web-app/)
 
-The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. English and Spanish follow the iPhone language. Add another language in `Localizable.xcstrings`, `InfoPlist.xcstrings`, and the project’s known regions; iOS then offers it in Settings → Brújula → Language. There is no language picker inside the app. The `locale` field in a backup is the Android interface language and is not used for the iPhone interface.
+The iPhone port is a native SwiftUI app for iOS 16 or later. It has an interactive life wheel, notes, check-in history, trends, comparisons, optional reminders, and local JSON backups. It starts empty and does not require an account or Internet connection. English and Spanish follow the iPhone language. Add another language in `Localizable.xcstrings`, `InfoPlist.xcstrings`, and the project’s known regions; iOS then offers it in Settings → Brújula: Wheel of Life → Language. The Spanish iPhone shows Brújula: Rueda de la vida. There is no language picker inside the app. The `locale` field in a backup is the Android interface language and is not used for the iPhone interface.
 
 ## Run on an iPhone
 

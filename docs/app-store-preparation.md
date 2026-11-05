@@ -1,6 +1,6 @@
-# App Store preparation — Brújula for iPhone 1.0.0 (1)
+# App Store preparation — Brújula for iPhone 1.0.0 (5)
 
-Prepared on November 4, 2026. **No build has been uploaded to App Store Connect, sent to TestFlight, or submitted for App Review.** This checklist is preparation, not a guarantee of acceptance. Recheck the linked Apple pages before uploading.
+Prepared on November 4, 2026. On November 5, 2026 the App Store Connect record **Brújula: Wheel of Life** (`6831086667`) was created. Builds 1 and 2 were rejected with ITMS-90129 because the icon name was already used by another app. Build 4 is in internal TestFlight. The icon name is **Brújula: Wheel of Life** in English and **Brújula: Rueda de la vida** in Spanish. External testing and App Review have not started. Recheck the linked Apple pages before uploading.
 
 The first distribution step is internal TestFlight. External testers and the public App Store come after a device pass on that internal build.
 
@@ -8,8 +8,8 @@ The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separa
 
 ## Project settings already in the repository
 
-- Bundle ID: `app.brujula.life.ios`. Display name: Brújula. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
-- Version: `MARKETING_VERSION` 1.0.0. Build: `CURRENT_PROJECT_VERSION` 1. After App Store Connect accepts an upload, increment the build number before the next upload.
+- Bundle ID: `app.brujula.life.ios`. Icon name (`CFBundleDisplayName`): Brújula: Wheel of Life (English) and Brújula: Rueda de la vida (Spanish). Short bundle name (`CFBundleName`): BrujulaLife. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
+- Version: `MARKETING_VERSION` 1.0.0. Build: `CURRENT_PROJECT_VERSION` 5. Builds 1 and 2 were rejected, build 3 was cancelled before the binary arrived, and build 4 is the internal TestFlight build. Apple keeps those build numbers.
 - Minimum iOS: 16.0. That meets Apple’s current minimum of iOS 13 (since September 9, 2026) and the April 2027 minimum of iOS 15.
 - `ITSAppUsesNonExemptEncryption` is `false` in Debug and Release. The app does not call CryptoKit, CommonCrypto, or its own network stack. Local files use Apple’s complete file protection, which is operating-system encryption. Standard exempt encryption is why the flag is false. Leaving it false lets TestFlight skip the Missing Compliance stop on every upload. If a later change adds non-exempt cryptography, remove this assumption and follow Apple’s export questionnaire.
 - `PrivacyInfo.xcprivacy` is in the app bundle. Tracking is off, collected-data types are empty, and required-reason API entries are empty.
@@ -74,7 +74,7 @@ Add English (U.S.) and Spanish localizations in App Store Connect. The iPhone in
 
 | Field | Draft |
 | --- | --- |
-| Name | Brújula |
+| Name | Brújula: Wheel of Life |
 | Subtitle | Private wheel of life |
 | Promotional text | A private wheel for eight areas of life. Scores, notes, and history stay on your iPhone. Optional local reminders. No account. |
 | Keywords | `reflection,journal,wheel of life,notes,check-in,offline,private,reminder,lifestyle` |
@@ -97,6 +97,8 @@ Description:
 > Your reflections stay on your iPhone. No sign-in, ads, analytics, or Internet connection are required. Export and restore local JSON backups when you choose, including a backup made on Android. Export before deleting the app or changing phones. Exported files include your notes and are not encrypted by Brújula.
 >
 > English and Spanish follow the language of your iPhone. Brújula is a personal reflection tool, not a medical device. It does not diagnose, treat, cure, or prevent any condition, and it does not replace professional advice.
+
+Spanish name: **Brújula: Rueda de la vida**.
 
 Spanish subtitle: **Rueda de la vida privada**.
 
