@@ -36,7 +36,10 @@ async (page) => {
   for(const [index,name] of categories.entries()){
     await page.getByRole('button',{name:name+', Sin valorar',exact:true}).click();
     if(index===0){
+      check(await page.locator('.reflection-prompts li').count()===3,'Each area offers three optional visible reflection prompts');
+      check(await page.getByRole('textbox',{name:'Tu reflexión',exact:true}).inputValue()==='','Prompts never prefill the reflection note');
       await page.getByRole('textbox',{name:'Tu reflexión',exact:true}).fill('My own reflection <img src=x onerror=alert(1)>');
+      check((await state()).draft.notes.health==='My own reflection <img src=x onerror=alert(1)>','Only the written answer is saved, without prompt text');
       await page.getByRole('slider',{name,exact:true}).focus();
       await page.keyboard.press('Home');
       check((await state()).draft.scores.health===0,'An explicit zero is saved rather than treated as unanswered');
@@ -50,7 +53,12 @@ async (page) => {
   await page.getByRole('button',{name:'Guardar este momento',exact:true}).click();
   check((await state()).history.length===1,'Only an intentional evaluation becomes the first history item');
   await page.reload();
-  check((await state()).history[0].notes.health.includes('<img'),'User scores, history and literal notes survive reload');
+  check((await state()).history[0].notes.health==='My own reflection <img src=x onerror=alert(1)>','User scores, history and literal notes survive reload without prompt text');
+  const beforeGuide=await state();
+  await page.locator('[data-area="health"]').click();
+  check(await page.getByRole('textbox',{name:'Tu reflexión',exact:true}).inputValue()===beforeGuide.draft.notes.health,'The guide preserves a preexisting note when reopened');
+  await page.getByRole('button',{name:'Listo',exact:true}).click();
+  check(JSON.stringify(await state())===JSON.stringify(beforeGuide),'Viewing optional questions does not change draft or saved history');
   await page.getByRole('button',{name:'Ajustes',exact:true}).click();
   await page.getByRole('button',{name:'Recordatorio de reflexión',exact:true}).click();
   check(!await page.getByRole('switch',{name:'Activar recordatorio',exact:true}).isChecked(),'Reminders are disabled by default');

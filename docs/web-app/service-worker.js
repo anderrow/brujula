@@ -2,7 +2,7 @@
 'use strict';
 
 const prefix = 'brujula-web-';
-const cacheName = prefix + 'f73011f1e9e12618';
+const cacheName = prefix + 'c446f0e54f7ba6c6';
 const assets = ["index.html","app.js","core.js","style.css","install.css","web-platform.js","manifest.webmanifest","icon.png"];
 const scope = self.registration.scope;
 

@@ -73,7 +73,7 @@ assert (RELEASE / f'Brujula-{VERSION}.aab.sha256').read_text().split()[0] == aab
 report = f'''# Brújula {VERSION} verification
 
 - APK: `Brujula-{VERSION}.apk`
-- Changes: reliable portable backups, failed-save recovery, recreation-safe Android document operations, reset ordering and current verification provenance
+- Changes: three optional reflection prompts beside each area note, with existing autosave, history and portable-backup compatibility preserved
 - Update compatibility: versionCode {VERSION_CODE}; same application ID and signing certificate as previous releases
 - Data migration: existing version-1 data is validated and migrated to version 2 without erasing scores, notes, or history; backups remain importable
 - Application ID: `app.brujula.life`

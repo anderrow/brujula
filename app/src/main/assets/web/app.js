@@ -12,7 +12,8 @@
       average:'MEDIA PERSONAL', focus:'UN POCO MÁS DE CUIDADO', focusFoot:'Un espacio al que puedes volver', averageFoot:'Ocho áreas, tu propia perspectiva',
       areas:'Tus ocho áreas', editHint:'De 0 a 10 · toca para editar', save:'Guardar evaluación', local:'Solo en este dispositivo. Sin cuentas ni conexión.',
       savedDraft:'Cambios guardados automáticamente', score:'¿Cómo te sientes en esta área?', low:'Nada satisfecho/a', high:'Muy satisfecho/a',
-      noteLabel:'Tu reflexión', notePlaceholder:'¿Qué va bien? ¿Qué necesitas? ¿Cuál sería un pequeño paso?', done:'Listo', previous:'Anterior', next:'Siguiente',
+      noteLabel:'Tu reflexión', notePlaceholder:'Write about what matters to you in this area.', done:'Listo', previous:'Anterior', next:'Siguiente',
+      reflectionPrompts:'Reflection prompts', reflectionActions:'What have you done recently to improve this area of your life?', reflectionPossibilities:'What else could you have tried, or what got in the way?', reflectionNextStep:'What small step would you like to take next?', reflectionOptional:'These questions are optional. Use whichever helps you reflect.',
       saveTitle:'Una pausa para recordar', saveCopy:'Guarda tus ocho puntuaciones y sus notas como una nueva evaluación. Podrás volver a ella en el historial.',
       titleLabel:'Dale un nombre (opcional)', titlePlaceholder:'Por ejemplo, el inicio de una nueva etapa', defaultTitle:'Mi evaluación', saveConfirm:'Guardar este momento',
       saved:'Evaluación guardada', cancel:'Cancelar', close:'Cerrar', initial:'Mi punto de partida', historyEyebrow:'TU CAMINO, A TU RITMO',
@@ -25,7 +26,7 @@
       deleteCopy:'Se eliminará esta evaluación y sus notas del historial. Tu borrador no cambiará. Esta acción no se puede deshacer.', deleted:'Evaluación eliminada',
       privacyPolicy:'Política de privacidad', language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
       backup:'Cuida tus recuerdos', backupCopy:'Exporta una copia antes de desinstalar la aplicación o cambiar de teléfono. Al desinstalar se borran los datos locales. La copia contiene tus notas: guárdala en un lugar privado.',
-      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.2.1 · A place to return to yourself', exported:'Copia de seguridad exportada',
+      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.3.0 · A place to return to yourself', exported:'Copia de seguridad exportada',
       transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'No se pudo exportar la copia. Inténtalo de nuevo.', importFailed:'No se pudo leer la copia de seguridad.', invalidBackup:'La copia no es válida o no es compatible con esta versión.',
       importTitle:'¿Restaurar esta copia?', importCopy:'Se sustituirán el borrador, las notas y todo el historial de este dispositivo por el contenido de la copia.', importConfirm:'Restaurar los datos', imported:'Copia restaurada',
@@ -48,7 +49,8 @@
       average:'PERSONAL AVERAGE', focus:'A LITTLE MORE CARE', focusFoot:'A space you can come back to', averageFoot:'Eight areas, your own perspective',
       areas:'Your eight areas', editHint:'From 0 to 10 · tap to edit', save:'Save check-in', local:'Only on this device. No accounts or connection.',
       savedDraft:'Changes saved automatically', score:'How do you feel about this area?', low:'Not at all satisfied', high:'Very satisfied',
-      noteLabel:'Your reflection', notePlaceholder:'What is going well? What do you need? What could be one small step?', done:'Done', previous:'Previous', next:'Next',
+      noteLabel:'Your reflection', notePlaceholder:'Write about what matters to you in this area.', done:'Done', previous:'Previous', next:'Next',
+      reflectionPrompts:'Reflection prompts', reflectionActions:'What have you done recently to improve this area of your life?', reflectionPossibilities:'What else could you have tried, or what got in the way?', reflectionNextStep:'What small step would you like to take next?', reflectionOptional:'These questions are optional. Use whichever helps you reflect.',
       saveTitle:'A pause to remember', saveCopy:'Save your eight scores and their notes as a new check-in. You can return to it in your history.',
       titleLabel:'Give it a name (optional)', titlePlaceholder:'For example, the start of a new chapter', defaultTitle:'My check-in', saveConfirm:'Save this moment',
       saved:'Check-in saved', cancel:'Cancel', close:'Close', initial:'My starting point', historyEyebrow:'YOUR PATH, AT YOUR PACE',
@@ -61,7 +63,7 @@
       deleteCopy:'This check-in and its notes will be removed from history. Your draft will stay the same. This cannot be undone.', deleted:'Check-in deleted',
       privacyPolicy:'Privacy policy', language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
-      export:'Export backup', import:'Restore backup', version:'Brújula 1.2.1 · A place to return to yourself', exported:'Backup exported',
+      export:'Export backup', import:'Restore backup', version:'Brújula 1.3.0 · A place to return to yourself', exported:'Backup exported',
       transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
@@ -288,7 +290,7 @@
   }
   function editArea(key) {
     const c=C.categories.find(c=>c.id===key), index=C.categories.indexOf(c);
-    openSheet('<div class="sheet-meta"><span>'+String(index+1).padStart(2,'0')+' / 08</span><span>'+t('savedDraft')+'</span></div>'+sheetHead(name(c))+'<p class="subtitle">'+t('score')+'</p><div class="stepper"><button id="minus" aria-label="'+esc(name(c)+' −1')+'">−</button><div class="big-score"><span id="edit-score">'+state.draft.scores[key]+'</span><small>/ 10</small></div><button id="plus" aria-label="'+esc(name(c)+' +1')+'">+</button></div><input id="score-slider" type="range" min="0" max="10" step="1" value="'+state.draft.scores[key]+'" aria-label="'+esc(name(c))+'"><div class="range-labels"><span>0 · '+t('low')+'</span><span>10 · '+t('high')+'</span></div><label class="field-label" for="area-note">'+t('noteLabel')+'</label><textarea id="area-note" maxlength="4000" placeholder="'+esc(t('notePlaceholder'))+'"></textarea><div class="note-hint"><span>'+t('savedDraft')+'</span><span id="char-count"></span></div><button class="primary" id="done">'+t('done')+'</button><div class="nav-arrows"><button class="text-button" id="previous-area">‹ '+t('previous')+'</button><button class="text-button" id="next-area">'+t('next')+' ›</button></div>','editor');
+    openSheet('<div class="sheet-meta"><span>'+String(index+1).padStart(2,'0')+' / 08</span><span>'+t('savedDraft')+'</span></div>'+sheetHead(name(c))+'<p class="subtitle">'+t('score')+'</p><div class="stepper"><button id="minus" aria-label="'+esc(name(c)+' −1')+'">−</button><div class="big-score"><span id="edit-score">'+state.draft.scores[key]+'</span><small>/ 10</small></div><button id="plus" aria-label="'+esc(name(c)+' +1')+'">+</button></div><input id="score-slider" type="range" min="0" max="10" step="1" value="'+state.draft.scores[key]+'" aria-label="'+esc(name(c))+'"><div class="range-labels"><span>0 · '+t('low')+'</span><span>10 · '+t('high')+'</span></div><section class="reflection-prompts" aria-labelledby="reflection-prompts-title"><h3 id="reflection-prompts-title">'+t('reflectionPrompts')+'</h3><ol><li>'+t('reflectionActions')+'</li><li>'+t('reflectionPossibilities')+'</li><li>'+t('reflectionNextStep')+'</li></ol><p id="reflection-prompts-hint">'+t('reflectionOptional')+'</p></section><label class="field-label" for="area-note">'+t('noteLabel')+'</label><textarea id="area-note" maxlength="4000" aria-describedby="reflection-prompts-hint" placeholder="'+esc(t('notePlaceholder'))+'"></textarea><div class="note-hint"><span>'+t('savedDraft')+'</span><span id="char-count"></span></div><button class="primary" id="done">'+t('done')+'</button><div class="nav-arrows"><button class="text-button" id="previous-area">‹ '+t('previous')+'</button><button class="text-button" id="next-area">'+t('next')+' ›</button></div>','editor');
     bindClose();
     const update=value=>{
       state.draft.scores[key]=Math.max(0,Math.min(10,Number(value)));persist();

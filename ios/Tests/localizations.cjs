@@ -64,6 +64,8 @@ for (const literal of literals) {
 const sameInEveryLanguage = new Set(['Brújula', '%lld / 10', '%lld/10', '%lld / 4000', '.', '/ 10', 'English', 'Español']);
 // New recovery copy remains in English; existing localized copy stays unchanged.
 for (const key of ['Retry loading', 'Export preserved data (recovery copy)', 'Some reminders could not be restored. Open Reminders and save again.']) sameInEveryLanguage.add(key);
+// Optional prompt copy follows the same explicit English-only artifact rule.
+for (const key of ["Reflection prompts", "What have you done recently to improve this area of your life?", "What else could you have tried, or what got in the way?", "What small step would you like to take next?", "These questions are optional. Use whichever helps you reflect."]) sameInEveryLanguage.add(key);
 for (const [key, entry] of Object.entries(strings)) {
   for (const language of languages) {
     const unit = entry.localizations?.[language]?.stringUnit;
@@ -123,4 +125,4 @@ for (const key of requiredFormats) {
   if (!strings[key]) fail(`Missing format string ${JSON.stringify(key)}`);
 }
 
-if (!process.exitCode) console.log(`iPhone catalog coverage validated for ${languages.join(' and ')} (${Object.keys(strings).length} entries; new recovery messages use English source copy).`);
+if (!process.exitCode) console.log(`iPhone catalog coverage validated for ${languages.join(' and ')} (${Object.keys(strings).length} entries; new recovery and prompt messages use English source copy).`);

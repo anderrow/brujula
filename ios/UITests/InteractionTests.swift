@@ -9,12 +9,38 @@ final class InteractionTests: XCTestCase {
 
         let healthLabel = app.buttons["wheel-area-health"]
         XCTAssertTrue(healthLabel.waitForExistence(timeout: 10))
+        let untouched = app.buttons["wheel-area-work"]
+        untouched.tap()
+        let untouchedNote = app.textViews["area-note"]
+        XCTAssertTrue(untouchedNote.exists)
+        XCTAssertEqual(app.staticTexts["editor-score"].label, "—")
+        XCTAssertTrue((untouchedNote.value as? String ?? "").isEmpty)
+        app.buttons["editor-toolbar-done"].tap()
+        XCTAssertTrue(untouched.waitForExistence(timeout: 5))
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(untouched.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-work").firstMatch.value as? String, "Not rated")
+        untouched.tap()
+        XCTAssertTrue(untouchedNote.exists)
+        XCTAssertEqual(app.staticTexts["editor-score"].label, "—")
+        XCTAssertTrue((untouchedNote.value as? String ?? "").isEmpty)
+        app.buttons["editor-toolbar-done"].tap()
+        XCTAssertTrue(healthLabel.waitForExistence(timeout: 5))
         screenshot("Empty wheel")
         healthLabel.tap()
         let slider = app.sliders["score-slider"]
         XCTAssertTrue(slider.waitForExistence(timeout: 5))
         slider.adjust(toNormalizedSliderPosition: 0.7)
+        XCTAssertTrue(app.staticTexts["reflection-prompt-actions"].exists)
+        XCTAssertTrue(app.staticTexts["reflection-prompt-possibilities"].exists)
+        XCTAssertTrue(app.staticTexts["reflection-prompt-next-step"].exists)
         let note = app.textViews["area-note"]
+        for _ in 0..<6 {
+            if note.isHittable { break }
+            app.scrollViews.firstMatch.swipeUp()
+        }
+        XCTAssertTrue(note.isHittable)
         note.tap()
         note.typeText("A quiet walk.")
         app.navigationBars.buttons["Done"].tap()
@@ -119,6 +145,18 @@ final class InteractionTests: XCTestCase {
         let slider = app.sliders["score-slider"]
         XCTAssertTrue(slider.waitForExistence(timeout: 5))
         slider.adjust(toNormalizedSliderPosition: 0.5)
+        let nextStep = app.staticTexts["reflection-prompt-next-step"]
+        for _ in 0..<8 {
+            if nextStep.isHittable { break }
+            app.scrollViews.firstMatch.swipeUp()
+        }
+        XCTAssertTrue(nextStep.isHittable)
+        let note = app.textViews["area-note"]
+        for _ in 0..<6 {
+            if note.isHittable { break }
+            app.scrollViews.firstMatch.swipeUp()
+        }
+        XCTAssertTrue(note.isHittable)
         screenshot("Largest accessibility text")
         app.buttons["editor-toolbar-done"].tap()
         app.terminate()

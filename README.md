@@ -1,4 +1,4 @@
-# Brújula 1.2.1
+# Brújula 1.3.0
 
 An offline Android wheel-of-life app with optional local reflection reminders. No account, server, analytics, or Internet permission. Spanish and English interfaces are included.
 
@@ -23,6 +23,8 @@ Existing installations retain their data during an update. To clear an existing 
 Tap a chart label or an area row to rate it from 0 to 10 and add a note. Rated chart points can be dragged. Changes are saved automatically. Save a named check-in to create a historical snapshot; later edits cannot change its notes or scores. The history view includes category trends and overlays for comparison. Notes are also accessible in their own tab.
 
 The displayed average uses only rated categories until all eight are complete. A blank wheel has no average and does not suggest a category needing improvement.
+
+Each area includes three optional reflection prompts about recent actions, other possibilities or obstacles, and a next small step. The questions remain outside the text field so typing does not replace the guide. Respond freely in the existing note; prompts never add text to it or change the backup format.
 
 ## Optional reminders
 
@@ -82,13 +84,13 @@ When publishing a future release, attach the signed APK under its versioned name
 
 ## Future Google Play submission
 
-The release target `Brujula-1.2.1.aab` targets API 36 and uses the existing Brújula release certificate. The APK remains available for direct installation. See [Google Play preparation](docs/google-play-preparation.md) for store copy, declarations, signing compatibility, and the account/testing/review steps that remain. No Play Console upload or submission has been performed.
+The release target `Brujula-1.3.0.aab` targets API 36 and uses the existing Brújula release certificate. The APK remains available for direct installation. See [Google Play preparation](docs/google-play-preparation.md) for store copy, declarations, signing compatibility, and the account/testing/review steps that remain. No Play Console upload or submission has been performed.
 
 The [public privacy policy](https://anderrow.github.io/brujula/privacy.html) is also bundled offline in Settings in English and Spanish. Run `node tools/generate-privacy.cjs` after changing the canonical app policy to regenerate its public copy. Release packaging verifies that both copies match.
 
 ## Future App Store submission
 
-The iPhone source in `ios/` is version 1.1.1 (build 7), separate from Android 1.2.1. Its release settings declare exempt encryption so a TestFlight upload is not held for the export questionnaire. See [App Store preparation](docs/app-store-preparation.md) for the internal TestFlight path, listing copy, and the account steps that remain. Earlier distribution observations are recorded with their build/date in that checklist. This source update does not establish a new TestFlight upload or App Store submission. The iPhone interface defaults to the phone language and supports a saved system/English/Spanish selection in Settings.
+The iPhone source in `ios/` is version 1.2.0 (build 8), separate from Android 1.3.0. Its release settings declare exempt encryption so a TestFlight upload is not held for the export questionnaire. See [App Store preparation](docs/app-store-preparation.md) for the internal TestFlight path, listing copy, and the account steps that remain. Earlier distribution observations are recorded with their build/date in that checklist. This source update does not establish a new TestFlight upload or App Store submission. The iPhone interface defaults to the phone language and supports a saved system/English/Spanish selection in Settings.
 
 ## Browser application boundaries
 

@@ -2787,6 +2787,96 @@
           }
         }
       }
+    },
+    "Reflection prompts": {
+      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reflection prompts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reflection prompts"
+          }
+        }
+      }
+    },
+    "What have you done recently to improve this area of your life?": {
+      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What have you done recently to improve this area of your life?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What have you done recently to improve this area of your life?"
+          }
+        }
+      }
+    },
+    "What else could you have tried, or what got in the way?": {
+      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What else could you have tried, or what got in the way?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What else could you have tried, or what got in the way?"
+          }
+        }
+      }
+    },
+    "What small step would you like to take next?": {
+      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What small step would you like to take next?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What small step would you like to take next?"
+          }
+        }
+      }
+    },
+    "These questions are optional. Use whichever helps you reflect.": {
+      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These questions are optional. Use whichever helps you reflect."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These questions are optional. Use whichever helps you reflect."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
