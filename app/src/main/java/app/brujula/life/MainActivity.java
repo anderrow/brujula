@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
             if (backups != null) backups.export(json, recovery); else runOnUiThread(() -> notifyJs("exportFailed"));
         }
         @JavascriptInterface public void retryExport() { if (backups != null) backups.retryExport(); }
-        @JavascriptInterface public void retryTransfer() { if (backups != null) backups.dispatch(); }
+        @JavascriptInterface public void retryTransfer() { if (backups != null) backups.retryDelivery(); }
         @JavascriptInterface public void importBackup() {
             runOnUiThread(() -> {
                 if (backups == null) { notifyJs("importFailed"); return; }

@@ -60,6 +60,7 @@ final class BackupTransfer {
         if (activity.get() == previous) { activity.clear(); delivering = 0; }
     }
     synchronized void pageChanged(MainActivity target) { if (activity.get() == target) delivering = 0; }
+    synchronized void retryDelivery() { delivering = 0; dispatch(); }
     synchronized boolean currentDelivery(MainActivity candidate, long token) { return activity.get() == candidate && delivering == token; }
     private File file(String name) { return new File(directory, name); }
     private File payload(String id) {
@@ -199,7 +200,9 @@ final class BackupTransfer {
             boolean discarded = false;
             if (file("result.json").exists() && !validResult(result)) { new AtomicFile(file("result.json")).delete(); discarded = true; }
             if (unreadableExport()) { new AtomicFile(file("export.json")).delete(); discarded = true; }
-            if (discarded) { delivering = 0; picker = 0; }
+            delivering = 0;
+            if (discarded) picker = 0;
+            dispatch();
             return; // Preserve payloads whose operation metadata cannot be read.
         }
         if (!id.equals(result.optString("id"))) return;
@@ -236,6 +239,7 @@ final class BackupTransfer {
     }
     synchronized void delivered(String id, boolean imported, boolean success, long token) {
         if (delivering != token) return;
+        if (success && imported) return; // Confirmation owns the result until commit, cancel, retry or a new page.
         delivering = 0;
         if (success && !imported) consume(id);
     }
