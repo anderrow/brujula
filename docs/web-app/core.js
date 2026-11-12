@@ -2,14 +2,14 @@
 (function (root) {
   'use strict';
   const categories = [
-    { id: 'health', en: 'Health', color: '#427F69' },
-    { id: 'work', en: 'Work', color: '#608FA3' },
-    { id: 'finances', en: 'Finances', color: '#B38A45' },
-    { id: 'family', en: 'Family', color: '#C48469' },
-    { id: 'friends', en: 'Friends', color: '#9B8AAD' },
-    { id: 'partner', en: 'Partner', color: '#B56F80' },
-    { id: 'leisure', en: 'Leisure', color: '#6F9B8E' },
-    { id: 'growth', en: 'Growth', color: '#8C9755' }
+    { id: 'health', es: 'Salud', en: 'Health', color: '#427F69' },
+    { id: 'work', es: 'Trabajo', en: 'Work', color: '#608FA3' },
+    { id: 'finances', es: 'Finanzas', en: 'Finances', color: '#B38A45' },
+    { id: 'family', es: 'Familia', en: 'Family', color: '#C48469' },
+    { id: 'friends', es: 'Amistades', en: 'Friends', color: '#9B8AAD' },
+    { id: 'partner', es: 'Pareja', en: 'Partner', color: '#B56F80' },
+    { id: 'leisure', es: 'Ocio', en: 'Leisure', color: '#6F9B8E' },
+    { id: 'growth', es: 'Crecimiento', en: 'Growth', color: '#8C9755' }
   ];
   const clone = value => JSON.parse(JSON.stringify(value));
   const maximumBytes = 8_000_000;

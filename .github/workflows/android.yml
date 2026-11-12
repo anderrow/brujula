@@ -28,7 +28,7 @@ jobs:
           packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
       - uses: gradle/actions/setup-gradle@v4
       - name: Check the local data model
-        run: node --test tests/core.test.cjs
+        run: node --test tests/core.test.cjs tests/localization.test.cjs
       - name: Check generated browser assets, privacy and verification guards
         run: |
           node tools/build-web-app.cjs --check

@@ -111,6 +111,10 @@ final class InteractionTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["wheel-heading"].label.contains("Tu vida"))
         app.buttons["wheel-area-health"].tap()
         XCTAssertEqual(app.textViews["area-note"].value as? String, "A quiet walk.")
+        XCTAssertEqual(app.staticTexts["reflection-prompt-actions"].label, "¿Qué has hecho últimamente para mejorar este aspecto de tu vida?")
+        XCTAssertEqual(app.staticTexts["reflection-prompt-possibilities"].label, "¿Qué más podrías haber intentado o qué te lo ha impedido?")
+        XCTAssertEqual(app.staticTexts["reflection-prompt-next-step"].label, "¿Qué pequeño paso te gustaría dar ahora?")
+        screenshot("Spanish reflection guide")
         app.buttons["editor-toolbar-done"].tap()
         screenshot("Spanish wheel")
 

@@ -13,6 +13,8 @@
       const section=document.createElement('section'),h=document.createElement('h2'),p=document.createElement('p');
       h.textContent=heading;p.textContent=body;section.append(h,p);return section;
     }));
+    document.getElementById('policy-issues').textContent=locale==='es'?'Consultas en GitHub ↗':'GitHub Issues ↗';
+    document.querySelector('meta[name="description"]').content=locale==='es'?'Política de privacidad de Brújula: reflexiones sin conexión, recordatorios opcionales, copias locales y borrado.':'Brújula privacy policy: offline reflections, optional reminders, local backups and deletion.';
     document.getElementById('policy-back').textContent=locale==='es'?'Volver a Brújula':'Back to Brújula';
     document.querySelector('.language-switch').setAttribute('aria-label',locale==='es'?'Idioma':'Language');
     document.querySelectorAll('[data-language]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.language===locale)));

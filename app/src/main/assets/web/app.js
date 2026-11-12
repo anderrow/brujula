@@ -6,14 +6,26 @@
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const strings = {
     es: {
+      retrySave:"Reintentar guardado",
+      recoveryExport:"Exportar datos conservados (copia de recuperación)",
+      unsavedEdits:" Tus últimos cambios solo están en memoria. Mantén esta página abierta hasta guardarlos o exportarlos.",
+      storedKept:" Se han conservado los últimos datos guardados.",
+      reloadStored:"Volver a cargar los datos guardados",
+      notSaved:"Sin guardar",
+      retryExport:"Reintentar exportación pendiente",
+      retryLoad:"Volver a cargar",
+      backupNotReady:"Copia no disponible",
+      pendingBackup:"No se pudo abrir la copia pendiente. Vuelve a cargarla o cancela la transferencia. Tus reflexiones guardadas no han cambiado.",
+      retryBackup:"Volver a cargar la copia",
+      recoverySuffix:" (copia de recuperación)",
       wheel:'Mi rueda', history:'Historial', notes:'Notas', settings:'Ajustes', eyebrow:'UN MOMENTO PARA TI',
       heading:'Tu vida,<br>en perspectiva.', subtitle:'No necesitas una rueda perfecta. Solo un momento para escuchar cómo estás.',
       yourWheel:'TU RUEDA DE LA VIDA', chartTip:'Toca un área o arrastra un punto para ajustar su valor',
       average:'MEDIA PERSONAL', focus:'UN POCO MÁS DE CUIDADO', focusFoot:'Un espacio al que puedes volver', averageFoot:'Ocho áreas, tu propia perspectiva',
       areas:'Tus ocho áreas', editHint:'De 0 a 10 · toca para editar', save:'Guardar evaluación', local:'Solo en este dispositivo. Sin cuentas ni conexión.',
       savedDraft:'Cambios guardados automáticamente', score:'¿Cómo te sientes en esta área?', low:'Nada satisfecho/a', high:'Muy satisfecho/a',
-      noteLabel:'Tu reflexión', notePlaceholder:'Write about what matters to you in this area.', done:'Listo', previous:'Anterior', next:'Siguiente',
-      reflectionPrompts:'Reflection prompts', reflectionActions:'What have you done recently to improve this area of your life?', reflectionPossibilities:'What else could you have tried, or what got in the way?', reflectionNextStep:'What small step would you like to take next?', reflectionOptional:'These questions are optional. Use whichever helps you reflect.',
+      noteLabel:'Tu reflexión', notePlaceholder:'Escribe sobre lo que te importa en este aspecto de tu vida.', done:'Listo', previous:'Anterior', next:'Siguiente',
+      reflectionPrompts:'Preguntas para reflexionar', reflectionActions:'¿Qué has hecho últimamente para mejorar este aspecto de tu vida?', reflectionPossibilities:'¿Qué más podrías haber intentado o qué te lo ha impedido?', reflectionNextStep:'¿Qué pequeño paso te gustaría dar ahora?', reflectionOptional:'Estas preguntas son opcionales. Utiliza las que te ayuden a reflexionar.',
       saveTitle:'Una pausa para recordar', saveCopy:'Guarda tus ocho puntuaciones y sus notas como una nueva evaluación. Podrás volver a ella en el historial.',
       titleLabel:'Dale un nombre (opcional)', titlePlaceholder:'Por ejemplo, el inicio de una nueva etapa', defaultTitle:'Mi evaluación', saveConfirm:'Guardar este momento',
       saved:'Evaluación guardada', cancel:'Cancelar', close:'Cerrar', initial:'Mi punto de partida', historyEyebrow:'TU CAMINO, A TU RITMO',
@@ -26,8 +38,8 @@
       deleteCopy:'Se eliminará esta evaluación y sus notas del historial. Tu borrador no cambiará. Esta acción no se puede deshacer.', deleted:'Evaluación eliminada',
       privacyPolicy:'Política de privacidad', language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
       backup:'Cuida tus recuerdos', backupCopy:'Exporta una copia antes de desinstalar la aplicación o cambiar de teléfono. Al desinstalar se borran los datos locales. La copia contiene tus notas: guárdala en un lugar privado.',
-      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.3.0 · A place to return to yourself', exported:'Copia de seguridad exportada',
-      transferBusy:'Finish or cancel the current backup operation before starting another.',
+      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.3.1 · Un lugar para volver a ti.', exported:'Copia de seguridad exportada',
+      transferBusy:'Termina o cancela la operación de copia de seguridad actual antes de iniciar otra.',
       exportFailed:'No se pudo exportar la copia. Inténtalo de nuevo.', importFailed:'No se pudo leer la copia de seguridad.', invalidBackup:'La copia no es válida o no es compatible con esta versión.',
       importTitle:'¿Restaurar esta copia?', importCopy:'Se sustituirán el borrador, las notas y todo el historial de este dispositivo por el contenido de la copia.', importConfirm:'Restaurar los datos', imported:'Copia restaurada',
       storageError:'No se pudo guardar. Conserva esta pantalla y exporta una copia.', limit:'Has alcanzado el límite de 5.000 evaluaciones. Exporta una copia antes de eliminar alguna.',
@@ -43,6 +55,18 @@
       weekdays:['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']
     },
     en: {
+      retrySave:"Retry saving",
+      recoveryExport:"Export preserved data (recovery copy)",
+      unsavedEdits:" Your latest edits are only in memory. Keep this page open until you save or export them.",
+      storedKept:" The last stored data has been kept.",
+      reloadStored:"Reload stored data",
+      notSaved:"Not saved",
+      retryExport:"Retry pending export",
+      retryLoad:"Retry loading",
+      backupNotReady:"Backup not ready",
+      pendingBackup:"The pending backup could not be opened. Retry loading it, or cancel the pending transfer. Saved reflections have not changed.",
+      retryBackup:"Retry loading backup",
+      recoverySuffix:" (recovery copy)",
       wheel:'My wheel', history:'History', notes:'Notes', settings:'Settings', eyebrow:'A MOMENT FOR YOURSELF',
       heading:'Your life,<br>in perspective.', subtitle:'You don’t need a perfect wheel. Just a moment to listen to how you feel.',
       yourWheel:'YOUR WHEEL OF LIFE', chartTip:'Tap an area or drag a point to adjust its score',
@@ -63,7 +87,7 @@
       deleteCopy:'This check-in and its notes will be removed from history. Your draft will stay the same. This cannot be undone.', deleted:'Check-in deleted',
       privacyPolicy:'Privacy policy', language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
-      export:'Export backup', import:'Restore backup', version:'Brújula 1.3.0 · A place to return to yourself', exported:'Backup exported',
+      export:'Export backup', import:'Restore backup', version:'Brújula 1.3.1 · A place to return to yourself', exported:'Backup exported',
       transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
@@ -102,6 +126,9 @@
   const sheet = $('#sheet');
   const native = window.BrujulaNative;
   const web = native ? null : window.BrujulaWeb;
+  const preferredLocale = () => { try { const saved=localStorage.getItem('brujula-web-locale'); if(saved==='en'||saved==='es')return saved; } catch(_) {} return navigator.language?.toLowerCase().startsWith('es')?'es':'en'; };
+  const errorTranslations = {"The original data is unavailable. Retry loading before exporting.": "Los datos originales no están disponibles. Vuelve a cargarlos antes de exportar.", "Another page changed the stored reflections. Export your unsaved edits, close older pages and reload before editing.": "Otra página ha cambiado las reflexiones guardadas. Exporta los cambios sin guardar, cierra las páginas anteriores y vuelve a cargar antes de editar.", "This page is read-only. Close the other Brújula page, then reload to edit. If exclusive editing is unavailable in this browser, use the native app.": "Esta página es de solo lectura. Cierra la otra página de Brújula y vuelve a cargar para editar. Si este navegador no permite la edición exclusiva, utiliza la aplicación nativa.", "This existing data exceeds the 8 MB backup limit. Export the preserved recovery copy before using confirmed Clear data. Recovery copies may require manual recovery and are not ordinary restorable backups.": "Los datos existentes superan el límite de 8 MB. Exporta la copia de recuperación conservada antes de confirmar el borrado. Las copias de recuperación pueden requerir recuperación manual y no son copias de seguridad restaurables normales.", "This data exceeds the 8 MB backup limit. Export preserved data before starting fresh.": "Los datos superan el límite de 8 MB. Exporta los datos conservados antes de empezar de cero.", "This page cannot safely replace the stored reflections. Export your edits, close other pages and reload.": "Esta página no puede sustituir las reflexiones guardadas con seguridad. Exporta tus cambios, cierra las otras páginas y vuelve a cargar."};
+  const localizeError = message => state?.locale==='es' ? (errorTranslations[message] || (Object.values(strings.es).includes(message) ? message : Object.values(strings.en).includes(message) ? strings.es[Object.keys(strings.en).find(key=>strings.en[key]===message)] : t('storageError'))) : message;
   const t = key => strings[state?.locale || 'es'][key] || key;
   const name = c => c[state.locale];
   const format = n => n === null ? '—' : n.toLocaleString(state.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -134,13 +161,13 @@
     }
     banner.hidden = !saveError;
     if (saveError) {
-      banner.innerHTML = '<p></p><button id="retry-save" class="secondary">Retry saving</button><button id="recover-save" class="secondary">Export preserved data (recovery copy)</button>';
-      $('p', banner).textContent = saveError + (dirty ? ' Your latest edits are only in memory. Keep this page open until you save or export them.' : ' The last stored data has been kept.');
-      $('#retry-save').textContent = web?.hasConflict ? 'Reload stored data' : 'Retry saving';
+      banner.innerHTML = '<p></p><button id="retry-save" class="secondary">'+t('retrySave')+'</button><button id="recover-save" class="secondary">'+t('recoveryExport')+'</button>';
+      $('p', banner).textContent = localizeError(saveError) + (dirty ? t('unsavedEdits') : t('storedKept'));
+      $('#retry-save').textContent = web?.hasConflict ? t('reloadStored') : t('retrySave');
       $('#retry-save').onclick = () => { if(web?.hasConflict)location.reload();else persist(); };
       $('#recover-save').onclick = () => exportData(true);
     }
-    sheet.querySelectorAll('.sheet-meta span:last-child,.note-hint span:first-child').forEach(el => el.textContent = dirty ? 'Not saved' : t('savedDraft'));
+    sheet.querySelectorAll('.sheet-meta span:last-child,.note-hint span:first-child').forEach(el => el.textContent = dirty ? t('notSaved') : t('savedDraft'));
   }
   function persist(importId = null) {
     try {
@@ -225,7 +252,7 @@
   }
   function changeTab(next) { tab = next; render(); window.scrollTo(0, 0); }
   function render() {
-    document.documentElement.lang = state.locale;
+    document.documentElement.lang = state.locale;window.dispatchEvent(new CustomEvent('brujula-locale',{detail:state.locale}));
     renderReminderShortcut();
     $('#settings').ariaLabel = t('settings');
     $('#navigation').ariaLabel = state.locale === 'es' ? 'Navegación principal' : 'Main navigation';
@@ -368,16 +395,16 @@
   }
   function settings() {
     const languageOptions = '<section class="settings-section"><h3>'+t('language')+'</h3><div class="language-options"><button data-lang="es" class="'+(state.locale==='es'?'selected':'')+'">Español</button><button data-lang="en" class="'+(state.locale==='en'?'selected':'')+'">English</button></div></section>';
-    openSheet(sheetHead(t('settings'))+(web?'':languageOptions)+'<section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+esc(web?.privacySummary ?? t('privacyCopy'))+'</p><button class="secondary" id="privacy-policy">'+t('privacyPolicy')+'</button></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+esc(web?.backupSummary ?? t('backupCopy'))+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+esc(web?.versionLabel ?? t('version'))+'</p>','settings');
+    openSheet(sheetHead(t('settings'))+languageOptions+'<section class="settings-section"><h3>'+t('privacy')+'</h3><p>'+esc(web?.privacySummary?.[state.locale] ?? t('privacyCopy'))+'</p><button class="secondary" id="privacy-policy">'+t('privacyPolicy')+'</button></section><section class="settings-section"><h3>'+t('backup')+'</h3><p>'+esc(web?.backupSummary?.[state.locale] ?? t('backupCopy'))+'</p><button class="secondary" id="export">'+t('export')+'</button><button class="secondary" id="import">'+t('import')+'</button></section><p class="quiet-line">'+esc(web?.versionLabel?.[state.locale] ?? t('version'))+'</p>','settings');
     bindClose();
     $('#privacy-policy').onclick=()=>{
-      const policy=web?.privacyPolicy ?? window.BrujulaPrivacy[state.locale];
+      const policy=web?.privacyPolicy?.[state.locale] ?? window.BrujulaPrivacy[state.locale];
       openSheet(sheetHead(policy.title)+'<p class="section-copy">'+esc(policy.updated)+'</p>'+policy.sections.map(([heading,body])=>'<section class="settings-section"><h3>'+esc(heading)+'</h3><p>'+esc(body)+'</p></section>').join(''),'privacy');
       bindClose();
     };
     sheet.querySelectorAll('[data-lang]').forEach(btn=>btn.onclick=()=>{
       const candidate=C.clone(state);candidate.locale=btn.dataset.lang;
-      if(commit(candidate)){if(native?.updateReminderLocale)native.updateReminderLocale(state.locale);render();settings();}
+      if(commit(candidate)){if(web){try{localStorage.setItem('brujula-web-locale',state.locale);}catch(_){}}if(native?.updateReminderLocale)native.updateReminderLocale(state.locale);render();settings();}
     });
     $('#export').onclick=()=>exportData();
     $('#import').onclick=()=>{if(native)native.importBackup();else if(web)web.importBackup();else toast(t('webBackup'));};
@@ -391,7 +418,7 @@
     const reset=document.createElement('section');reset.className='settings-section';
     reset.innerHTML='<button class="secondary danger" id="clear-data">'+t('clearData')+'</button>';
     sheet.insertBefore(reset,sheet.lastElementChild);
-    $('#clear-data').onclick=()=>confirmAction(t('clearTitle'),web?.clearCopy ?? t('clearCopy'),t('clearConfirm'),()=>{
+    $('#clear-data').onclick=()=>confirmAction(t('clearTitle'),web?.clearCopy?.[state.locale] ?? t('clearCopy'),t('clearConfirm'),()=>{
       const candidate=C.initial();candidate.locale=state.locale;
       if (native) {
         if (!native.resetData) { toast(t('storageError')); return; }
@@ -448,7 +475,7 @@
   window.reminderRefresh=()=>{renderReminderShortcut();if(modalKind==='reminder')reminderDialog();};
   window.nativeNotice=key=>{
     toast(t(key));
-    if(key==='exportFailed' && native?.retryExport){saveError=t(key);updateSaveStatus();const retry=document.createElement('button');retry.className='secondary';retry.textContent='Retry pending export';retry.onclick=()=>native.retryExport();$('#save-status').append(retry);}
+    if(key==='exportFailed' && native?.retryExport){saveError=t(key);updateSaveStatus();const retry=document.createElement('button');retry.className='secondary';retry.textContent=t('retryExport');retry.onclick=()=>native.retryExport();$('#save-status').append(retry);}
   };
   window.resetResult=result=>{
     if(result.ok && pendingReset){state=pendingReset;rawState=JSON.stringify(state);loaded=true;preserveOriginal=false;dirty=false;saveError='';pendingReset=null;$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;closeSheet();changeTab('wheel');updateSaveStatus();toast(t('cleared'));}
@@ -459,7 +486,7 @@
     let candidate;
     try{candidate=C.migrate(JSON.parse(text));C.serialize(candidate);}
     catch(_){native?.consumeTransfer?.(importId);toast(t('invalidBackup'));return false;}
-    if(web)candidate.locale='en';
+    if(web)candidate.locale=state.locale;
     activeImport=importId;
     confirmAction(t('importTitle'),t('importCopy')+' '+t('importCount')+': '+candidate.history.length+'.',t('importConfirm'),()=>{
       if(commit(candidate,importId)){loaded=true;activeImport=null;closeSheet();$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;render();toast(t('imported'));}
@@ -469,7 +496,7 @@
   window.importUnavailable=importId=>{
     if(activeImport===importId && sheet.open)return true;
     activeImport=importId;
-    confirmAction('Backup not ready','The pending backup could not be opened. Retry loading it, or cancel the pending transfer. Saved reflections have not changed.','Retry loading backup',()=>{
+    confirmAction(t('backupNotReady'),t('pendingBackup'),t('retryBackup'),()=>{
       activeImport=null;closeSheet();native.retryTransfer();
     });
     return true;
@@ -486,7 +513,7 @@
       rawState=native?native.read():(localStorage.getItem('brujula-state-v1')||'');
       if(!editable) throw Error('This page is read-only. Close the other Brújula page, then reload to edit. If exclusive editing is unavailable in this browser, use the native app.');
       state=rawState?C.migrate(JSON.parse(rawState)):C.initial();
-      if(web)state.locale='en';
+      if(web && !rawState)state.locale=preferredLocale();
       if(!C.validate(state))throw Error('invalid stored data');
       loaded=true;preserveOriginal=C.byteLength(JSON.stringify(state))>C.maximumBytes;
       if(!rawState || (JSON.parse(rawState).version!==state.version && C.byteLength(JSON.stringify(state))<=C.maximumBytes))persist();
@@ -494,9 +521,9 @@
       if(C.byteLength(JSON.stringify(state))>C.maximumBytes){saveError='This existing data exceeds the 8 MB backup limit. Export the preserved recovery copy before using confirmed Clear data. Recovery copies may require manual recovery and are not ordinary restorable backups.';updateSaveStatus();}
     } catch(error) {
       loaded=false;
-      state={locale:web?'en':'es'};
-      $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p></p><button class="secondary" id="retry-load">Retry loading</button>'+(rawState&&(native||web)?'<button class="secondary" id="recover">'+t('exportOriginal')+' (recovery copy)</button>':'')+(native?'<button class="secondary danger" id="reset-failed">'+t('clearData')+'</button>':'')+'</div>';
-      $('#main p').textContent=editable?t('fatal'):error.message;
+      state={locale:preferredLocale()};
+      $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p></p><button class="secondary" id="retry-load">'+t('retryLoad')+'</button>'+(rawState&&(native||web)?'<button class="secondary" id="recover">'+t('exportOriginal')+t('recoverySuffix')+'</button>':'')+(native?'<button class="secondary danger" id="reset-failed">'+t('clearData')+'</button>':'')+'</div>';
+      $('#main p').textContent=editable?t('fatal'):localizeError(error.message);
       $('#retry-load').onclick=()=>location.reload();
       $('#settings').disabled=true;if(!web)$('#reminder-shortcut').disabled=true;
       if($('#recover'))$('#recover').onclick=()=>exportData(true);

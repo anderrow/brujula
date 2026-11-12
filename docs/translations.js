@@ -1,7 +1,7 @@
 /* Public website copy. Keep both locales aligned when adding content. */
 window.BRUJULA_TRANSLATIONS = {
   en: {
-    openDemo: 'Open Demo', demoMeta: 'English web demo · Try in your browser', demoEyebrow: 'WEB DEMO', demoTitle: 'Try Brújula in your browser', demoBody: 'Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.', demoFoot: 'The demo is in English. Wait for its offline-ready message and verify an offline reopen before relying on it. Scheduled reminders are available in the native Android and iOS apps.',
+    openDemo: 'Open Demo', demoMeta: "Web demo · Try in your browser", demoEyebrow: 'WEB DEMO', demoTitle: 'Try Brújula in your browser', demoBody: 'Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.', demoFoot: "Choose English or Spanish in Settings. Wait for the offline-ready message before using the demo offline. Scheduled reminders are available in the native apps.",
     title: 'Brújula — A moment for yourself',
     description: 'Get Brújula for Android and iPhone. A private, offline wheel of life with personal reflections, check-in history and optional reminders.',
     skip: 'Skip to content', home: 'Brújula home', navigation: 'Main navigation', language: 'Language', navInstall: 'How to install',
@@ -27,15 +27,24 @@ window.BRUJULA_TRANSLATIONS = {
     faqUpdateTitle: 'Will an update erase my data?', faqUpdateBody: 'Install the new release over your existing app, without uninstalling it. Your reflections and history are preserved. To start fresh instead, use Settings → Clear data and start fresh and confirm.',
     faqReminderTitle: 'How do reminders work?', faqReminderBody: 'They are off by default. Tap the bell labeled Reminders in the app header, or open Settings → Reflection reminder. Choose a daily, weekly or monthly schedule and a local time, then save. Android will ask for notification permission when needed. You can disable the reminder and save at any time. Battery management may delay delivery.',
     faqLatestTitle: 'Does this page stay up to date?', faqLatestBody: 'The download points to the latest stable GitHub release. Version information is refreshed from GitHub when available. The permanent APK link follows new releases even if version information is temporarily out of date. This page does not update the app on your phone automatically.',
-    footerNote: 'A place to return to yourself.', privacyPolicy: 'Privacy policy', source: 'Explore the source'
+    footerNote: 'A place to return to yourself.', privacyPolicy: 'Privacy policy', source: 'Explore the source',
+    iphoneDownload: "Get the iPhone beta",
+    iphoneMeta: "iPhone · TestFlight beta",
+    iphoneEyebrow: "IPHONE BETA",
+    iphoneTitle: "Install Brújula on iPhone",
+    iphoneBody: "Get the native iPhone beta through Apple TestFlight. Your reflections stay on your device.",
+    iphoneStep1: "Install TestFlight from the App Store.",
+    iphoneStep2: "Open the beta invitation on your iPhone using the button below.",
+    iphoneStep3: "Tap Install, or Update if you already have the beta.",
+    iphoneFoot: "Beta availability depends on active builds and tester places. New versions become available in TestFlight after publication."
   },
   es: {
-    openDemo: 'Open Demo', demoMeta: 'English web demo · Try in your browser', demoEyebrow: 'WEB DEMO', demoTitle: 'Try Brújula in your browser', demoBody: 'Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.', demoFoot: 'The demo is in English. Wait for its offline-ready message and verify an offline reopen before relying on it. Scheduled reminders are available in the native Android and iOS apps.',
+    openDemo: "Abrir demo", demoMeta: "Demo web · Pruébala en tu navegador", demoEyebrow: "DEMO WEB", demoTitle: "Prueba Brújula en tu navegador", demoBody: "Explora la rueda, las notas y el historial antes de instalar la aplicación nativa. Tus reflexiones se quedan en este navegador, en tu dispositivo.", demoFoot: "Elige español o inglés en Ajustes. Espera al mensaje de acceso sin conexión antes de utilizar la demo sin Internet. Los recordatorios programados están disponibles en las aplicaciones nativas.",
     title: 'Brújula — Un momento para ti',
-    description: 'Get Brújula for Android and iPhone. A private, offline wheel of life with personal reflections, check-in history and optional reminders.',
+    description: "Descarga Brújula para Android e iPhone. Una rueda de la vida privada y sin conexión, con reflexiones personales, historial y recordatorios opcionales.",
     skip: 'Ir al contenido', home: 'Inicio de Brújula', navigation: 'Navegación principal', language: 'Idioma', navInstall: 'Cómo instalar',
     heroEyebrow: 'UN MOMENTO PARA TI', heroTitleFirst: 'Tu vida,', heroTitleLast: 'en perspectiva.',
-    heroIntroFirst: 'Ocho áreas. Un pequeño espacio para reflexionar.', heroIntroLast: 'Find your own direction with Brújula, a private wheel of life for Android and iPhone.',
+    heroIntroFirst: 'Ocho áreas. Un pequeño espacio para reflexionar.', heroIntroLast: "Encuentra tu propio rumbo con Brújula, una rueda de la vida privada para Android e iPhone.",
     download: 'Descargar para Android', privateLine: 'Sin cuenta. Sin anuncios. Sin conexión en la app.',
     visualLabel: 'TU PROPIO PUNTO DE PARTIDA', visualNoteFirst: 'Una rueda limpia.', visualNoteLast: 'Un espacio que es tuyo.',
     previewAlt: 'Brújula empieza con una rueda de la vida limpia y una campana de recordatorios en la cabecera. Las ocho categorías están sin valorar y no hay datos personales precargados.',
@@ -56,6 +65,15 @@ window.BRUJULA_TRANSLATIONS = {
     faqUpdateTitle: '¿Una actualización borrará mis datos?', faqUpdateBody: 'Instala la nueva versión sobre la app que ya tienes, sin desinstalarla. Tus reflexiones e historial se conservan. Si prefieres empezar de cero, usa Ajustes → Borrar datos y empezar de cero y confirma.',
     faqReminderTitle: '¿Cómo funcionan los recordatorios?', faqReminderBody: 'Están desactivados por defecto. Toca la campana Recordatorios de la cabecera o entra en Ajustes → Recordatorio de reflexión. Elige un aviso diario, semanal o mensual y una hora, y guarda. Android pedirá permiso para mostrar notificaciones cuando sea necesario. Puedes desactivar el recordatorio y guardar en cualquier momento. El ahorro de batería puede retrasar los avisos.',
     faqLatestTitle: '¿Esta página se mantiene actualizada?', faqLatestBody: 'La descarga apunta a la última versión estable de GitHub. La información de versión se actualiza desde GitHub cuando está disponible. El enlace permanente al APK sigue las nuevas versiones aunque esa información esté temporalmente desactualizada. Esta página no actualiza automáticamente la app de tu teléfono.',
-    footerNote: 'Un lugar para volver a ti.', privacyPolicy: 'Política de privacidad', source: 'Explorar el código'
+    footerNote: 'Un lugar para volver a ti.', privacyPolicy: 'Política de privacidad', source: 'Explorar el código',
+    iphoneDownload: "Obtener la beta para iPhone",
+    iphoneMeta: "iPhone · Beta de TestFlight",
+    iphoneEyebrow: "BETA PARA IPHONE",
+    iphoneTitle: "Instala Brújula en tu iPhone",
+    iphoneBody: "Consigue la beta de la aplicación nativa para iPhone mediante TestFlight de Apple. Tus reflexiones se quedan en tu dispositivo.",
+    iphoneStep1: "Instala TestFlight desde el App Store.",
+    iphoneStep2: "Abre la invitación a la beta en tu iPhone con el botón de abajo.",
+    iphoneStep3: "Pulsa Instalar, o Actualizar si ya tienes la beta.",
+    iphoneFoot: "El acceso a la beta depende de las versiones activas y las plazas disponibles. Las nuevas versiones aparecen en TestFlight después de publicarse."
   }
 };

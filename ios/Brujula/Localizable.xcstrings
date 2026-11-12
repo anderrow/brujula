@@ -2738,7 +2738,7 @@
       }
     },
     "Retry loading": {
-      "comment": "Recovery action or persistent reminder failure message.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2749,13 +2749,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retry loading"
+            "value": "Volver a cargar"
           }
         }
       }
     },
     "Export preserved data (recovery copy)": {
-      "comment": "Recovery action or persistent reminder failure message.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2766,13 +2766,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export preserved data (recovery copy)"
+            "value": "Exportar datos conservados (copia de recuperación)"
           }
         }
       }
     },
     "Some reminders could not be restored. Open Reminders and save again.": {
-      "comment": "Recovery action or persistent reminder failure message.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2783,13 +2783,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Some reminders could not be restored. Open Reminders and save again."
+            "value": "No se pudieron restablecer algunos recordatorios. Abre Recordatorios y vuelve a guardar."
           }
         }
       }
     },
     "Reflection prompts": {
-      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -2801,13 +2801,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reflection prompts"
+            "value": "Preguntas para reflexionar"
           }
         }
       }
     },
     "What have you done recently to improve this area of your life?": {
-      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -2819,13 +2819,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "What have you done recently to improve this area of your life?"
+            "value": "¿Qué has hecho últimamente para mejorar este aspecto de tu vida?"
           }
         }
       }
     },
     "What else could you have tried, or what got in the way?": {
-      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -2837,13 +2837,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "What else could you have tried, or what got in the way?"
+            "value": "¿Qué más podrías haber intentado o qué te lo ha impedido?"
           }
         }
       }
     },
     "What small step would you like to take next?": {
-      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -2855,13 +2855,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "What small step would you like to take next?"
+            "value": "¿Qué pequeño paso te gustaría dar ahora?"
           }
         }
       }
     },
     "These questions are optional. Use whichever helps you reflect.": {
-      "comment": "Optional reflection guide. English source copy under the project artifact-language rule.",
+      "comment": "User-facing interface text; translate completely for each supported language.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -2873,7 +2873,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "These questions are optional. Use whichever helps you reflect."
+            "value": "Estas preguntas son opcionales. Utiliza las que te ayuden a reflexionar."
           }
         }
       }
