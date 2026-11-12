@@ -27,7 +27,7 @@ function uiLiterals(source) {
   const found = new Set();
   const add = value => {
     const text = unescape(value);
-    if (text && !text.includes('\\(') && !text.startsWith('http') && text !== 'brujula-backup') found.add(text);
+    if (text && !text.includes('\\(') && !text.startsWith('http') && !['brujula-backup', 'brujula-recovery-copy'].includes(text)) found.add(text);
   };
   for (const line of source.split('\n')) {
     for (const match of line.matchAll(/(?:Text|Button|Section|Label|Toggle|Picker|TextField|Link|LabeledContent|navigationTitle|accessibilityLabel|accessibilityValue|accessibilityHint|eyebrow|statistic|localized|localizedFormat|\.alert)\(\s*"((?:\\.|[^"\\])*)"/g)) add(match[1]);

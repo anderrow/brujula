@@ -132,4 +132,25 @@ public class RemindersTest {
             assertTrue(Reminders.settings(app).getBoolean("registered"));
         }
     }
+    @Test public void resetRegistrationFailure() throws Exception {
+        assertTrue(Reminders.save(app, config(true, "daily")));
+        try (android.database.sqlite.SQLiteDatabase db = android.database.sqlite.SQLiteDatabase.create(null)) {
+            db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            assertTrue(MainActivity.writeState(db, "{\"original\":true}", null));
+            db.execSQL("CREATE TRIGGER reject_reset BEFORE INSERT ON state BEGIN SELECT RAISE(FAIL, 'Synthetic write denial'); END");
+            FailingAlarmManager.rejectAdds = 1;
+            assertFalse(MainActivity.resetState(app, db, "{}"));
+            assertEquals("{\"original\":true}", MainActivity.readState(db));
+            JSONObject retained = Reminders.settings(app);
+            assertTrue(retained.getBoolean("enabled"));
+            assertEquals("daily", retained.getString("frequency"));
+            assertEquals(20, retained.getInt("hour"));
+            assertFalse(retained.getBoolean("registered"));
+            assertEquals(0, retained.getLong("nextAt"));
+            assertEquals(0, shadowOf(alarms).getScheduledAlarms().size());
+            Reminders.reschedule(app);
+            assertTrue(Reminders.settings(app).getBoolean("registered"));
+            assertEquals(1, shadowOf(alarms).getScheduledAlarms().size());
+        }
+    }
 }

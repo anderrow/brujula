@@ -80,6 +80,15 @@ public final class Reminders {
             return false;
         }
     }
+    @SuppressLint("ApplySharedPref")
+    static synchronized void restoreAfterFailedReset(Context ctx, JSONObject previous) {
+        registrationFailed = true;
+        if (!prefs(ctx).edit().putString("config", previous.toString()).putLong("registeredAt", 0).commit()) {
+            throw new IllegalStateException("Cannot restore reminder preferences");
+        }
+        // Keep restored intent even if AlarmManager fails; a later foreground retry can register it.
+        reschedule(ctx);
+    }
     private static PendingIntent alarm(Context ctx) {
         return PendingIntent.getBroadcast(ctx, 0, new Intent(ctx, ReminderReceiver.class).setAction(ACTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }

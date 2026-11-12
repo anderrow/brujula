@@ -217,7 +217,7 @@ public class MainActivity extends Activity {
             JSONObject disabled = Reminders.parse(previous.toString()); disabled.put("enabled", false);
             if (!Reminders.save(context, disabled)) return false;
             if (writeState(db, value, null)) return true;
-            Reminders.save(context, previous);
+            Reminders.restoreAfterFailedReset(context, previous);
         } catch (Exception ignored) { }
         return false;
     }
