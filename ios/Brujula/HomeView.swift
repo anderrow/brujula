@@ -216,10 +216,11 @@ struct HomeView: View {
                         .foregroundStyle(Palette.muted).padding(.horizontal, 10)
                     if !dynamicTypeSize.isAccessibilitySize { RadarView(wheel: store.state.draft, select: { area = $0 }, update: { item, score in
                         store.edit(item, score: score, note: store.state.draft.note(item))
-                    }) }
+                    })
                     Text("Tap an area or drag a point to adjust its score")
                         .font(.system(.caption2)).foregroundStyle(Palette.muted)
                         .frame(maxWidth: .infinity)
+                    }
                 }
                 .padding(.horizontal, 10).padding(.vertical, 18)
                 .background(Palette.paper, in: RoundedRectangle(cornerRadius: 22))
