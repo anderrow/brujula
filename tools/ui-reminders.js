@@ -14,6 +14,7 @@ async (page) => {
         if(!blocked)localStorage.setItem('test-reminders',JSON.stringify({...proposed,canNotify:true,nextAt:proposed.enabled?Date.now()+3600000:0}));
         window.reminderResult({ok:!blocked,key:blocked?'reminderBlocked':proposed.enabled?'reminderSaved':'reminderDisabled',settings:read()});
       },
+      resetData:text=>{localStorage.setItem('brujula-state-v1',text);localStorage.setItem('test-reminders',JSON.stringify({...read(),enabled:false}));window.resetResult({ok:true});},
       updateReminderLocale:locale=>{localStorage.setItem('test-reminders',JSON.stringify({...read(),locale}));},
       exportBackup:text=>localStorage.setItem('test-export',text),
       importBackup:()=>{},notificationSettings:()=>{window.__openedSettings=true;}

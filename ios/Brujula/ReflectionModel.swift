@@ -107,7 +107,7 @@ struct ReflectionState: Codable, Equatable {
 
     func encoded() throws -> Data {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = [.sortedKeys]
+        encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         let data = try encoder.encode(self)
         guard data.count <= Self.maximumBytes else { throw ReflectionError.tooLarge }
         return data

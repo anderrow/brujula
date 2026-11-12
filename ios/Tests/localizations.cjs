@@ -27,7 +27,7 @@ function uiLiterals(source) {
   const found = new Set();
   const add = value => {
     const text = unescape(value);
-    if (text && !text.includes('\\(') && !text.startsWith('http') && text !== 'brujula-backup') found.add(text);
+    if (text && !text.includes('\\(') && !text.startsWith('http') && !['brujula-backup', 'brujula-recovery-copy'].includes(text)) found.add(text);
   };
   for (const line of source.split('\n')) {
     for (const match of line.matchAll(/(?:Text|Button|Section|Label|Toggle|Picker|TextField|Link|LabeledContent|navigationTitle|accessibilityLabel|accessibilityValue|accessibilityHint|eyebrow|statistic|localized|localizedFormat|\.alert)\(\s*"((?:\\.|[^"\\])*)"/g)) add(match[1]);
@@ -62,6 +62,8 @@ for (const literal of literals) {
 }
 
 const sameInEveryLanguage = new Set(['Brújula', '%lld / 10', '%lld/10', '%lld / 4000', '.', '/ 10', 'English', 'Español']);
+// New recovery copy remains in English; existing localized copy stays unchanged.
+for (const key of ['Retry loading', 'Export preserved data (recovery copy)', 'Some reminders could not be restored. Open Reminders and save again.']) sameInEveryLanguage.add(key);
 for (const [key, entry] of Object.entries(strings)) {
   for (const language of languages) {
     const unit = entry.localizations?.[language]?.stringUnit;
@@ -121,4 +123,4 @@ for (const key of requiredFormats) {
   if (!strings[key]) fail(`Missing format string ${JSON.stringify(key)}`);
 }
 
-if (!process.exitCode) console.log(`iPhone localizations cover ${languages.join(' and ')} for ${Object.keys(strings).length} strings.`);
+if (!process.exitCode) console.log(`iPhone catalog coverage validated for ${languages.join(' and ')} (${Object.keys(strings).length} entries; new recovery messages use English source copy).`);

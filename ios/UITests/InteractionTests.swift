@@ -102,6 +102,28 @@ final class InteractionTests: XCTestCase {
         screenshot("English restored")
     }
 
+    func testAccessibilityTextKeepsEditingReachable() {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        XCTAssertTrue(app.buttons["settings"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["settings"].isHittable)
+        let health = app.buttons["area-health"]
+        for _ in 0..<8 {
+            if health.isHittable { break }
+            app.scrollViews.firstMatch.swipeUp()
+        }
+        XCTAssertTrue(health.isHittable)
+        health.tap()
+        let slider = app.sliders["score-slider"]
+        XCTAssertTrue(slider.waitForExistence(timeout: 5))
+        slider.adjust(toNormalizedSliderPosition: 0.5)
+        screenshot("Largest accessibility text")
+        app.buttons["editor-toolbar-done"].tap()
+        app.terminate()
+    }
+
     override func tearDownWithError() throws {
         screenshot("End of interaction check")
         let tree = XCTAttachment(string: XCUIApplication().debugDescription)

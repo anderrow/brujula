@@ -29,7 +29,7 @@ struct BrujulaApp: App {
                 .tint(Palette.green)
                 .preferredColorScheme(.light)
                 .task(id: phase) {
-                    if phase == .active { await reminders.refresh() }
+                    if phase == .active { if !store.ready { store.reload() }; await reminders.refresh() }
                 }
                 .task(id: language) {
                     if phase == .active { await reminders.refresh() }
@@ -46,7 +46,7 @@ enum Palette {
     static let background = color(0xF7F6F1)
     static let paper = color(0xFFFEFA)
     static let ink = color(0x263E35)
-    static let muted = color(0x778178)
+    static let muted = color(0x56645A)
     static let line = color(0xE3E6DC)
     static let pale = color(0xE8EEE4)
     static let warm = color(0xF0DFCD)

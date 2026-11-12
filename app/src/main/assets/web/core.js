@@ -11,6 +11,14 @@
     { id: 'growth', es: 'Crecimiento', en: 'Growth', color: '#8C9755' }
   ];
   const clone = value => JSON.parse(JSON.stringify(value));
+  const maximumBytes = 8_000_000;
+  const byteLength = text => new TextEncoder().encode(text).length;
+  function serialize(state) {
+    if (!validate(state)) throw new Error('Invalid reflection data');
+    const text = JSON.stringify(state);
+    if (byteLength(text) > maximumBytes) throw new Error('This data exceeds the 8 MB backup limit. Export preserved data before starting fresh.');
+    return text;
+  }
   function id() { return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10); }
   function initial() {
     const draft = { scores: {}, notes: {} };
@@ -52,7 +60,7 @@
       return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
     });
   }
-  const api = { categories, clone, initial, average, validate, migrate, complete, snapshot, points };
+  const api = { categories, clone, initial, average, validate, migrate, complete, snapshot, points, maximumBytes, byteLength, serialize };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.BrujulaCore = api;
 })(typeof window === 'undefined' ? globalThis : window);

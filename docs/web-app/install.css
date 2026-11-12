@@ -28,12 +28,14 @@
   margin-bottom: 0;
 }
 
-.is-standalone .install-tip {
+.is-standalone .install-tip details {
   display: none;
 }
 
 @media (display-mode: standalone) {
-  .install-tip {
+  .install-tip details {
     display: none;
   }
 }
+
+.offline-status{font-size:13px;line-height:1.6;color:#394c40}.offline-status button{min-height:44px;text-decoration:underline}

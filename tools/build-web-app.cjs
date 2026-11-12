@@ -1,5 +1,14 @@
 /* Publish the shared life-wheel UI with the English copy and web platform adapter. */
 const fs = require('node:fs');
+const check = process.argv.includes('--check');
+function emit(filename, data) {
+  if (check) {
+    const actual = fs.readFileSync(filename);
+    const same = Buffer.isBuffer(data) ? actual.equals(data) : actual.toString('utf8').replace(/\r\n/g, '\n') === data.replace(/\r\n/g, '\n');
+    if (!same) throw Error('Generated output is stale: ' + filename);
+  } else fs.writeFileSync(filename, data);
+}
+
 const path = require('node:path');
 const {createHash} = require('node:crypto');
 
@@ -22,10 +31,10 @@ ui = replaceRequired(ui, "+(web?'':languageOptions)+", '+');
 ui = replaceRequired(ui, /state.locale === 'es' \? '[^']*' : 'Main navigation'/, "'Main navigation'");
 
 const model = replaceRequired(read(path.join(source, 'core.js')), /, es: '[^']*'/g, '');
-fs.writeFileSync(path.join(target, 'app.js'), generated + ui);
-fs.writeFileSync(path.join(target, 'core.js'), generated + model);
-fs.writeFileSync(path.join(target, 'style.css'), generated + read(path.join(source, 'style.css')));
-fs.copyFileSync(path.join(root, 'ios/Brujula/Assets.xcassets/AppIcon.appiconset/AppIcon.png'), path.join(target, 'icon.png'));
+emit(path.join(target, 'app.js'), generated + ui);
+emit(path.join(target, 'core.js'), generated + model);
+emit(path.join(target, 'style.css'), generated + read(path.join(source, 'style.css')));
+emit(path.join(target, 'icon.png'), fs.readFileSync(path.join(root, 'ios/Brujula/Assets.xcassets/AppIcon.appiconset/AppIcon.png')));
 
 const assets = ['index.html', 'app.js', 'core.js', 'style.css', 'install.css', 'web-platform.js', 'manifest.webmanifest', 'icon.png'];
 const hash = createHash('sha256');
@@ -35,7 +44,7 @@ for (const name of assets) {
 }
 const revision = hash.digest('hex').slice(0, 16);
 
-fs.writeFileSync(path.join(target, 'service-worker.js'), generated + `'use strict';
+emit(path.join(target, 'service-worker.js'), generated + `'use strict';
 
 const prefix = 'brujula-web-';
 const cacheName = prefix + '${revision}';

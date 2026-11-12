@@ -20,6 +20,7 @@ public final class Reminders {
     static final String CHANNEL = "reflection";
     static final String ACTION = "app.brujula.life.REFLECTION";
     private static final int NOTIFICATION_ID = 41;
+    private static volatile boolean registrationFailed;
     private Reminders() { }
     private static SharedPreferences prefs(Context ctx) { return ctx.getSharedPreferences("reminders", Context.MODE_PRIVATE); }
     public static void ensureChannel(Context ctx) {
@@ -43,7 +44,10 @@ public final class Reminders {
             value.put("monthDay", value.optInt("monthDay", 1));
             value.put("locale", value.optString("locale", "es"));
             value.put("canNotify", allowed(ctx));
-            value.put("nextAt", value.getBoolean("enabled") ? next(value).toInstant().toEpochMilli() : 0);
+            long registeredAt = prefs(ctx).getLong("registeredAt", 0);
+            boolean registered = value.getBoolean("enabled") && allowed(ctx) && registeredAt > 0 && !registrationFailed;
+            value.put("registered", registered);
+            value.put("nextAt", registered ? registeredAt : 0);
             return value;
         } catch (Exception e) { throw new IllegalStateException("Cannot read reminder settings", e); }
     }
@@ -68,7 +72,11 @@ public final class Reminders {
     @SuppressLint("ApplySharedPref")
     public static synchronized boolean save(Context ctx, JSONObject value) {
         String previous = prefs(ctx).getString("config", "{}");
-        if (!prefs(ctx).edit().putString("config", value.toString()).commit()) return false;
+        if (!prefs(ctx).edit().putString("config", value.toString()).commit()) {
+            // A failed disk commit has already changed the in-memory preferences map.
+            prefs(ctx).edit().putString("config", previous).commit();
+            return false;
+        }
         try { reschedule(ctx); return true; }
         catch (Exception e) {
             prefs(ctx).edit().putString("config", previous).commit();
@@ -76,21 +84,36 @@ public final class Reminders {
             return false;
         }
     }
+    @SuppressLint("ApplySharedPref")
+    static synchronized void restoreAfterFailedReset(Context ctx, JSONObject previous) {
+        registrationFailed = true;
+        if (!prefs(ctx).edit().putString("config", previous.toString()).putLong("registeredAt", 0).commit()) {
+            throw new IllegalStateException("Cannot restore reminder preferences");
+        }
+        // Keep restored intent even if AlarmManager fails; a later foreground retry can register it.
+        reschedule(ctx);
+    }
     private static PendingIntent alarm(Context ctx) {
         return PendingIntent.getBroadcast(ctx, 0, new Intent(ctx, ReminderReceiver.class).setAction(ACTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
     public static synchronized void reschedule(Context ctx) {
+        registrationFailed = true;
+        prefs(ctx).edit().putLong("registeredAt", 0).commit();
         ensureChannel(ctx);
         AlarmManager manager = ctx.getSystemService(AlarmManager.class);
         manager.cancel(alarm(ctx));
         JSONObject value = settings(ctx);
         if (!value.optBoolean("enabled")) {
             ctx.getSystemService(NotificationManager.class).cancel(NOTIFICATION_ID);
+            registrationFailed = false;
             return;
         }
         if (!allowed(ctx)) return;
         try {
-            manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next(value).toInstant().toEpochMilli(), alarm(ctx));
+            long at = next(value).toInstant().toEpochMilli();
+            manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, alarm(ctx));
+            if (!prefs(ctx).edit().putLong("registeredAt", at).commit()) throw new IllegalStateException("Cannot preserve registration status");
+            registrationFailed = false;
         } catch (Exception e) { throw new IllegalStateException("Cannot schedule reminder", e); }
     }
     public static synchronized void deliver(Context ctx) {

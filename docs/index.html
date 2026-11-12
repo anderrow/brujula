@@ -8,9 +8,9 @@
   <meta name="color-scheme" content="light">
   <title>Brújula — A moment for yourself</title>
   <link rel="icon" type="image/svg+xml" href="compass.svg">
-  <link rel="stylesheet" href="style.css?v=iphone-2">
+  <link rel="stylesheet" href="style.css?v=2026-11-12">
   <script src="config.js" defer></script>
-  <script src="translations.js?v=iphone-1" defer></script>
+  <script src="translations.js?v=2026-11-12" defer></script>
   <script src="app.js?v=language-1" defer></script>
 </head>
 <body>
@@ -36,9 +36,9 @@
             <a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span class="button-text" data-i18n="download">Download for Android</span><span aria-hidden="true">↗</span></a>
             <p class="download-meta"><span id="hero-version">Latest stable release</span><span class="divider">·</span>Android 8.0+</p>
           </div>
-          <div lang="en">
-            <a class="button outline" href="web-app/">Open Demo</a>
-            <p class="download-meta">Web demo <span class="divider">·</span> Try in your browser</p>
+          <div>
+            <a class="button outline" href="web-app/" data-i18n="openDemo">Open Demo</a>
+            <p class="download-meta" data-i18n="demoMeta">English web demo · Try in your browser</p>
           </div>
         </div>
         <p class="private-line"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg><span data-i18n="privateLine">No account. No ads. No Internet needed in the app.</span></p>
@@ -75,18 +75,18 @@
         <div class="release-actions"><a class="button primary download-link" data-download href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk"><span class="button-text" data-i18n="downloadLatest">Download the latest APK</span><span aria-hidden="true">↓</span></a><a class="text-link" data-releases href="https://github.com/anderrow/brujula/releases/latest" target="_blank" rel="noopener noreferrer"><span data-i18n="releaseNotes">Release notes &amp; previous versions</span> <span aria-hidden="true">↗</span></a></div>
         <div class="release-foot"><a data-checksum href="https://github.com/anderrow/brujula/releases/latest/download/Brujula.apk.sha256" data-i18n="checksum">SHA-256 checksum</a><span data-i18n="releaseFoot">Free to download · Android 8.0+</span></div>
       </section>
-      <section id="iphone" class="release-card" aria-labelledby="iphone-title" lang="en">
+      <section id="iphone" class="release-card" aria-labelledby="iphone-title">
         <div class="release-heading">
           <div>
-            <p class="eyebrow">WEB DEMO</p>
-            <h2 id="iphone-title">Try Brújula in your browser</h2>
-            <p>Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.</p>
+            <p class="eyebrow" data-i18n="demoEyebrow">WEB DEMO</p>
+            <h2 id="iphone-title" data-i18n="demoTitle">Try Brújula in your browser</h2>
+            <p data-i18n="demoBody">Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.</p>
           </div>
         </div>
         <div class="release-actions">
-          <a class="button primary" href="web-app/">Open Demo</a>
+          <a class="button primary" href="web-app/" data-i18n="openDemo">Open Demo</a>
         </div>
-        <div class="release-foot">The demo is in English and works offline after the first load. Scheduled reminders are available in the native Android and iOS apps.</div>
+        <div class="release-foot" data-i18n="demoFoot">The demo is in English. Wait for its offline-ready message and verify an offline reopen before relying on it. Scheduled reminders are available in the native apps.</div>
       </section>
     </div>
     <section class="faq wrap" aria-labelledby="questions-title">

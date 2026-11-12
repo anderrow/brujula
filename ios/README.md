@@ -16,7 +16,7 @@ Open the labeled **Reminders** bell in the header or **Settings → Reflection r
 2. In the Brujula target, open **Signing & Capabilities**. Enable automatic signing and select your Apple development team. If the bundle identifier is unavailable for your team, change it to a unique identifier. An installed app's local data stays associated with its original bundle identifier and signing team.
 3. Connect and select your iPhone. Follow Xcode's prompts to trust the device and enable Developer Mode if needed, then click **Run**. For a simulator, select any available iPhone simulator instead.
 
-A build made without signing cannot be installed on a physical iPhone. TestFlight and App Store distribution still need a paid Apple Developer team, a signed archive, and the steps in [App Store preparation](../docs/app-store-preparation.md). Nothing has been uploaded to App Store Connect. An upload needs Xcode 26 or later; the current SDK minimum is recorded in that checklist. The project sets `ITSAppUsesNonExemptEncryption` to false so a TestFlight build is not held for the export-compliance questionnaire.
+A build made without signing cannot be installed on a physical iPhone. TestFlight and App Store distribution still need a paid Apple Developer team, a signed archive, and the steps in [App Store preparation](../docs/app-store-preparation.md). Current source is 1.1.1 (build 7); this source update does not establish a new upload. Dated earlier distribution observations are kept in the preparation checklist. An upload needs Xcode 26 or later; the current SDK minimum is recorded in that checklist. The project sets `ITSAppUsesNonExemptEncryption` to false so a TestFlight build is not held for the export-compliance questionnaire.
 
 ## Transfer reflections from Android
 
@@ -43,3 +43,7 @@ swiftc ios/Brujula/Localization.swift ios/Brujula/ReflectionModel.swift ios/Bruj
 /tmp/brujula-ios-checks /tmp/brujula-android-backup.json
 xcodebuild -project ios/Brujula.xcodeproj -scheme Brujula -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 ```
+
+## Failure recovery
+
+If reflections cannot be decoded, Retry loading keeps the original file unchanged. Settings can export the preserved bytes as a recovery copy, restore a valid backup or confirm a fresh start. A recovery copy may require manual recovery and is not promised to be a valid ordinary backup. Reminder preference read failure does not disable already pending notifications; retry or explicitly save a valid configuration. Failed replacement/reset restores actual pending requests and prior preference bytes rather than a default schedule.

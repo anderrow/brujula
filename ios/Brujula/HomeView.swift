@@ -5,6 +5,8 @@ import Charts
 struct HomeView: View {
     @EnvironmentObject private var store: ReflectionStore
     @EnvironmentObject private var reminders: ReminderStore
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    private var summaryLayout: AnyLayout { dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(alignment: .top, spacing: 12)) }
     @State private var area: Area?
     @State private var sheet: Sheet?
     @State private var importFile = false
@@ -51,6 +53,7 @@ struct HomeView: View {
                 if !store.ready {
                     VStack(spacing: 16) {
                         Text("Saved reflections could not be opened.")
+                        Button("Retry loading") { store.reload() }
                         Button("Open settings") { sheet = .settings }
                     }
                     .padding()
@@ -62,12 +65,12 @@ struct HomeView: View {
                     case .notes: notes
                     }
                 }
+                navigation
             }
             .id(language)
             .background(Palette.background)
             .foregroundStyle(Palette.ink)
             .toolbar(.hidden, for: .navigationBar)
-            .safeAreaInset(edge: .bottom, spacing: 0) { navigation }
         }
         .sheet(item: $area) { item in
             AreaEditor(area: item, wheel: store.state.draft) { score, note in
@@ -98,13 +101,7 @@ struct HomeView: View {
         .alert(localized("Clear local data?"), isPresented: $reset) {
             Button("Clear data", role: .destructive) {
                 Task {
-                    let previous = reminders.schedule
-                    guard await reminders.save(ReminderSchedule()) else {
-                        if reminders.error == nil { notice = localized("Wait for the reminder update to finish and try again.") }
-                        return
-                    }
-                    if store.commit(ReflectionState()) { notice = localized("Local data cleared.") }
-                    else if previous.enabled { _ = await reminders.save(previous) }
+                    if await reminders.resetReflections(store) { notice = localized("Local data cleared.") }
                 }
             }
             Button("Cancel", role: .cancel) {}
@@ -114,13 +111,14 @@ struct HomeView: View {
         } message: { Text(store.error ?? reminders.error ?? notice ?? "") }
         .fileImporter(isPresented: $importFile, allowedContentTypes: [.json], onCompletion: loadBackup)
         .fileExporter(isPresented: $exportFile, document: backup, contentType: .json,
-                      defaultFilename: "brujula-backup") { result in
+                      defaultFilename: store.ready ? "brujula-backup" : "brujula-recovery-copy") { result in
             if case .failure(let error) = result { notice = error.localizedDescription }
             backup = nil
         }
     }
 
     private var reminderStatus: String {
+        guard reminders.loaded && !reminders.registrationFailed else { return localized("Changes could not be saved") }
         guard reminders.schedule.enabled else { return localized("Off") }
         return reminders.canNotify ? localized("On") : localized("Notifications blocked")
     }
@@ -129,19 +127,20 @@ struct HomeView: View {
         HStack {
             HStack(spacing: 7) {
                 Image(systemName: "safari")
-                    .font(.system(size: 30, weight: .ultraLight))
+                    .font(.system(.title).weight(.ultraLight))
                     .foregroundStyle(Palette.green)
-                Text("Brújula").font(.system(size: 29, weight: .semibold, design: .serif))
-                Text(".").font(.system(size: 29, design: .serif)).foregroundStyle(Palette.color(0xC78C64))
+                Text("Brújula").font(.system(.title, design: .serif).weight(.semibold))
+                Text(".").font(.system(.title, design: .serif)).foregroundStyle(Palette.color(0xC78C64))
                     .padding(.leading, -7)
             }
             .accessibilityElement(children: .combine)
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             Spacer(minLength: 4)
             Button { sheet = .reminders } label: {
                 VStack(spacing: 4) {
                     Image(systemName: reminders.schedule.enabled ? "bell.badge" : "bell")
-                        .font(.system(size: 21))
-                    Text("Reminders").font(.system(size: 9, weight: .semibold))
+                        .font(.system(.title3))
+                    Text("Reminders").font(.system(.caption2).weight(.semibold))
                 }
                 .frame(minWidth: 68, minHeight: 50)
                 .background(reminders.schedule.enabled ? Palette.pale : .clear,
@@ -151,7 +150,7 @@ struct HomeView: View {
             .accessibilityValue(reminderStatus)
             .accessibilityIdentifier("reminder-shortcut")
             Button { sheet = .settings } label: {
-                Image(systemName: "gearshape").font(.system(size: 21)).frame(width: 44, height: 48)
+                Image(systemName: "gearshape").font(.system(.title3)).frame(width: 44, height: 48)
             }
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("settings")
@@ -169,8 +168,8 @@ struct HomeView: View {
             ForEach(Tab.allCases, id: \.self) { item in
                 Button { tab = item } label: {
                     VStack(spacing: 5) {
-                        Image(systemName: item.symbol).font(.system(size: 21))
-                        Text(item.title).font(.system(size: 10, weight: tab == item ? .bold : .regular))
+                        Image(systemName: item.symbol).font(.system(.title3))
+                        Text(item.title).font(.system(.caption2).weight(tab == item ? .bold : .regular))
                     }
                     .frame(minWidth: 80, minHeight: 51)
                     .foregroundStyle(tab == item ? Palette.green : Palette.muted)
@@ -203,29 +202,30 @@ struct HomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 Text(Date.now, format: .dateTime.day().month(.abbreviated).year())
-                    .font(.system(size: 11)).foregroundStyle(Palette.muted).padding(.bottom, 14)
+                    .font(.system(.caption)).foregroundStyle(Palette.muted).padding(.bottom, 14)
                 eyebrow("A MOMENT FOR YOURSELF")
-                Text("Your life,\nin perspective.").font(.system(size: 41, design: .serif))
+                Text("Your life,\nin perspective.").font(.system(.largeTitle, design: .serif))
                     .tracking(-1.4).lineSpacing(-2).padding(.top, 9).padding(.bottom, 14)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("wheel-heading")
                 Text("You don’t need a perfect wheel. Just a moment to listen to how you feel.")
-                    .font(.system(size: 13)).lineSpacing(5).foregroundStyle(Palette.muted)
+                    .font(.system(.subheadline)).lineSpacing(5).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true).padding(.bottom, 22)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("YOUR WHEEL OF LIFE").font(.system(size: 10, weight: .bold)).tracking(1.5)
+                    Text("YOUR WHEEL OF LIFE").font(.system(.caption2).weight(.bold)).tracking(1.5)
                         .foregroundStyle(Palette.muted).padding(.horizontal, 10)
-                    RadarView(wheel: store.state.draft, select: { area = $0 }, update: { item, score in
+                    if !dynamicTypeSize.isAccessibilitySize { RadarView(wheel: store.state.draft, select: { area = $0 }, update: { item, score in
                         store.edit(item, score: score, note: store.state.draft.note(item))
                     })
                     Text("Tap an area or drag a point to adjust its score")
-                        .font(.system(size: 10)).foregroundStyle(Palette.muted)
+                        .font(.system(.caption2)).foregroundStyle(Palette.muted)
                         .frame(maxWidth: .infinity)
+                    }
                 }
                 .padding(.horizontal, 10).padding(.vertical, 18)
                 .background(Palette.paper, in: RoundedRectangle(cornerRadius: 22))
                 .overlay(RoundedRectangle(cornerRadius: 22).stroke(Palette.line, lineWidth: 1))
-                HStack(alignment: .top, spacing: 12) {
+                summaryLayout {
                     statistic("PERSONAL AVERAGE", value: store.state.draft.average.map {
                         $0.formatted(.number.precision(.fractionLength(1)).locale(AppLanguage.load().locale))
                     } ?? "—", foot: store.state.draft.complete ? "Eight areas, your own perspective" : "Average of rated areas",
@@ -235,9 +235,9 @@ struct HomeView: View {
                 }
                 .padding(.top, 14).padding(.bottom, 27)
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Your eight areas").font(.system(size: 25, design: .serif))
+                    Text("Your eight areas").font(.system(.title2, design: .serif))
                     Spacer()
-                    Text("0–10 · tap to edit").font(.system(size: 10)).foregroundStyle(Palette.muted)
+                    Text("0–10 · tap to edit").font(.system(.caption2)).foregroundStyle(Palette.muted)
                 }
                 .padding(.bottom, 12)
                 VStack(spacing: 0) {
@@ -246,7 +246,7 @@ struct HomeView: View {
                             HStack(spacing: 12) {
                                 AreaBadge(area: item)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(item.title).font(.system(size: 13, weight: .semibold))
+                                    Text(item.title).font(.system(.subheadline).weight(.semibold))
                                     GeometryReader { geometry in
                                         Capsule().fill(Palette.pale)
                                             .overlay(alignment: .leading) {
@@ -256,12 +256,12 @@ struct HomeView: View {
                                     }
                                     .frame(width: 75, height: 4)
                                     Text(store.state.draft.note(item).isEmpty ? localized("Add a reflection…") : store.state.draft.note(item))
-                                        .font(.system(size: 10)).foregroundStyle(Palette.muted).lineLimit(1)
+                                        .font(.system(.caption2)).foregroundStyle(Palette.muted).lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                                 }
                                 Spacer()
                                 Text(store.state.draft.score(item).map(String.init) ?? "—")
-                                    .font(.system(size: 24, design: .serif))
-                                Image(systemName: "chevron.right").font(.system(size: 12, weight: .light))
+                                    .font(.system(.title2, design: .serif))
+                                Image(systemName: "chevron.right").font(.system(.subheadline).weight(.light))
                                     .foregroundStyle(Palette.muted)
                             }
                             .padding(.horizontal, 16).padding(.vertical, 15)
@@ -278,7 +278,7 @@ struct HomeView: View {
                 Button {
                     saveTitle = ""
                     savingCheckIn = true
-                } label: { Label("Save check-in", systemImage: "plus").font(.system(size: 13, weight: .semibold))
+                } label: { Label("Save check-in", systemImage: "plus").font(.system(.subheadline).weight(.semibold))
                         .frame(maxWidth: .infinity, minHeight: 36) }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle(radius: 14))
@@ -286,10 +286,10 @@ struct HomeView: View {
                     .accessibilityIdentifier("save-check-in")
                     .padding(.top, 20)
                 Text(store.state.draft.complete ? localized("Changes saved automatically") : localized("Rate all eight areas to save a check-in."))
-                    .font(.system(size: 10)).foregroundStyle(Palette.muted)
+                    .font(.system(.caption2)).foregroundStyle(Palette.muted)
                     .frame(maxWidth: .infinity).padding(.top, 12)
                 Label("Only on this device. No accounts or connection.", systemImage: "lock")
-                    .font(.system(size: 10)).foregroundStyle(Palette.muted)
+                    .font(.system(.caption2)).foregroundStyle(Palette.muted)
                     .frame(maxWidth: .infinity).padding(.top, 12)
             }
             .padding(.horizontal, 24).padding(.top, 12).padding(.bottom, 28)
@@ -307,20 +307,20 @@ struct HomeView: View {
     private func eyebrow(_ text: String) -> some View {
         HStack(spacing: 7) {
             Circle().fill(Palette.color(0x9AA76D)).frame(width: 6, height: 6)
-            Text(localized(text)).font(.system(size: 10, weight: .bold)).tracking(2)
+            Text(localized(text)).font(.system(.caption2).weight(.bold)).tracking(2)
         }
         .foregroundStyle(Palette.green)
     }
 
     private func statistic(_ title: String, value: String, foot: String, color: Color, numeric: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(localized(title)).font(.system(size: 9, weight: .bold)).tracking(1).foregroundStyle(Palette.muted)
+            Text(localized(title)).font(.system(.caption2).weight(.bold)).tracking(1).foregroundStyle(Palette.muted)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(value).font(.system(size: numeric ? 31 : 24, design: .serif))
-                    .lineLimit(1).minimumScaleFactor(0.7)
-                if numeric { Text("/ 10").font(.system(size: 12)).foregroundStyle(Palette.muted) }
+                Text(value).font(.system(numeric ? .title : .title2, design: .serif))
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                if numeric { Text("/ 10").font(.system(.subheadline)).foregroundStyle(Palette.muted) }
             }
-            Text(localized(foot)).font(.system(size: 10)).foregroundStyle(Palette.muted)
+            Text(localized(foot)).font(.system(.caption2)).foregroundStyle(Palette.muted)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16).frame(maxWidth: .infinity, minHeight: 112, alignment: .topLeading)
@@ -331,21 +331,21 @@ struct HomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 eyebrow("SPACE TO LISTEN TO YOURSELF")
-                Text("What’s behind\na number.").font(.system(size: 41, design: .serif)).tracking(-1.4)
+                Text("What’s behind\na number.").font(.system(.largeTitle, design: .serif)).tracking(-1.4)
                 Text("Draft notes are saved as you write. Save a check-in to keep that reflection in your history too.")
-                    .font(.system(size: 13)).foregroundStyle(Palette.muted).lineSpacing(5)
+                    .font(.system(.subheadline)).foregroundStyle(Palette.muted).lineSpacing(5)
                 ForEach(Area.allCases) { item in
                     Button { area = item } label: {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
                                 AreaBadge(area: item)
-                                Text(item.title).font(.system(size: 13, weight: .semibold))
+                                Text(item.title).font(.system(.subheadline).weight(.semibold))
                                 Spacer()
                                 Text(store.state.draft.score(item).map(String.init) ?? "—")
-                                    .font(.system(size: 22, design: .serif))
+                                    .font(.system(.title2, design: .serif))
                             }
                             Text(store.state.draft.note(item).isEmpty ? localized("Add a reflection…") : store.state.draft.note(item))
-                                .font(.system(size: 13)).foregroundStyle(Palette.muted)
+                                .font(.system(.subheadline)).foregroundStyle(Palette.muted)
                                 .lineSpacing(5).frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .reflectionCard()
@@ -366,17 +366,17 @@ struct HomeView: View {
         return ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 eyebrow("YOUR PATH, AT YOUR PACE")
-                Text("Every moment counts.").font(.system(size: 41, design: .serif)).tracking(-1.4)
+                Text("Every moment counts.").font(.system(.largeTitle, design: .serif)).tracking(-1.4)
                 Text("See how your priorities change. Your history tells your story, without judging it.")
-                    .font(.system(size: 13)).foregroundStyle(Palette.muted).lineSpacing(5)
+                    .font(.system(.subheadline)).foregroundStyle(Palette.muted).lineSpacing(5)
                 if entries.isEmpty {
                     Text("Your saved check-ins will appear here. Save a moment from My wheel.")
-                        .font(.system(size: 13)).foregroundStyle(Palette.muted)
+                        .font(.system(.subheadline)).foregroundStyle(Palette.muted)
                         .frame(maxWidth: .infinity).padding(.vertical, 40)
                 }
                 if entries.count >= 2 {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Your progress").font(.system(size: 25, design: .serif))
+                        Text("Your progress").font(.system(.title2, design: .serif))
                         Picker("Area", selection: $trendArea) {
                             Text("Overall average").tag(nil as Area?)
                             ForEach(Area.allCases) { item in Text(item.title).tag(Optional(item)) }
@@ -400,14 +400,14 @@ struct HomeView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             if let date = entry.date {
                                 Text(date, format: .dateTime.year().month().day())
-                                    .font(.system(size: 10)).foregroundStyle(Palette.muted)
+                                    .font(.system(.caption2)).foregroundStyle(Palette.muted)
                             }
                             HStack {
-                                Text(entry.title).font(.system(size: 14, weight: .semibold))
+                                Text(entry.title).font(.system(.body).weight(.semibold))
                                 Spacer()
                                 if let average = entry.wheel.average {
                                     Text(average, format: .number.precision(.fractionLength(1)))
-                                        .font(.system(size: 30, design: .serif))
+                                        .font(.system(.title, design: .serif))
                                 }
                             }
                             HStack(alignment: .bottom, spacing: 5) {
@@ -478,20 +478,19 @@ struct HomeView: View {
                     NavigationLink("Privacy policy") { privacy }
                 }
                 Section("Backups") {
-                    Button("Export backup") {
+                    Button(store.ready ? localized("Export backup") : localized("Export preserved data (recovery copy)")) {
                         do {
-                            backup = BackupDocument(data: try store.state.encoded())
+                            backup = BackupDocument(data: try store.ready ? store.state.encoded() : store.originalData())
                             dismissSettings { exportFile = true }
                         } catch { notice = error.localizedDescription }
                     }
-                    .disabled(!store.ready)
                     Button("Restore backup") { dismissSettings { importFile = true } }
                     Text("Backups include your notes and are not encrypted by Brújula. They work on iPhone and Android.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
                 Section {
                     Button("Clear data and start fresh", role: .destructive) { dismissSettings { reset = true } }
-                        .disabled(!store.ready || reminders.busy)
+                        .disabled(reminders.busy)
                 }
             }
             .id(language)

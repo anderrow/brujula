@@ -26,6 +26,8 @@ jobs:
           node ios/Tests/android-fixture.cjs "$RUNNER_TEMP/android-backup.json"
           swiftc ios/Brujula/Localization.swift ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Tests/main.swift -o "$RUNNER_TEMP/ios-checks"
           "$RUNNER_TEMP/ios-checks" "$RUNNER_TEMP/android-backup.json"
+          swiftc ios/Brujula/Localization.swift ios/Brujula/ReflectionModel.swift ios/Brujula/ReminderSchedule.swift ios/Brujula/Stores.swift ios/Tests/StoreChecks.swift -o "$RUNNER_TEMP/store-checks"
+          "$RUNNER_TEMP/store-checks"
       - name: Build for iPhone Simulator
         run: |
           xcodebuild -project ios/Brujula.xcodeproj -scheme Brujula -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/brujula-simulator" CODE_SIGNING_ALLOWED=NO build

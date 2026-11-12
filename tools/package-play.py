@@ -4,8 +4,14 @@ import json
 import re
 import struct
 import zipfile
+import subprocess
+import sys
+from verification import validate, receipt_path
 
 ROOT = Path(__file__).resolve().parents[1]
+validate(json.loads(receipt_path().read_text(encoding='utf-8')))
+# Regenerate current reports rather than bundling a prior build's VERIFICATION.md.
+subprocess.run([sys.executable, str(ROOT / 'tools/package.py')], cwd=ROOT, check=True)
 version = re.search(r"versionName\s+'([^']+)'", (ROOT / 'app/build.gradle').read_text()).group(1)
 release = ROOT / 'release'
 drafts = release / 'play-preparation'
