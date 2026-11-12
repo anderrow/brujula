@@ -99,7 +99,7 @@ public class MainActivityTest {
         }
     }
 
-    @Test public void transientDatabaseInitializationFailureCanRetryWithoutReplacingOriginal() {
+    @Test public void databaseRetry() {
         Application app = RuntimeEnvironment.getApplication();
         try (SQLiteDatabase db = app.openOrCreateDatabase("brujula.db", 0, null)) {
             db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
@@ -143,7 +143,7 @@ public class MainActivityTest {
         assertTrue(new File(directory, unrelated + ".json").exists());
     }
 
-    @Test public void uncommittedImportRedeliversAndCommittedImportIsDeduplicated() throws Exception {
+    @Test public void importRedelivery() throws Exception {
         Application app = RuntimeEnvironment.getApplication();
         BackupTransfer.get(app);
         File directory = new File(app.getNoBackupFilesDir(), "backup-transfer");
