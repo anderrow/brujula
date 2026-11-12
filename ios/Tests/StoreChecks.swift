@@ -59,15 +59,26 @@ struct StoreChecks {
         check(reminders.loaded && reminders.schedule.enabled, "Read retry must load the original schedule.")
 
         let snapshot = Set(notifications.requests.keys)
+        let expectedNext = notifications.requests.values.compactMap { ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() }.min()
         let failingSave = ReminderStore(directory: { directory }, write: { _, _ in throw CocoaError(.fileWriteNoPermission) }, notifications: notifications)
         var changed = enabled; changed.frequency = .weekly
         let saved = await failingSave.save(changed)
         check(!saved && Set(notifications.requests.keys) == snapshot, "A preference write failure must restore actual requests.")
+        check(failingSave.nextDate == expectedNext && !failingSave.registrationFailed, "Successful rollback must restore the actual next date.")
         check(notifications.deliveredRemoved.isEmpty, "Failed replacement must retain delivered notifications.")
 
         notifications.failAdds = 1
         let failedRegistration = await reminders.save(changed)
         check(!failedRegistration && Set(notifications.requests.keys) == snapshot, "Failed notification registration must roll back actual requests.")
+
+        notifications.failAdds = 2
+        let failedRollback = await reminders.save(changed)
+        reminders.error = nil
+        check(!failedRollback && reminders.registrationFailed && reminders.nextDate == nil,
+              "Failed rollback must remain visibly unregistered after an alert is dismissed.")
+        await reminders.refresh()
+        check(!reminders.registrationFailed && reminders.nextDate != nil && Set(notifications.requests.keys) == snapshot,
+              "Only successful reconciliation may clear registration failure.")
 
         try corrupt.write(to: remindersURL)
         let invalidReminders = ReminderStore(directory: { directory }, notifications: notifications)

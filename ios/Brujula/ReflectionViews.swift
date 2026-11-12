@@ -413,7 +413,7 @@ struct ReminderEditor: View {
                             .accessibilityIdentifier("reminder-time")
                     }
                 }
-                if reminders.schedule.enabled, let next = reminders.nextDate {
+                if reminders.schedule.enabled, !reminders.registrationFailed, let next = reminders.nextDate {
                     Section("Next scheduled reminder") {
                         Text(next, format: .dateTime.month().day().hour().minute())
                             .accessibilityIdentifier("reminder-next-date")

@@ -31,6 +31,7 @@ final class BackupTransfer {
     });
     private WeakReference<MainActivity> activity = new WeakReference<>(null);
     private boolean busy, delivering;
+    private int picker;
 
     private BackupTransfer(Context context) {
         this.context = context;
@@ -42,6 +43,7 @@ final class BackupTransfer {
         worker.execute(() -> {
             synchronized (this) {
                 if (!busy && file("running.json").exists()) {
+                    picker = 0;
                     JSONObject running = readRecord("running.json");
                     notice(running.optString("kind").equals("import") ? "importFailed" : "exportFailed");
                     file("running.json").delete();
@@ -74,11 +76,28 @@ final class BackupTransfer {
     }
     synchronized String pendingExport() { return readRecord("export.json").optString("id", ""); }
     private synchronized boolean begin() {
-        if (busy || file("result.json").exists()) return false;
+        if (busy || picker != 0 || file("result.json").exists()) return false;
         busy = true; return true;
     }
+    synchronized boolean reserveImport() {
+        if (busy || picker != 0 || file("result.json").exists()) return false;
+        picker = MainActivity.IMPORT; return true;
+    }
+    synchronized int pickerRequest() { return picker; }
+    synchronized void restorePicker(int request) {
+        if (!busy && picker == 0 && (request == MainActivity.IMPORT || request == MainActivity.EXPORT)) picker = request;
+    }
+    synchronized void cancelPicker(int request, String exportId) {
+        if (picker != request) return;
+        picker = 0;
+        if (request == MainActivity.EXPORT && !exportId.isEmpty()) cancelExport(exportId);
+    }
+    private void rejected() {
+        main.post(() -> { MainActivity target = activity.get(); if (target != null) target.backupBusy(); });
+        dispatch();
+    }
     void export(String text, boolean recovery) {
-        if (!begin()) { dispatch(); return; }
+        if (!begin()) { rejected(); return; }
         worker.execute(() -> {
             try {
                 if (!pendingExport().isEmpty()) throw new IOException("Finish the pending export first");
@@ -93,25 +112,35 @@ final class BackupTransfer {
         });
     }
     void retryExport() {
+        if (!begin()) { rejected(); return; }
         worker.execute(() -> {
-            JSONObject pending = readRecord("export.json");
-            String id = pending.optString("id");
-            if (id.isEmpty()) { notice("exportFailed"); dispatch(); }
-            else openExport(id, pending.optBoolean("recovery"));
+            try {
+                JSONObject pending = readRecord("export.json");
+                String id = pending.optString("id");
+                if (id.isEmpty()) notice("exportFailed");
+                else openExport(id, pending.optBoolean("recovery"));
+            } finally { synchronized (this) { busy = false; } dispatch(); }
         });
     }
     private void openExport(String id, boolean recovery) {
+        synchronized (this) { picker = MainActivity.EXPORT; }
         main.post(() -> {
             MainActivity target;
             synchronized (this) { target = activity.get(); }
             if (target != null && !target.isFinishing()) target.openExportPicker(id, recovery);
+            else {
+                cancelPicker(MainActivity.EXPORT, ""); notice("exportFailed"); dispatch();
+            }
         });
     }
     synchronized void cancelExport(String id) {
         if (id.equals(pendingExport())) { payload(id).delete(); file("export.json").delete(); }
     }
-    void complete(int request, Uri uri, String exportId) {
-        if (!begin()) { dispatch(); return; }
+    boolean complete(int request, Uri uri, String exportId) {
+        synchronized (this) {
+            if (busy || picker != request || file("result.json").exists()) return false;
+            picker = 0; busy = true;
+        }
         worker.execute(() -> {
             String id = request == MainActivity.EXPORT ? exportId : UUID.randomUUID().toString();
             try {
@@ -134,6 +163,7 @@ final class BackupTransfer {
             } catch (Exception error) { notice(request == MainActivity.EXPORT ? "exportFailed" : "importFailed"); }
             finally { file("running.json").delete(); synchronized (this) { busy = false; } dispatch(); }
         });
+        return true;
     }
     static void copy(InputStream in, OutputStream out, int limit) throws IOException {
         byte[] bytes = new byte[8192]; int count, total = 0;

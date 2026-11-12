@@ -12,6 +12,11 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+import android.os.Bundle;
+import android.os.Looper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -25,6 +30,29 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 36)
 public class MainActivityTest {
+    public static class FlakyActivity extends MainActivity {
+        boolean failOpening = true;
+        @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                SQLiteDatabase.CursorFactory factory, android.database.DatabaseErrorHandler handler) {
+            if (failOpening) throw new android.database.sqlite.SQLiteException("Synthetic unavailable storage");
+            return super.openOrCreateDatabase(name, mode, factory, handler);
+        }
+    }
+    public static class TransferActivity extends MainActivity {
+        volatile String received;
+        @Override boolean backupPageReady() { return true; }
+        @Override void deliverBackup(String id, String script, boolean imported) {
+            received = script;
+            BackupTransfer.get(this).delivered(id, imported, true);
+        }
+    }
+    private void await(java.util.function.BooleanSupplier condition) throws Exception {
+        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(5);
+        while (!condition.getAsBoolean() && System.nanoTime() < deadline) {
+            shadowOf(Looper.getMainLooper()).idle(); Thread.sleep(5);
+        }
+        assertTrue("Background transfer did not reach its expected state", condition.getAsBoolean());
+    }
     private SQLiteDatabase stateDatabase() {
         SQLiteDatabase db = SQLiteDatabase.create(null);
         db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
@@ -57,6 +85,88 @@ public class MainActivityTest {
         assertFalse(MainActivity.resetState(app, null, "{}"));
         assertTrue(Reminders.settings(app).getBoolean("enabled"));
         assertTrue(Reminders.settings(app).getBoolean("registered"));
+    }
+
+    @Test public void diskStateSurvivesCloseAndReopen() {
+        Application app = RuntimeEnvironment.getApplication();
+        String value = "{\"note\":\"" + "a".repeat(3_000_000) + "\"}";
+        try (SQLiteDatabase db = app.openOrCreateDatabase("disk-reopen.db", 0, null)) {
+            db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            assertTrue(MainActivity.writeState(db, value, null));
+        }
+        try (SQLiteDatabase reopened = app.openOrCreateDatabase("disk-reopen.db", 0, null)) {
+            assertEquals(value, MainActivity.readState(reopened));
+        }
+    }
+
+    @Test public void transientDatabaseInitializationFailureCanRetryWithoutReplacingOriginal() {
+        Application app = RuntimeEnvironment.getApplication();
+        try (SQLiteDatabase db = app.openOrCreateDatabase("brujula.db", 0, null)) {
+            db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            assertTrue(MainActivity.writeState(db, "{\"original\":true}", null));
+        }
+        try (ActivityController<FlakyActivity> controller = Robolectric.buildActivity(FlakyActivity.class).setup()) {
+            FlakyActivity activity = controller.get();
+            assertNull(activity.openDatabase());
+            activity.failOpening = false;
+            assertEquals("{\"original\":true}", MainActivity.readState(activity.openDatabase()));
+        }
+    }
+
+    @Test public void pickerReservationSurvivesRecreationAndCancellationIsScoped() throws Exception {
+        Application app = RuntimeEnvironment.getApplication();
+        BackupTransfer transfer = BackupTransfer.get(app);
+        try (ActivityController<MainActivity> first = Robolectric.buildActivity(MainActivity.class).setup()) {
+            assertTrue(transfer.reserveImport());
+            assertFalse(transfer.reserveImport());
+            Bundle saved = new Bundle(); first.saveInstanceState(saved);
+            assertEquals(MainActivity.IMPORT, saved.getInt("pendingPicker"));
+            first.pause().stop().destroy();
+            try (ActivityController<MainActivity> next = Robolectric.buildActivity(MainActivity.class).setup(saved)) {
+                assertEquals(MainActivity.IMPORT, transfer.pickerRequest());
+                assertFalse(transfer.reserveImport());
+                transfer.cancelPicker(MainActivity.IMPORT, "");
+                assertTrue(transfer.reserveImport());
+                transfer.cancelPicker(MainActivity.IMPORT, "");
+            }
+        }
+        File directory = new File(app.getNoBackupFilesDir(), "backup-transfer");
+        String export = UUID.randomUUID().toString(), unrelated = UUID.randomUUID().toString();
+        BackupTransfer.writeAtomic(new File(directory, export + ".json"), new byte[]{1});
+        BackupTransfer.writeAtomic(new File(directory, unrelated + ".json"), new byte[]{2});
+        BackupTransfer.writeAtomic(new File(directory, "export.json"), new JSONObject().put("id", export).toString().getBytes(StandardCharsets.UTF_8));
+        transfer.restorePicker(MainActivity.EXPORT);
+        transfer.cancelPicker(MainActivity.IMPORT, export);
+        assertTrue(new File(directory, export + ".json").exists());
+        transfer.cancelPicker(MainActivity.EXPORT, export);
+        assertFalse(new File(directory, export + ".json").exists());
+        assertTrue(new File(directory, unrelated + ".json").exists());
+    }
+
+    @Test public void uncommittedImportRedeliversAndCommittedImportIsDeduplicated() throws Exception {
+        Application app = RuntimeEnvironment.getApplication();
+        BackupTransfer.get(app);
+        File directory = new File(app.getNoBackupFilesDir(), "backup-transfer");
+        String id = UUID.randomUUID().toString(), value = "{\"note\":\"Preserved import\"}";
+        File result = new File(directory, "result.json"), payload = new File(directory, id + ".json");
+        BackupTransfer.writeAtomic(payload, value.getBytes(StandardCharsets.UTF_8));
+        BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "import").toString().getBytes(StandardCharsets.UTF_8));
+        try (ActivityController<TransferActivity> first = Robolectric.buildActivity(TransferActivity.class).setup()) {
+            await(() -> first.get().received != null);
+            assertTrue(first.get().received.contains("Preserved import"));
+            assertTrue(result.exists());
+        }
+        try (ActivityController<TransferActivity> next = Robolectric.buildActivity(TransferActivity.class).setup()) {
+            await(() -> next.get().received != null);
+            assertTrue(next.get().received.contains(id));
+            assertTrue(MainActivity.writeState(next.get().openDatabase(), value, id));
+        }
+        try (ActivityController<TransferActivity> afterCommit = Robolectric.buildActivity(TransferActivity.class).setup()) {
+            await(() -> !result.exists());
+            assertNull(afterCommit.get().received);
+            assertFalse(payload.exists());
+            assertEquals(value, MainActivity.readState(afterCommit.get().openDatabase()));
+        }
     }
 
     @Test public void providerCopyRejectsOversizeWithoutPretendingSuccess() throws Exception {

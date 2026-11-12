@@ -118,7 +118,7 @@ struct HomeView: View {
     }
 
     private var reminderStatus: String {
-        guard reminders.loaded else { return localized("Changes could not be saved") }
+        guard reminders.loaded && !reminders.registrationFailed else { return localized("Changes could not be saved") }
         guard reminders.schedule.enabled else { return localized("Off") }
         return reminders.canNotify ? localized("On") : localized("Notifications blocked")
     }

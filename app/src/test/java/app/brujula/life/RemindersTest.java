@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -13,17 +14,33 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.annotation.Implements;
+import org.robolectric.annotation.Implementation;
+import org.robolectric.shadows.ShadowAlarmManager;
 import static org.junit.Assert.*;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = {33, 36})
+@Config(sdk = {33, 36}, shadows = RemindersTest.FailingAlarmManager.class)
 public class RemindersTest {
+    @Implements(AlarmManager.class)
+    public static class FailingAlarmManager extends ShadowAlarmManager {
+        static int rejectAdds, rejectCancels;
+        @Implementation @Override protected void setAndAllowWhileIdle(int type, long at, PendingIntent intent) {
+            if (rejectAdds > 0) { rejectAdds--; throw new SecurityException("Synthetic scheduling failure"); }
+            super.setAndAllowWhileIdle(type, at, intent);
+        }
+        @Implementation @Override protected void cancel(PendingIntent intent) {
+            if (rejectCancels > 0) { rejectCancels--; throw new SecurityException("Synthetic cancellation failure"); }
+            super.cancel(intent);
+        }
+    }
     private Application app;
     private AlarmManager alarms;
     private NotificationManager notifications;
     @Before public void setup() {
         app = RuntimeEnvironment.getApplication();
+        FailingAlarmManager.rejectAdds = 0; FailingAlarmManager.rejectCancels = 0;
         app.getSharedPreferences("reminders", 0).edit().clear().commit();
         alarms = app.getSystemService(AlarmManager.class);
         notifications = app.getSystemService(NotificationManager.class);
@@ -88,5 +105,31 @@ public class RemindersTest {
         JSONObject raw=config(true,"daily");raw.put("monthDay",32);
         try { Reminders.parse(raw.toString()); fail("Invalid month day accepted"); }
         catch (IllegalArgumentException expected) { }
+    }
+    @Test public void rejectedRegistrationRestoresPreviousScheduleAndReportsFailedRollback() throws Exception {
+        assertTrue(Reminders.save(app, config(true, "daily")));
+        FailingAlarmManager.rejectAdds = 1;
+        assertFalse(Reminders.save(app, config(true, "weekly")));
+        assertEquals("daily", Reminders.settings(app).getString("frequency"));
+        assertTrue(Reminders.settings(app).getBoolean("registered"));
+        assertEquals(1, shadowOf(alarms).getScheduledAlarms().size());
+        FailingAlarmManager.rejectAdds = 2;
+        assertFalse(Reminders.save(app, config(true, "weekly")));
+        assertFalse(Reminders.settings(app).getBoolean("registered"));
+        assertEquals(0, Reminders.settings(app).getLong("nextAt"));
+        Reminders.reschedule(app);
+        assertTrue(Reminders.settings(app).getBoolean("registered"));
+    }
+    @Test public void rejectedCancellationStopsResetBeforeReflectionReplacement() throws Exception {
+        assertTrue(Reminders.save(app, config(true, "daily")));
+        try (android.database.sqlite.SQLiteDatabase db = android.database.sqlite.SQLiteDatabase.create(null)) {
+            db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            assertTrue(MainActivity.writeState(db, "{\"original\":true}", null));
+            FailingAlarmManager.rejectCancels = 1;
+            assertFalse(MainActivity.resetState(app, db, "{}"));
+            assertEquals("{\"original\":true}", MainActivity.readState(db));
+            assertTrue(Reminders.settings(app).getBoolean("enabled"));
+            assertTrue(Reminders.settings(app).getBoolean("registered"));
+        }
     }
 }

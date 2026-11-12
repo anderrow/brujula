@@ -51,7 +51,7 @@
       const url = URL.createObjectURL(new Blob([data], {type: 'application/json'}));
       const link = document.createElement('a');
       link.href = url;
-      link.download = recovery ? 'brujula-recovery-original.json' : 'brujula-backup.json';
+      link.download = recovery ? 'brujula-recovery-copy.json' : 'brujula-backup.json';
       document.body.append(link);
       link.click();
       link.remove();

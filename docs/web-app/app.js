@@ -27,6 +27,7 @@
       privacyPolicy:'Privacy policy', language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
       export:'Export backup', import:'Restore backup', version:'Brújula 1.2.1 · A place to return to yourself', exported:'Backup exported',
+      transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
       storageError:'Could not save. Keep this screen open and export a backup.', limit:'You have reached 5,000 check-ins. Export a backup before removing one.',
@@ -60,7 +61,7 @@
     growth:'<path d="M12 22V11M12 16C2 17 2 9 3 7c6-1 9 3 9 9ZM12 12c0-8 4-10 9-10 1 6-2 11-9 10Z"/>'
   };
   const icon = name => '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">' + (icons[name] || icons.notes) + '</svg>';
-  let state, saveError = '', dirty = false, activeImport = null, pendingReset = null, rawState = '', tab = 'wheel', metric = 'overall', modalKind = '', opener = null, toastTimer;
+  let state, saveError = '', dirty = false, loaded = false, preserveOriginal = false, activeImport = null, pendingReset = null, rawState = '', tab = 'wheel', metric = 'overall', modalKind = '', opener = null, toastTimer;
   const sheet = $('#sheet');
   const native = window.BrujulaNative;
   const web = native ? null : window.BrujulaWeb;
@@ -81,7 +82,8 @@
   }
   function exportData(recovery = false) {
     try {
-      const data = recovery ? (rawState && !dirty ? rawState : JSON.stringify(state)) : C.serialize(state);
+      if (recovery && !loaded && !rawState) throw Error('The original data is unavailable. Retry loading before exporting.');
+      const data = recovery ? ((!loaded || preserveOriginal || !dirty) ? rawState : JSON.stringify(state)) : C.serialize(state);
       if (native) native.exportBackup(data, recovery);
       else if (web) web.exportBackup(data, recovery);
       else toast(t('webBackup'));
@@ -111,7 +113,7 @@
         if (!ok) throw Error(t('storageError'));
       } else if (web) web.writeState(data);
       else localStorage.setItem('brujula-state-v1', data);
-      rawState = data; saveError = ''; dirty = false; updateSaveStatus(); return true;
+      rawState = data; preserveOriginal = false; saveError = ''; dirty = false; updateSaveStatus(); return true;
     } catch (error) {
       dirty = true; saveError = error.message || t('storageError'); updateSaveStatus(); toast(t('storageError')); return false;
     }
@@ -124,7 +126,6 @@
   }
   window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
   window.addEventListener('brujula-storage-conflict', () => {
-    dirty = true;
     saveError = 'Another page changed the stored reflections. Export your unsaved edits, close older pages and reload before editing.';
     updateSaveStatus();
   });
@@ -412,7 +413,7 @@
     if(key==='exportFailed' && native?.retryExport){saveError=t(key);updateSaveStatus();const retry=document.createElement('button');retry.className='secondary';retry.textContent='Retry pending export';retry.onclick=()=>native.retryExport();$('#save-status').append(retry);}
   };
   window.resetResult=result=>{
-    if(result.ok && pendingReset){state=pendingReset;rawState=JSON.stringify(state);dirty=false;saveError='';pendingReset=null;$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;closeSheet();changeTab('wheel');updateSaveStatus();toast(t('cleared'));}
+    if(result.ok && pendingReset){state=pendingReset;rawState=JSON.stringify(state);loaded=true;preserveOriginal=false;dirty=false;saveError='';pendingReset=null;$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;closeSheet();changeTab('wheel');updateSaveStatus();toast(t('cleared'));}
     else {pendingReset=null;if($('#confirm'))$('#confirm').disabled=false;toast(t('storageError'));}
   };
   window.restoreBackup=(text,importId=null)=>{
@@ -441,10 +442,12 @@
       state=rawState?C.migrate(JSON.parse(rawState)):C.initial();
       if(web)state.locale='en';
       if(!C.validate(state))throw Error('invalid stored data');
+      loaded=true;preserveOriginal=C.byteLength(JSON.stringify(state))>C.maximumBytes;
       if(!rawState || (JSON.parse(rawState).version!==state.version && C.byteLength(JSON.stringify(state))<=C.maximumBytes))persist();
       render();
       if(C.byteLength(JSON.stringify(state))>C.maximumBytes){saveError='This existing data exceeds the 8 MB backup limit. Export the preserved recovery copy before using confirmed Clear data. Recovery copies may require manual recovery and are not ordinary restorable backups.';updateSaveStatus();}
     } catch(error) {
+      loaded=false;
       state={locale:web?'en':'es'};
       $('#main').innerHTML='<div class="error-screen"><h1>Brújula</h1><p></p><button class="secondary" id="retry-load">Retry loading</button>'+(rawState&&(native||web)?'<button class="secondary" id="recover">'+t('exportOriginal')+' (recovery copy)</button>':'')+(native?'<button class="secondary danger" id="reset-failed">'+t('clearData')+'</button>':'')+'</div>';
       $('#main p').textContent=editable?t('fatal'):error.message;

@@ -122,6 +122,7 @@ final class ReminderStore: ObservableObject {
     @Published private(set) var nextDate: Date?
     @Published private(set) var busy = false
     @Published private(set) var loaded = false
+    @Published private(set) var registrationFailed = false
     @Published var error: String?
     private let center: ReminderNotifications
     private let prefix = "brujula.reflection."
@@ -209,14 +210,18 @@ final class ReminderStore: ObservableObject {
             url = destination; schedule = ReminderSchedule(); loaded = true; nextDate = nil; error = nil
             await clearDelivered(); return true
         } catch {
+            var restoredPreferences = true
             do {
                 if preferencesChanged, let target {
                     if let original { try writeFile(original, target) }
                     else { try FileManager.default.removeItem(at: target) }
                 }
-                try await restoreRequests(snapshot)
-            } catch { self.error = localized("Some reminders could not be restored. Open Reminders and save again.") }
-            schedule = previous; loaded = wasLoaded
+            } catch { restoredPreferences = false }
+            do { try await restoreRequests(snapshot) }
+            catch { registrationFailed = true }
+            schedule = previous; loaded = wasLoaded && restoredPreferences
+            if !restoredPreferences { registrationFailed = true; nextDate = nil }
+            if registrationFailed { self.error = localized("Some reminders could not be restored. Open Reminders and save again.") }
             if self.error == nil { self.error = localized("The reminder could not be saved.") }
             return false
         }
@@ -241,9 +246,18 @@ final class ReminderStore: ObservableObject {
     }
 
     private func restoreRequests(_ snapshot: [UNNotificationRequest]) async throws {
+        registrationFailed = true; nextDate = nil
         center.removePending(await center.pending().filter { $0.identifier.hasPrefix(prefix) }.map(\.identifier))
         do { for request in snapshot { try await center.add(request) } }
         catch { self.error = localized("Some reminders could not be restored. Open Reminders and save again."); nextDate = nil; throw error }
+        nextDate = nextTrigger(in: snapshot); registrationFailed = false
+    }
+
+    private func nextTrigger(in requests: [UNNotificationRequest]) -> Date? {
+        requests.compactMap {
+            ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
+                ?? ($0.trigger as? UNTimeIntervalNotificationTrigger)?.nextTriggerDate()
+        }.min()
     }
 
     private func clearDelivered() async {
@@ -254,6 +268,7 @@ final class ReminderStore: ObservableObject {
         let existing = await center.pending().filter { $0.identifier.hasPrefix(prefix) }
         let desired = requests(for: config)
         let desiredIDs = Set(desired.map(\.identifier))
+        registrationFailed = true; nextDate = nil
         do {
             center.removePending(existing.map(\.identifier).filter { !desiredIDs.contains($0) })
             for request in desired {
@@ -264,7 +279,7 @@ final class ReminderStore: ObservableObject {
                 }
             }
         } catch { try await restoreRequests(existing); throw error }
-        nextDate = desired.compactMap { ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() }.min()
+        nextDate = nextTrigger(in: desired); registrationFailed = false
         return existing
     }
 }

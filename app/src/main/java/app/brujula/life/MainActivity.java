@@ -48,16 +48,11 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        try {
-            database = openOrCreateDatabase("brujula.db", MODE_PRIVATE, null, broken -> {
-                throw new android.database.sqlite.SQLiteException("Saved database is damaged; original files preserved");
-            });
-            database.execSQL("CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
-            database.execSQL("CREATE TABLE IF NOT EXISTS import_receipt (id INTEGER PRIMARY KEY CHECK(id=1), operation TEXT NOT NULL)");
-        } catch (RuntimeException error) { database = null; }
+        openDatabase();
         try { backups = BackupTransfer.get(this); pendingExport = backups.pendingExport(); }
         catch (RuntimeException ignored) { backups = null; }
         if (state != null) pendingExport = state.getString("pendingExport", pendingExport);
+        if (backups != null && state != null) backups.restorePicker(state.getInt("pendingPicker", 0));
         Reminders.ensureChannel(this);
         if (state != null && state.getString("pendingReminder") != null) {
             try { pendingReminder = Reminders.parse(state.getString("pendingReminder")); } catch (Exception ignored) { }
@@ -144,10 +139,10 @@ public class MainActivity extends Activity {
                 catch (Exception ignored) { notifyJs("reminderFailed"); }
             });
         }
-        @JavascriptInterface public String read() { return readState(database); }
-        @JavascriptInterface public boolean write(String value) { return writeState(database, value, null); }
+        @JavascriptInterface public String read() { return readState(openDatabase()); }
+        @JavascriptInterface public boolean write(String value) { return writeState(openDatabase(), value, null); }
         @JavascriptInterface public boolean restoreData(String value, String operation) {
-            boolean ok = writeState(database, value, operation);
+            boolean ok = writeState(openDatabase(), value, operation);
             if (ok && backups != null) backups.consume(operation);
             return ok;
         }
@@ -161,17 +156,36 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void retryExport() { if (backups != null) backups.retryExport(); }
         @JavascriptInterface public void importBackup() {
             runOnUiThread(() -> {
+                if (backups == null) { notifyJs("importFailed"); return; }
+                if (!backups.reserveImport()) { backupBusy(); return; }
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE); intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"});
                 try { startActivityForResult(intent, IMPORT); }
-                catch (Exception ignored) { notifyJs("importFailed"); }
+                catch (Exception ignored) { backups.cancelPicker(IMPORT, pendingExport); notifyJs("importFailed"); }
             });
         }
         @JavascriptInterface public void resetData(String value) {
-            boolean ok = resetState(MainActivity.this, database, value);
+            boolean ok = resetState(MainActivity.this, openDatabase(), value);
             runOnUiThread(() -> { if (web != null) web.evaluateJavascript("window.resetResult({ok:" + ok + "})", null); });
         }
+    }
+
+    synchronized SQLiteDatabase openDatabase() {
+        if (database != null && database.isOpen()) return database;
+        SQLiteDatabase candidate = null;
+        try {
+            candidate = openOrCreateDatabase("brujula.db", MODE_PRIVATE, null, broken -> {
+                throw new android.database.sqlite.SQLiteException("Saved database is damaged; original files preserved");
+            });
+            candidate.execSQL("CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            candidate.execSQL("CREATE TABLE IF NOT EXISTS import_receipt (id INTEGER PRIMARY KEY CHECK(id=1), operation TEXT NOT NULL)");
+            database = candidate;
+        } catch (RuntimeException error) {
+            if (candidate != null) candidate.close();
+            database = null;
+        }
+        return database;
     }
 
     static String readState(SQLiteDatabase db) {
@@ -195,6 +209,7 @@ public class MainActivity extends Activity {
         } catch (Exception ignored) { return false; }
     }
     static boolean resetState(android.content.Context context, SQLiteDatabase db, String value) {
+        if (db == null) return false;
         try {
             JSONObject previous = Reminders.settings(context);
             JSONObject disabled = Reminders.parse(previous.toString()); disabled.put("enabled", false);
@@ -208,9 +223,9 @@ public class MainActivity extends Activity {
         pendingExport = id;
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE); intent.setType("application/json");
-        intent.putExtra(Intent.EXTRA_TITLE, "brujula-" + (recovery ? "recovery-original-" : "backup-") + LocalDate.now() + ".json");
+        intent.putExtra(Intent.EXTRA_TITLE, "brujula-" + (recovery ? "recovery-copy-" : "backup-") + LocalDate.now() + ".json");
         try { startActivityForResult(intent, EXPORT); }
-        catch (Exception ignored) { notifyJs("exportFailed"); }
+        catch (Exception ignored) { backups.cancelPicker(EXPORT, ""); notifyJs("exportFailed"); }
     }
     boolean backupPageReady() { return pageReady && web != null && !isFinishing(); }
     boolean importApplied(String operation) {
@@ -229,6 +244,7 @@ public class MainActivity extends Activity {
         });
     }
     void backupStagingFailed() { notifyJs("exportFailed"); }
+    void backupBusy() { notifyJs("transferBusy"); }
 
     private void applyReminder(JSONObject config) throws Exception {
         if (config.getBoolean("enabled") && !Reminders.allowed(this)) {
@@ -255,6 +271,7 @@ public class MainActivity extends Activity {
     @Override protected void onSaveInstanceState(Bundle outState) {
         if (pendingReminder != null) outState.putString("pendingReminder", pendingReminder.toString());
         outState.putString("pendingExport", pendingExport);
+        if (backups != null) outState.putInt("pendingPicker", backups.pickerRequest());
         super.onSaveInstanceState(outState);
     }
     @Override protected void onResume() {
@@ -271,11 +288,11 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, result);
         if (requestCode != EXPORT && requestCode != IMPORT) return;
         if (resultCode != RESULT_OK || result == null || result.getData() == null) {
-            if (requestCode == EXPORT && backups != null && !pendingExport.isEmpty()) backups.cancelExport(pendingExport);
+            if (backups != null) backups.cancelPicker(requestCode, pendingExport);
             return;
         }
         if (backups == null) { notifyJs(requestCode == EXPORT ? "exportFailed" : "importFailed"); return; }
-        backups.complete(requestCode, result.getData(), pendingExport);
+        if (!backups.complete(requestCode, result.getData(), pendingExport)) backupBusy();
     }
 
     @Override public void onBackPressed() {

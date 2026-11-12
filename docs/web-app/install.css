@@ -28,12 +28,12 @@
   margin-bottom: 0;
 }
 
-.is-standalone .install-tip {
+.is-standalone .install-tip details {
   display: none;
 }
 
 @media (display-mode: standalone) {
-  .install-tip {
+  .install-tip details {
     display: none;
   }
 }

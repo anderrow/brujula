@@ -34,6 +34,16 @@ async (page) => {
     await app.getByRole('button', {name: 'Health, Not rated', exact: true}).waitFor();
     check(await app.evaluate(() => JSON.parse(localStorage.getItem('brujula-state-v1')).draft.notes.health === 'Synthetic unsaved reflection'), 'Retried draft survives reload');
 
+    const observer = await context.newPage(); await observer.goto(base);
+    await observer.evaluate(() => { window.BrujulaWeb.exportBackup = data => { window.__recovery = data; }; });
+    await app.getByRole('button', {name: 'Work, Not rated', exact: true}).click();
+    await app.getByRole('textbox', {name: 'Your reflection', exact: true}).fill('Change after read-only page opened');
+    await app.getByRole('button', {name: 'Done', exact: true}).click();
+    await observer.locator('#save-status').waitFor();
+    await observer.locator('#recover').click();
+    check(await observer.evaluate(() => JSON.parse(window.__recovery).draft.notes.health === 'Synthetic unsaved reflection'), 'Read-only recovery retains complete original reflections after another page writes');
+    await observer.close();
+
     const legacy = await context.newPage();
     await legacy.goto(base);
     await legacy.evaluate(() => {
@@ -57,5 +67,62 @@ async (page) => {
     const readonly = await unsupported.newPage(); await readonly.goto(base);
     check(await readonly.getByText('This page is read-only.', {exact: false}).isVisible(), 'Browsers without exclusive editing support fail read-only');
   } finally { await unsupported.close(); }
+
+  const installed = await page.context().browser().newContext();
+  try {
+    await installed.addInitScript(() => {
+      Object.defineProperty(navigator, 'standalone', {value: true});
+      const register = navigator.serviceWorker.register.bind(navigator.serviceWorker);
+      let attempt = 0;
+      navigator.serviceWorker.register = async (...args) => {
+        if (attempt++ === 0) {
+          await new Promise(resolve => setTimeout(resolve, 300));
+          throw Error('Synthetic offline setup failure');
+        }
+        return register(...args);
+      };
+    });
+    const app = await installed.newPage(); await app.goto(base);
+    check(await app.locator('.offline-status').isVisible(), 'Installed app keeps offline preparation visible');
+    await app.getByRole('button', {name: 'Retry offline setup', exact: true}).waitFor();
+    check(await app.locator('.offline-status').isVisible(), 'Installed app keeps offline failure and retry visible');
+    check(await app.locator('.install-tip details').isHidden(), 'Installed app hides only installation instructions');
+    await app.getByRole('button', {name: 'Retry offline setup', exact: true}).click();
+    await app.getByText('Ready for offline use.', {exact: false}).waitFor();
+    check(await app.locator('.offline-status').isVisible(), 'Successful offline retry remains observable in installed mode');
+    await app.evaluate(async () => { if (!navigator.serviceWorker.controller) await new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', resolve, {once: true})); });
+    await installed.setOffline(true); await app.reload();
+    await app.getByRole('button', {name: 'Health, Not rated', exact: true}).waitFor();
+    check(await app.locator('.offline-status').isVisible(), 'Installed app reopens from its prepared cache offline');
+  } finally { await installed.close(); }
+
+  const oversized = await page.context().browser().newContext();
+  try {
+    await oversized.addInitScript(() => {
+      window.__writes = 0;
+      window.BrujulaNative = {
+        read: () => {
+          const C = window.BrujulaCore, state = C.initial(); state.locale = 'en';
+          state.draft.notes.health = 'Original draft';
+          const saved = C.clone(state.draft);
+          for (const area of C.categories) { saved.scores[area.id] = 5; saved.notes[area.id] = '€'.repeat(4000); }
+          state.history = Array.from({length: 100}, (_, i) => ({...saved, id: 'preserved-' + i, at: '2026-01-01T12:00:00.000Z', title: 'Preserved check-in'}));
+          window.__raw = JSON.stringify(state); return window.__raw;
+        },
+        write: () => { window.__writes++; return false; },
+        readReminders: () => JSON.stringify({enabled: false, canNotify: true}),
+        exportBackup: data => { window.__exported = data; }
+      };
+    });
+    const app = await oversized.newPage(); await app.goto('http://127.0.0.1:8877/app/src/main/assets/web/');
+    await app.getByText('This existing data exceeds', {exact: false}).waitFor();
+    check(await app.evaluate(() => window.__writes === 0), 'Oversized original is never overwritten during startup');
+    await app.getByRole('button', {name: 'Health, Not rated', exact: true}).click();
+    await app.getByRole('textbox', {name: 'Your reflection', exact: true}).fill('Edited oversized draft');
+    await app.getByRole('button', {name: 'Done', exact: true}).click();
+    check(await app.evaluate(() => window.__writes === 0), 'Oversized edits fail before native replacement');
+    await app.locator('#recover-save').click();
+    check(await app.evaluate(() => window.__exported === window.__raw), 'Oversized recovery export preserves exact original bytes after rejected edits');
+  } finally { await oversized.close(); }
   return {passed: checks.length, checks};
 }
