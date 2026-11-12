@@ -1,6 +1,6 @@
 # Current source update status — November 12, 2026
 
-Current source is iPhone 1.1.1 (build 7). This checklist retains earlier recorded archive/upload observations as history; they do not establish current account state, acceptance or availability. Recheck App Store Connect before acting on any account/create/upload step. This source update does not claim a new upload.
+Current source is iPhone 1.2.0 (build 8). This checklist retains earlier recorded archive/upload observations as history; they do not establish current account state, acceptance or availability. Recheck App Store Connect before acting on any account/create/upload step. This source update does not claim a new upload.
 
 # App Store preparation — Brújula for iPhone 1.1.0 (5)
 
@@ -8,12 +8,12 @@ Prepared on November 4, 2026. On November 5, 2026 the App Store Connect record *
 
 For this update, validate the new archive and current account state before choosing an internal TestFlight build. External testers and the public App Store come after a device pass on that internal build.
 
-The historical iPhone version line started at **1.0.0 (build 1)**. Current source versions are iPhone **1.1.1 (7)** and Android **1.2.1**. English and Spanish follow the iPhone language. Add a later language in the string catalogs and in the Xcode known regions; `ios/Tests/localizations.cjs` fails until every string has that language.
+The historical iPhone version line started at **1.0.0 (build 1)**. Current source versions are iPhone **1.2.0 (8)** and Android **1.3.0**. English and Spanish follow the iPhone language. Add a later language in the string catalogs and in the Xcode known regions; `ios/Tests/localizations.cjs` fails until every string has that language.
 
 ## Current source settings (November 12, 2026)
 
 - Bundle ID: `app.brujula.life.ios`. Icon name (`CFBundleDisplayName`): Brújula: Wheel of Life (English) and Brújula: Rueda de la vida (Spanish). Short bundle name (`CFBundleName`): BrujulaLife. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
-- Version: `MARKETING_VERSION` 1.1.1. Build: `CURRENT_PROJECT_VERSION` 7. Version 1.0.0 used builds 1 through 4: 1 and 2 were rejected, 3 was cancelled, and 4 is the internal TestFlight build. Apple keeps those build numbers.
+- Version: `MARKETING_VERSION` 1.2.0. Build: `CURRENT_PROJECT_VERSION` 8. Version 1.0.0 used builds 1 through 4: 1 and 2 were rejected, 3 was cancelled, and 4 is the internal TestFlight build. Apple keeps those build numbers.
 - Minimum iOS: 16.0. That meets Apple’s current minimum of iOS 13 (since September 9, 2026) and the April 2027 minimum of iOS 15.
 - `ITSAppUsesNonExemptEncryption` is `false` in Debug and Release. The app does not call CryptoKit, CommonCrypto, or its own network stack. Local files use Apple’s complete file protection, which is operating-system encryption. Standard exempt encryption is why the flag is false. Leaving it false lets TestFlight skip the Missing Compliance stop on every upload. If a later change adds non-exempt cryptography, remove this assumption and follow Apple’s export questionnaire.
 - `PrivacyInfo.xcprivacy` is in the app bundle. Tracking is off and collected-data types are empty. App-specific UserDefaults language preferences are declared under NSPrivacyAccessedAPICategoryUserDefaults with reason CA92.1. Inspect the current archive privacy report before submission.

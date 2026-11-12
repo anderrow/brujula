@@ -8,6 +8,8 @@ Language preferences are specific to this installation and are separate from ref
 
 The native interface follows the Android app's cream and green palette, serif headings, summary cards, area colors and icons, and three-tab navigation. Tap a wheel label or sector to open an area, or drag its point to change its score directly. Hollow points on an empty wheel are touch targets; they do not assign sample scores. VoiceOver users can adjust each point with swipe-up/down actions. Scores and notes save automatically, and dragging commits when the gesture ends.
 
+Each area includes three optional reflection prompts about recent actions, other possibilities or obstacles, and a next small step. The questions remain outside the text field so typing does not replace the guide. Respond freely in the existing note; prompts never add text to it or change the backup format.
+
 Open the labeled **Reminders** bell in the header or **Settings → Reflection reminder**. Both open the same daily, weekly and monthly scheduling controls. The header announces whether reminders are off, on, or blocked by notification permissions.
 
 ## Run on an iPhone
@@ -16,7 +18,7 @@ Open the labeled **Reminders** bell in the header or **Settings → Reflection r
 2. In the Brujula target, open **Signing & Capabilities**. Enable automatic signing and select your Apple development team. If the bundle identifier is unavailable for your team, change it to a unique identifier. An installed app's local data stays associated with its original bundle identifier and signing team.
 3. Connect and select your iPhone. Follow Xcode's prompts to trust the device and enable Developer Mode if needed, then click **Run**. For a simulator, select any available iPhone simulator instead.
 
-A build made without signing cannot be installed on a physical iPhone. TestFlight and App Store distribution still need a paid Apple Developer team, a signed archive, and the steps in [App Store preparation](../docs/app-store-preparation.md). Current source is 1.1.1 (build 7); this source update does not establish a new upload. Dated earlier distribution observations are kept in the preparation checklist. An upload needs Xcode 26 or later; the current SDK minimum is recorded in that checklist. The project sets `ITSAppUsesNonExemptEncryption` to false so a TestFlight build is not held for the export-compliance questionnaire.
+A build made without signing cannot be installed on a physical iPhone. TestFlight and App Store distribution still need a paid Apple Developer team, a signed archive, and the steps in [App Store preparation](../docs/app-store-preparation.md). Current source is 1.2.0 (build 8); this source update does not establish a new upload. Dated earlier distribution observations are kept in the preparation checklist. An upload needs Xcode 26 or later; the current SDK minimum is recorded in that checklist. The project sets `ITSAppUsesNonExemptEncryption` to false so a TestFlight build is not held for the export-compliance questionnaire.
 
 ## Transfer reflections from Android
 

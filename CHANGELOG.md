@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (Android) / 1.2.0 build 8 (iPhone)
+
+- Keep three optional reflection prompts visible beside each area note on Android, iPhone and the browser app.
+- Invite reflection on recent actions, other possibilities or obstacles, and a next small step.
+- Preserve free-text notes, automatic saving, history and existing backup compatibility.
+
 ## 1.2.1 (Android) / 1.1.1 build 7 (iPhone)
 
 - Keep portable backups within a consistent compact UTF-8 byte limit and preserve original recovery data.

@@ -242,6 +242,23 @@ struct AreaEditor: View {
                         Text("10 · Very satisfied")
                     }
                     .font(.system(.caption2)).foregroundStyle(Palette.muted)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Reflection prompts")
+                            .font(.subheadline.weight(.semibold))
+                            .accessibilityAddTraits(.isHeader)
+                        Text("What have you done recently to improve this area of your life?")
+                            .accessibilityIdentifier("reflection-prompt-actions")
+                        Text("What else could you have tried, or what got in the way?")
+                            .accessibilityIdentifier("reflection-prompt-possibilities")
+                        Text("What small step would you like to take next?")
+                            .accessibilityIdentifier("reflection-prompt-next-step")
+                        Text("These questions are optional. Use whichever helps you reflect.")
+                            .font(.footnote).foregroundStyle(Palette.muted)
+                    }
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Palette.pale, in: RoundedRectangle(cornerRadius: 14))
                     Text("Your reflection").font(.system(.subheadline).weight(.semibold)).padding(.top, 8)
                     TextEditor(text: $note)
                         .scrollContentBackground(.hidden)

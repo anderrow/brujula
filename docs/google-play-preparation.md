@@ -1,13 +1,13 @@
-# Google Play preparation — Brújula 1.2.1
+# Google Play preparation — Brújula 1.3.0
 
 Prepared on November 2, 2026. **No app has been uploaded to Play Console, submitted for review, or published on Google Play.** This checklist is preparation, not a guarantee of store acceptance. Recheck requirements when you decide to submit.
 
 ## Build and signing
 
-- Application ID: `app.brujula.life`; version name `1.2.1`; version code `6`.
+- Application ID: `app.brujula.life`; version name `1.3.0`; version code `7`.
 - Minimum Android API: 26 (Android 8). Compile and target API: 36 (Android 16).
-- Release bundle: `Brujula-1.2.1.aab`. This is the file for a future Play Console release; it cannot be installed directly on a phone.
-- Direct installation/update: `Brujula-1.2.1.apk`.
+- Release bundle: `Brujula-1.3.0.aab`. This is the file for a future Play Console release; it cannot be installed directly on a phone.
+- Direct installation/update: `Brujula-1.3.0.apk`.
 - Both files use the existing Brújula release signing certificate. Check their adjacent SHA-256 files.
 - Expected certificate SHA-256: `9ba64e260876d4c314f13c747486316bbf6078de623274b35a7151855ef94dbe`.
 - Retain the private release keystore and its protected password outside the public repository. Neither is included in delivery archives.
