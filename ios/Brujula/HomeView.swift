@@ -111,7 +111,7 @@ struct HomeView: View {
         } message: { Text(store.error ?? reminders.error ?? notice ?? "") }
         .fileImporter(isPresented: $importFile, allowedContentTypes: [.json], onCompletion: loadBackup)
         .fileExporter(isPresented: $exportFile, document: backup, contentType: .json,
-                      defaultFilename: "brujula-backup") { result in
+                      defaultFilename: store.ready ? "brujula-backup" : "brujula-recovery-copy") { result in
             if case .failure(let error) = result { notice = error.localizedDescription }
             backup = nil
         }

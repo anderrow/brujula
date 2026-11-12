@@ -237,7 +237,8 @@ public class MainActivityTest {
             shadowOf(web).getLastEvaluatedJavascriptCallback().onReceiveValue("true");
             assertTrue(result.exists()); assertFalse(transfer.reserveImport());
             String id = UUID.randomUUID().toString();
-            BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "notice").put("key", "exported").toString().getBytes(StandardCharsets.UTF_8));
+            // Directly repair the fixture: Windows renameTo does not emulate Android AtomicFile replacement.
+            java.nio.file.Files.write(result.toPath(), new JSONObject().put("id", id).put("kind", "notice").put("key", "exported").toString().getBytes(StandardCharsets.UTF_8));
             bridgeAction(web, "retryTransfer");
             await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("window.nativeNotice"));
             shadowOf(web).getLastEvaluatedJavascriptCallback().onReceiveValue("true");
