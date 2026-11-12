@@ -245,6 +245,8 @@ public class MainActivityTest {
             File export = new File(directory, "export.json"), payload = new File(directory, id + ".json");
             BackupTransfer.writeAtomic(export, "{unreadable export metadata".getBytes(StandardCharsets.UTF_8));
             BackupTransfer.writeAtomic(payload, "Preserved staged payload".getBytes(StandardCharsets.UTF_8));
+            transfer.cancelExport("unreadable-transfer");
+            assertTrue(export.exists());
             bridgeAction(web, "retryTransfer");
             await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("unreadable-transfer"));
             transfer.consume("unreadable-transfer");

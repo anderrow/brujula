@@ -151,7 +151,7 @@ final class BackupTransfer {
         });
     }
     synchronized void cancelExport(String id) {
-        if (id.equals(pendingExport())) { payload(id).delete(); file("export.json").delete(); }
+        if (validID(id) && id.equals(pendingExport())) { payload(id).delete(); file("export.json").delete(); }
     }
     boolean complete(int request, Uri uri, String exportId) {
         synchronized (this) {
