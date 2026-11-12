@@ -37,3 +37,5 @@
     display: none;
   }
 }
+
+.offline-status{font-size:13px;line-height:1.6;color:#394c40}.offline-status button{min-height:44px;text-decoration:underline}

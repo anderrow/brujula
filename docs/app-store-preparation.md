@@ -1,24 +1,28 @@
+# Current source update status — November 12, 2026
+
+Current source is iPhone 1.1.1 (build 7). This checklist retains earlier recorded archive/upload observations as history; they do not establish current account state, acceptance or availability. Recheck App Store Connect before acting on any account/create/upload step. This source update does not claim a new upload.
+
 # App Store preparation — Brújula for iPhone 1.1.0 (5)
 
 Prepared on November 4, 2026. On November 5, 2026 the App Store Connect record **Brújula: Wheel of Life** (`6831086667`) was created. Builds 1 and 2 were rejected with ITMS-90129 because the icon name was already used by another app. Build 4 is in internal TestFlight. The icon name is **Brújula: Wheel of Life** in English and **Brújula: Rueda de la vida** in Spanish. External testing and App Review have not started. Recheck the linked Apple pages before uploading.
 
-The first distribution step is internal TestFlight. External testers and the public App Store come after a device pass on that internal build.
+For this update, validate the new archive and current account state before choosing an internal TestFlight build. External testers and the public App Store come after a device pass on that internal build.
 
-The iPhone version line starts at **1.0.0 (build 1)**. Android 1.2.0 is a separate release. English and Spanish follow the iPhone language. Add a later language in the string catalogs and in the Xcode known regions; `ios/Tests/localizations.cjs` fails until every string has that language.
+The historical iPhone version line started at **1.0.0 (build 1)**. Current source versions are iPhone **1.1.1 (7)** and Android **1.2.1**. English and Spanish follow the iPhone language. Add a later language in the string catalogs and in the Xcode known regions; `ios/Tests/localizations.cjs` fails until every string has that language.
 
-## Project settings already in the repository
+## Current source settings (November 12, 2026)
 
 - Bundle ID: `app.brujula.life.ios`. Icon name (`CFBundleDisplayName`): Brújula: Wheel of Life (English) and Brújula: Rueda de la vida (Spanish). Short bundle name (`CFBundleName`): BrujulaLife. Category: Lifestyle (`public.app-category.lifestyle`). iPhone only (`TARGETED_DEVICE_FAMILY = 1`). Portrait only.
-- Version: `MARKETING_VERSION` 1.1.0. Build: `CURRENT_PROJECT_VERSION` 5. Version 1.0.0 used builds 1 through 4: 1 and 2 were rejected, 3 was cancelled, and 4 is the internal TestFlight build. Apple keeps those build numbers.
+- Version: `MARKETING_VERSION` 1.1.1. Build: `CURRENT_PROJECT_VERSION` 7. Version 1.0.0 used builds 1 through 4: 1 and 2 were rejected, 3 was cancelled, and 4 is the internal TestFlight build. Apple keeps those build numbers.
 - Minimum iOS: 16.0. That meets Apple’s current minimum of iOS 13 (since September 9, 2026) and the April 2027 minimum of iOS 15.
 - `ITSAppUsesNonExemptEncryption` is `false` in Debug and Release. The app does not call CryptoKit, CommonCrypto, or its own network stack. Local files use Apple’s complete file protection, which is operating-system encryption. Standard exempt encryption is why the flag is false. Leaving it false lets TestFlight skip the Missing Compliance stop on every upload. If a later change adds non-exempt cryptography, remove this assumption and follow Apple’s export questionnaire.
-- `PrivacyInfo.xcprivacy` is in the app bundle. Tracking is off, collected-data types are empty, and required-reason API entries are empty.
+- `PrivacyInfo.xcprivacy` is in the app bundle. Tracking is off and collected-data types are empty. App-specific UserDefaults language preferences are declared under NSPrivacyAccessedAPICategoryUserDefaults with reason CA92.1. Inspect the current archive privacy report before submission.
 - The 1024×1024 App Store icon is an sRGB PNG with no alpha channel. The artwork is a full square; iOS applies the icon mask.
 - No third-party SDKs, entitlements, push, iCloud, HealthKit, or advertising frameworks are linked. Charts, SwiftUI, UIKit, Foundation, and UserNotifications are system frameworks. The Release binary also weak-links `libswiftCoreLocation`; the app does not import CoreLocation or request location, and it has no location purpose string. Do not add a purpose string for an API the app does not use.
 - `ALWAYS_SEARCH_USER_PATHS` is `NO`, which removes Xcode 27’s traditional-headermap warning.
 - The Apple Developer team is not stored in the project. Select it locally under Signing & Capabilities. Automatic signing stays on. A free Personal Team cannot upload to TestFlight.
 
-## Upload SDK
+## Upload SDK and historical observations
 
 Since April 28, 2026, App Store Connect accepts uploads built with Xcode 26 or later and the iOS 26 SDK or later. Starting April 2027, uploads must use Xcode 27 or later and the iOS 27 SDK or later.
 
@@ -28,7 +32,7 @@ Checked on this Mac on November 4, 2026:
 - Unsigned Debug simulator build and unsigned Release device build both succeeded.
 - The Release `Info.plist` contains `ITSAppUsesNonExemptEncryption = false`, version `1.0.0`, build `1`, bundle `app.brujula.life.ios`, and minimum OS `16.0`.
 - The bundled privacy manifest matches the source file.
-- The Release executable’s undefined symbols do not include the C entry points Apple lists for required-reason APIs (`stat`, `getattrlist`, `statfs`, `sysctl`, `mach_absolute_time`, UserDefaults). The app source does not call those APIs. Before the first upload, open the Organizer archive’s privacy report and confirm it still shows no missing reasons.
+- The Release executable’s undefined symbols do not include the C entry points Apple lists for required-reason APIs (`stat`, `getattrlist`, `statfs`, `sysctl`, `mach_absolute_time`, UserDefaults). That historical binary inspection predates the current UserDefaults language preference and does not qualify the current source. Inspect the new archive privacy report for its declared preference reason and any additional covered API use.
 - Model, backup, and reminder date checks passed. Notification delivery on a physical iPhone has not been tested.
 - On November 5, 2026 a Release archive of 1.0.0 (1) was signed with Apple Distribution for Prodfact BV and exported to an IPA. Upload is waiting on an App Store Connect app record. The current API key can upload a build and cannot create that record.
 
@@ -68,9 +72,9 @@ Before inviting external testers, enter:
 - Beta App Review contact name, phone, and email. Leave sign-in empty. There is no account and no demo password.
 - Notes: “No login. The first screen is an empty wheel. Settings contains export, restore, clear data, and the privacy policy. Reminders are optional and local. The Health row is a self-assigned life-area score, not a medical feature.”
 
-## App Store listing, after TestFlight
+## App Store listing, after a verified current TestFlight build
 
-Add English (U.S.) and Spanish localizations in App Store Connect. The iPhone interface follows the phone language and has no in-app language picker. Primary language can stay English (U.S.).
+Add English (U.S.) and Spanish localizations in App Store Connect. The iPhone interface defaults to the phone language and includes system/English/Spanish selection in Settings. Primary language can stay English (U.S.).
 
 | Field | Draft |
 | --- | --- |

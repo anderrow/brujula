@@ -1,9 +1,10 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 Set-Location -LiteralPath $projectRoot
-$env:JAVA_HOME = (Get-Content -LiteralPath '.toolchain/java-home.txt' -Raw).Trim()
+$env:JAVA_HOME = (Get-Content -LiteralPath '.toolchain/java-home.txt' -Raw -Encoding UTF8).Trim()
 $env:ANDROID_HOME = Join-Path $projectRoot '.toolchain/android-sdk'
 $env:ANDROID_USER_HOME = Join-Path $projectRoot '.toolchain/android-user'
+Remove-Item Env:ANDROID_SDK_HOME -ErrorAction SilentlyContinue
 $env:GRADLE_USER_HOME = Join-Path $projectRoot '.toolchain/gradle-home'
 $env:TEMP = Join-Path $projectRoot '.toolchain/tmp'
 $env:TMP = $env:TEMP

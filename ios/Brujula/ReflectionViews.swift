@@ -25,7 +25,7 @@ struct AreaBadge: View {
     let area: Area
     var body: some View {
         Image(systemName: area.symbol)
-            .font(.system(size: 18, weight: .regular))
+            .font(.system(.title3).weight(.regular))
             .foregroundStyle(area.color)
             .frame(width: 34, height: 34)
             .background(area.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 11))
@@ -162,9 +162,9 @@ struct RadarView: View {
 
     private func areaLabel(_ area: Area) -> some View {
         VStack(spacing: 3) {
-            Text(area.title).font(.system(size: 10))
+            Text(area.title).font(.system(.caption2))
             Text(score(area).map(String.init) ?? "—")
-                .font(.system(size: 10, weight: .bold)).foregroundStyle(area.color)
+                .font(.system(.caption2).weight(.bold)).foregroundStyle(Palette.ink)
         }
         .foregroundStyle(Palette.ink)
         .lineLimit(1).minimumScaleFactor(0.7)
@@ -213,19 +213,19 @@ struct AreaEditor: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         AreaBadge(area: area)
-                        Text(localized("Changes saved automatically")).font(.system(size: 11)).foregroundStyle(Palette.muted)
+                        Text(localized("Changes saved automatically")).font(.system(.caption)).foregroundStyle(Palette.muted)
                         Spacer()
                     }
                     Text("How do you feel about this area?")
-                        .font(.system(size: 13)).foregroundStyle(Palette.muted)
+                        .font(.system(.subheadline)).foregroundStyle(Palette.muted)
                     HStack {
                         Button { score = max(0, (score ?? 0) - 1) } label: { stepper("minus") }
                             .accessibilityLabel(localizedFormat("%@ minus one", area.title))
                         Spacer()
                         HStack(alignment: .firstTextBaseline, spacing: 5) {
-                            Text(score.map(String.init) ?? "—").font(.system(size: 72, design: .serif))
+                            Text(score.map(String.init) ?? "—").font(.system(.largeTitle, design: .serif))
                                 .accessibilityIdentifier("editor-score")
-                            Text("/ 10").font(.system(size: 18)).foregroundStyle(Palette.muted)
+                            Text("/ 10").font(.system(.title3)).foregroundStyle(Palette.muted)
                         }
                         Spacer()
                         Button { score = min(10, (score ?? 0) + 1) } label: { stepper("plus") }
@@ -241,11 +241,11 @@ struct AreaEditor: View {
                         Spacer()
                         Text("10 · Very satisfied")
                     }
-                    .font(.system(size: 10)).foregroundStyle(Palette.muted)
-                    Text("Your reflection").font(.system(size: 12, weight: .semibold)).padding(.top, 8)
+                    .font(.system(.caption2)).foregroundStyle(Palette.muted)
+                    Text("Your reflection").font(.system(.subheadline).weight(.semibold)).padding(.top, 8)
                     TextEditor(text: $note)
                         .scrollContentBackground(.hidden)
-                        .font(.system(size: 16)).padding(8).frame(minHeight: 155)
+                        .font(.system(.body)).padding(8).frame(minHeight: 155)
                         .background(Palette.background, in: RoundedRectangle(cornerRadius: 12))
                         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Palette.line, lineWidth: 1))
                         .accessibilityLabel("Your reflection")
@@ -255,7 +255,7 @@ struct AreaEditor: View {
                         Spacer()
                         Text("\(note.utf16.count) / 4000")
                     }
-                    .font(.system(size: 10)).foregroundStyle(failed ? .red : Palette.muted)
+                    .font(.system(.caption2)).foregroundStyle(failed ? .red : Palette.muted)
                     if failed {
                         Text(note.utf16.count > 4000 ? localized("Keep your reflection to 4,000 characters or fewer.") :
                              localized("Your edits are still here. Tap Done to try saving again."))
@@ -264,7 +264,7 @@ struct AreaEditor: View {
                     Button {
                         if persist() { dismiss() }
                     } label: {
-                        Text("Done").font(.system(size: 13, weight: .semibold)).frame(maxWidth: .infinity, minHeight: 36)
+                        Text("Done").font(.system(.subheadline).weight(.semibold)).frame(maxWidth: .infinity, minHeight: 36)
                     }
                     .buttonStyle(.borderedProminent).buttonBorderShape(.roundedRectangle(radius: 14))
                     .accessibilityIdentifier("editor-done")
@@ -288,7 +288,7 @@ struct AreaEditor: View {
     }
 
     private func stepper(_ symbol: String) -> some View {
-        Image(systemName: symbol).font(.system(size: 20))
+        Image(systemName: symbol).font(.system(.title3))
             .frame(width: 47, height: 47).foregroundStyle(Palette.green)
             .background(Palette.pale, in: Circle())
     }

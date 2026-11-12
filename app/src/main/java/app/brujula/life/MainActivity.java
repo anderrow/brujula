@@ -6,7 +6,8 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
+import android.database.sqlite.SQLiteStatement;
+import android.database.sqlite.SQLiteDoneException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
@@ -31,11 +32,14 @@ import java.util.Collections;
 
 /** Offline-only shell. Only packaged resources can execute code or access the bridge. */
 public class MainActivity extends Activity {
-    private static final int EXPORT = 11, IMPORT = 12;
+    static final int EXPORT = 11, IMPORT = 12;
     private static final String ORIGIN = "https://app.brujula.local/";
     private WebView web;
     private SQLiteDatabase database;
-    private String pendingExport;
+    private String pendingExport = "";
+    private BackupTransfer backups;
+    private volatile boolean pageReady;
+    private int pageGeneration;
     private JSONObject pendingReminder;
     private static final int NOTIFICATIONS = 21;
 
@@ -44,8 +48,16 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        database = openOrCreateDatabase("brujula.db", MODE_PRIVATE, null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+        try {
+            database = openOrCreateDatabase("brujula.db", MODE_PRIVATE, null, broken -> {
+                throw new android.database.sqlite.SQLiteException("Saved database is damaged; original files preserved");
+            });
+            database.execSQL("CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+            database.execSQL("CREATE TABLE IF NOT EXISTS import_receipt (id INTEGER PRIMARY KEY CHECK(id=1), operation TEXT NOT NULL)");
+        } catch (RuntimeException error) { database = null; }
+        try { backups = BackupTransfer.get(this); pendingExport = backups.pendingExport(); }
+        catch (RuntimeException ignored) { backups = null; }
+        if (state != null) pendingExport = state.getString("pendingExport", pendingExport);
         Reminders.ensureChannel(this);
         if (state != null && state.getString("pendingReminder") != null) {
             try { pendingReminder = Reminders.parse(state.getString("pendingReminder")); } catch (Exception ignored) { }
@@ -76,6 +88,9 @@ public class MainActivity extends Activity {
         settings.setSupportZoom(false);
         web.addJavascriptInterface(new LocalStore(), "BrujulaNative");
         web.setWebViewClient(new WebViewClient() {
+            @Override public void onPageStarted(WebView view, String url, android.graphics.Bitmap icon) {
+                pageReady = false; pageGeneration++;
+            }
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) { return true; }
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
                 String url = req.getUrl().toString();
@@ -90,6 +105,7 @@ public class MainActivity extends Activity {
                 return denied();
             }
         });
+        if (backups != null) backups.attach(this);
         web.loadUrl(ORIGIN + "index.html");
         if (android.os.Build.VERSION.SDK_INT >= 33) {
             getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
@@ -128,41 +144,91 @@ public class MainActivity extends Activity {
                 catch (Exception ignored) { notifyJs("reminderFailed"); }
             });
         }
-        @JavascriptInterface public synchronized String read() {
-            try (Cursor cursor = database.rawQuery("SELECT json FROM state WHERE id=1", null)) {
-                return cursor.moveToFirst() ? cursor.getString(0) : "";
-            }
+        @JavascriptInterface public String read() { return readState(database); }
+        @JavascriptInterface public boolean write(String value) { return writeState(database, value, null); }
+        @JavascriptInterface public boolean restoreData(String value, String operation) {
+            boolean ok = writeState(database, value, operation);
+            if (ok && backups != null) backups.consume(operation);
+            return ok;
         }
-        @JavascriptInterface public synchronized boolean write(String value) {
-            try {
-                if (value.length() > 8_000_000) return false;
-                new JSONObject(value);
-                database.execSQL("INSERT OR REPLACE INTO state (id,json) VALUES (1,?)", new Object[]{value});
-                return true;
-            } catch (Exception ignored) { return false; }
+        @JavascriptInterface public void consumeTransfer(String operation) { if (backups != null && operation != null) backups.consume(operation); }
+        @JavascriptInterface public void pageReady() {
+            runOnUiThread(() -> { pageReady = true; if (backups != null) backups.dispatch(); });
         }
-        @JavascriptInterface public void exportBackup(String json) {
-            runOnUiThread(() -> {
-                pendingExport = json;
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("application/json");
-                intent.putExtra(Intent.EXTRA_TITLE, "brujula-backup-" + LocalDate.now() + ".json");
-                try { startActivityForResult(intent, EXPORT); }
-                catch (Exception ignored) { notifyJs("exportFailed"); }
-            });
+        @JavascriptInterface public void exportBackup(String json, boolean recovery) {
+            if (backups != null) backups.export(json, recovery); else runOnUiThread(() -> notifyJs("exportFailed"));
         }
+        @JavascriptInterface public void retryExport() { if (backups != null) backups.retryExport(); }
         @JavascriptInterface public void importBackup() {
             runOnUiThread(() -> {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE); intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"});
                 try { startActivityForResult(intent, IMPORT); }
                 catch (Exception ignored) { notifyJs("importFailed"); }
             });
         }
+        @JavascriptInterface public void resetData(String value) {
+            boolean ok = resetState(MainActivity.this, database, value);
+            runOnUiThread(() -> { if (web != null) web.evaluateJavascript("window.resetResult({ok:" + ok + "})", null); });
+        }
     }
+
+    static String readState(SQLiteDatabase db) {
+        if (db == null) throw new IllegalStateException("Saved data is unavailable and has not been replaced");
+        try (SQLiteStatement query = db.compileStatement("SELECT json FROM state WHERE id=1")) {
+            return query.simpleQueryForString();
+        } catch (SQLiteDoneException empty) { return ""; }
+    }
+    static boolean writeState(SQLiteDatabase db, String value, String importId) {
+        if (db == null) return false;
+        try {
+            if (value.getBytes(StandardCharsets.UTF_8).length > 8_000_000) return false;
+            new JSONObject(value);
+            db.beginTransaction();
+            try {
+                db.execSQL("INSERT OR REPLACE INTO state (id,json) VALUES (1,?)", new Object[]{value});
+                if (importId != null) db.execSQL("INSERT OR REPLACE INTO import_receipt (id,operation) VALUES (1,?)", new Object[]{importId});
+                db.setTransactionSuccessful();
+            } finally { db.endTransaction(); }
+            return true;
+        } catch (Exception ignored) { return false; }
+    }
+    static boolean resetState(android.content.Context context, SQLiteDatabase db, String value) {
+        try {
+            JSONObject previous = Reminders.settings(context);
+            JSONObject disabled = Reminders.parse(previous.toString()); disabled.put("enabled", false);
+            if (!Reminders.save(context, disabled)) return false;
+            if (writeState(db, value, null)) return true;
+            Reminders.save(context, previous);
+        } catch (Exception ignored) { }
+        return false;
+    }
+    void openExportPicker(String id, boolean recovery) {
+        pendingExport = id;
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE); intent.setType("application/json");
+        intent.putExtra(Intent.EXTRA_TITLE, "brujula-" + (recovery ? "recovery-original-" : "backup-") + LocalDate.now() + ".json");
+        try { startActivityForResult(intent, EXPORT); }
+        catch (Exception ignored) { notifyJs("exportFailed"); }
+    }
+    boolean backupPageReady() { return pageReady && web != null && !isFinishing(); }
+    boolean importApplied(String operation) {
+        if (database == null) return false;
+        try (SQLiteStatement query = database.compileStatement("SELECT operation FROM import_receipt WHERE id=1")) {
+            return operation.equals(query.simpleQueryForString());
+        } catch (RuntimeException ignored) { return false; }
+    }
+    void deliverBackup(String id, String script, boolean imported) {
+        if (!backupPageReady() || backups == null || !backups.current(this)) {
+            if (backups != null) backups.delivered(id, imported, false); return;
+        }
+        int generation = pageGeneration;
+        web.evaluateJavascript(script, result -> {
+            if (generation == pageGeneration && backupPageReady() && backups.current(this)) backups.delivered(id, imported, "true".equals(result));
+        });
+    }
+    void backupStagingFailed() { notifyJs("exportFailed"); }
 
     private void applyReminder(JSONObject config) throws Exception {
         if (config.getBoolean("enabled") && !Reminders.allowed(this)) {
@@ -188,6 +254,7 @@ public class MainActivity extends Activity {
     }
     @Override protected void onSaveInstanceState(Bundle outState) {
         if (pendingReminder != null) outState.putString("pendingReminder", pendingReminder.toString());
+        outState.putString("pendingExport", pendingExport);
         super.onSaveInstanceState(outState);
     }
     @Override protected void onResume() {
@@ -202,30 +269,13 @@ public class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent result) {
         super.onActivityResult(requestCode, resultCode, result);
-        if (resultCode != RESULT_OK || result == null || result.getData() == null) return;
-        Uri uri = result.getData();
-        try {
-            if (requestCode == EXPORT && pendingExport != null) {
-                try (OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
-                    if (out == null) throw new IllegalStateException();
-                    out.write(pendingExport.getBytes(StandardCharsets.UTF_8));
-                }
-                pendingExport = null;
-                notifyJs("exported");
-            } else if (requestCode == IMPORT) {
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                try (InputStream input = getContentResolver().openInputStream(uri)) {
-                    if (input == null) throw new IllegalStateException();
-                    byte[] bytes = new byte[8192];
-                    int count;
-                    while ((count = input.read(bytes)) != -1) {
-                        if (buffer.size() + count > 8_000_000) throw new IllegalArgumentException();
-                        buffer.write(bytes, 0, count);
-                    }
-                }
-                web.evaluateJavascript("window.restoreBackup(" + JSONObject.quote(buffer.toString("UTF-8")) + ")", null);
-            }
-        } catch (Exception ignored) { notifyJs(requestCode == EXPORT ? "exportFailed" : "importFailed"); }
+        if (requestCode != EXPORT && requestCode != IMPORT) return;
+        if (resultCode != RESULT_OK || result == null || result.getData() == null) {
+            if (requestCode == EXPORT && backups != null && !pendingExport.isEmpty()) backups.cancelExport(pendingExport);
+            return;
+        }
+        if (backups == null) { notifyJs(requestCode == EXPORT ? "exportFailed" : "importFailed"); return; }
+        backups.complete(requestCode, result.getData(), pendingExport);
     }
 
     @Override public void onBackPressed() {
@@ -235,6 +285,8 @@ public class MainActivity extends Activity {
         web.evaluateJavascript("window.handleBack()", result -> { if (!"true".equals(result)) finish(); });
     }
     @Override protected void onDestroy() {
+        pageReady = false;
+        if (backups != null) backups.detach(this);
         if (web != null) { web.removeJavascriptInterface("BrujulaNative"); web.destroy(); web = null; }
         // SQLite is process-owned; do not close it while a bridge call may be in flight.
         super.onDestroy();

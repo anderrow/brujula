@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.1 (Android) / 1.1.1 build 7 (iPhone)
+
+- Keep portable backups within a consistent compact UTF-8 byte limit and preserve original recovery data.
+- Prevent concurrent upgraded browser pages from silently replacing newer reflections.
+- Show persistent failed-save recovery and retain unsaved draft export access.
+- Preserve Android picker work across recreation and perform provider I/O in the background.
+- Recover native iPhone files without reinstalling and restore actual reminder requests after failed changes.
+- Keep reset completion tied to native reminder-disable and state-write success.
+- Improve reading contrast and scalable iPhone typography; declare the actual preference API usage.
+- Bind release verification claims to current source/check outputs and artifact hashes.
+- Clarify browser offline readiness, website entry translations and dated distribution observations.
+
 ## 1.2.0
 
 - Compile and target Android 16 / API 36 while retaining Android 8+ support.

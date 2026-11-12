@@ -1,6 +1,7 @@
 /* Public website copy. Keep both locales aligned when adding content. */
 window.BRUJULA_TRANSLATIONS = {
   en: {
+    openDemo: 'Open Demo', demoMeta: 'English web demo · Try in your browser', demoEyebrow: 'WEB DEMO', demoTitle: 'Try Brújula in your browser', demoBody: 'Explore the wheel, notes, and check-in history before installing a native app. Your reflections stay in this browser on your device.', demoFoot: 'The demo is in English. Wait for its offline-ready message and verify an offline reopen before relying on it. Scheduled reminders are available in the native Android and iOS apps.',
     title: 'Brújula — A moment for yourself',
     description: 'Get Brújula for Android and iPhone. A private, offline wheel of life with personal reflections, check-in history and optional reminders.',
     skip: 'Skip to content', home: 'Brújula home', navigation: 'Main navigation', language: 'Language', navInstall: 'How to install',
@@ -29,11 +30,12 @@ window.BRUJULA_TRANSLATIONS = {
     footerNote: 'A place to return to yourself.', privacyPolicy: 'Privacy policy', source: 'Explore the source'
   },
   es: {
+    openDemo: 'Abrir demo', demoMeta: 'Demo web en inglés · Pruébala en tu navegador', demoEyebrow: 'DEMO WEB', demoTitle: 'Prueba Brújula en tu navegador', demoBody: 'Explora la rueda, las notas y el historial antes de instalar una app nativa. Tus reflexiones se guardan en este navegador de tu dispositivo.', demoFoot: 'La demo está en inglés. Espera a que indique que está lista sin conexión y comprueba que vuelve a abrir sin conexión antes de depender de ella. Los recordatorios están disponibles en las apps nativas de Android e iOS.',
     title: 'Brújula — Un momento para ti',
-    description: 'Descarga Brújula para Android. Una rueda de la vida privada y sin conexión, con reflexiones personales, historial de evaluaciones y recordatorios opcionales.',
+    description: 'Descarga Brújula para Android e iPhone. Una rueda de la vida privada y sin conexión, con reflexiones personales, historial de evaluaciones y recordatorios opcionales.',
     skip: 'Ir al contenido', home: 'Inicio de Brújula', navigation: 'Navegación principal', language: 'Idioma', navInstall: 'Cómo instalar',
     heroEyebrow: 'UN MOMENTO PARA TI', heroTitleFirst: 'Tu vida,', heroTitleLast: 'en perspectiva.',
-    heroIntroFirst: 'Ocho áreas. Un pequeño espacio para reflexionar.', heroIntroLast: 'Encuentra tu propio rumbo con Brújula, una rueda de la vida privada para Android.',
+    heroIntroFirst: 'Ocho áreas. Un pequeño espacio para reflexionar.', heroIntroLast: 'Encuentra tu propio rumbo con Brújula, una rueda de la vida privada para Android e iPhone.',
     download: 'Descargar para Android', privateLine: 'Sin cuenta. Sin anuncios. Sin conexión en la app.',
     visualLabel: 'TU PROPIO PUNTO DE PARTIDA', visualNoteFirst: 'Una rueda limpia.', visualNoteLast: 'Un espacio que es tuyo.',
     previewAlt: 'Brújula empieza con una rueda de la vida limpia y una campana de recordatorios en la cabecera. Las ocho categorías están sin valorar y no hay datos personales precargados.',

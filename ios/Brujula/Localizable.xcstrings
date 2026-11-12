@@ -2736,6 +2736,57 @@
           }
         }
       }
+    },
+    "Retry loading": {
+      "comment": "Recovery action or persistent reminder failure message.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry loading"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a intentar la carga"
+          }
+        }
+      }
+    },
+    "Export preserved data (recovery copy)": {
+      "comment": "Recovery action or persistent reminder failure message.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export preserved data (recovery copy)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar los datos conservados (copia de recuperación)"
+          }
+        }
+      }
+    },
+    "Some reminders could not be restored. Open Reminders and save again.": {
+      "comment": "Recovery action or persistent reminder failure message.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some reminders could not be restored. Open Reminders and save again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron restaurar algunos avisos. Abre Recordatorios y vuelve a guardar."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

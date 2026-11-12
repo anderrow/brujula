@@ -1,5 +1,14 @@
 /* Generate the public policy from the same text bundled in the offline app. */
 const fs=require('node:fs');
+const check = process.argv.includes('--check');
+function emit(filename, data) {
+  if (check) {
+    const actual = fs.readFileSync(filename);
+    const same = Buffer.isBuffer(data) ? actual.equals(data) : actual.toString('utf8').replace(/\r\n/g, '\n') === data.replace(/\r\n/g, '\n');
+    if (!same) throw Error('Generated output is stale: ' + filename);
+  } else fs.writeFileSync(filename, data);
+}
+
 const path=require('node:path');
 const vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
@@ -7,8 +16,8 @@ const source=fs.readFileSync(path.join(root,'app/src/main/assets/web/privacy-cop
 const context={window:{}};vm.runInNewContext(source,context);
 const policy=context.window.BrujulaPrivacy.en;
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-fs.writeFileSync(path.join(root,'docs/privacy-copy.js'),source);
-fs.writeFileSync(path.join(root,'docs/privacy.html'),`<!doctype html>
+emit(path.join(root,'docs/privacy-copy.js'),source);
+emit(path.join(root,'docs/privacy.html'),`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Brújula privacy policy: offline reflections, optional reminders, local backups and deletion.">
 <title>Brújula — Privacy policy</title><link rel="icon" href="compass.svg"><link rel="stylesheet" href="style.css?v=language-1">

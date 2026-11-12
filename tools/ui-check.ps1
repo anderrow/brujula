@@ -14,7 +14,7 @@ function Invoke-Ui([string[]]$UiArgs) {
     $result = & node $cli cli '-s=brujula' @UiArgs
     $result | Out-File -LiteralPath 'output/playwright/cli.log' -Append -Encoding UTF8
     Write-Output $result
-    if ($LASTEXITCODE -ne 0) { throw 'Playwright command failed' }
+    if ($LASTEXITCODE -ne 0 -or (($result -join "`n") -match '(?m)^### Error')) { throw 'Playwright command failed' }
 }
 New-Item -ItemType Directory -Path 'output/playwright' -Force | Out-Null
 if ($Stage -eq 'open') {
@@ -40,6 +40,9 @@ if ($Stage -eq 'open') {
     $code = Get-Content -LiteralPath 'tools/ui-reminders.js' -Raw -Encoding UTF8
     Invoke-Ui @('run-code', $code)
     Invoke-Ui @('snapshot')
+} elseif ($Stage -eq 'reliability') {
+    $code = Get-Content -LiteralPath 'tools/ui-reliability.js' -Raw -Encoding UTF8
+    Invoke-Ui @('run-code', $code)
 } elseif ($Stage -eq 'close') {
     Invoke-Ui @('close')
 }

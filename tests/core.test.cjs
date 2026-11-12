@@ -56,3 +56,26 @@ test('radar geometry maps boundary scores to center and outer ring', () => {
   for(const point of C.points(zeros))assert.deepEqual(point,{x:180,y:168});
   for(const point of C.points(tens))assert.ok(Math.abs(Math.hypot(point.x-180,point.y-168)-113)<1e-9);
 });
+
+test('portable backups use compact UTF-8 bytes and preserve valid Unicode notes', () => {
+  const s = ratedState();
+  s.draft.notes.health = 'A reflection: é € 🌱 / <literal>';
+  const text = C.serialize(s);
+  assert.equal(C.byteLength(text), Buffer.byteLength(text, 'utf8'));
+  assert.deepEqual(C.migrate(JSON.parse(text)), s);
+  assert.equal(text, JSON.stringify(s));
+});
+
+test('byte-limit rejection cannot mutate the original state or silently truncate history', () => {
+  const s = ratedState();
+  for (const area of C.categories) s.draft.notes[area.id] = '€'.repeat(3900);
+  for (let i = 0; i < 100; i++) { const e = C.snapshot(s, 'Boundary'); e.id = 'boundary-' + i; s.history.push(e); }
+  assert.ok(C.validate(s));
+  const original = JSON.stringify(s);
+  assert.ok(original.length < C.maximumBytes);
+  assert.ok(Buffer.byteLength(original) > C.maximumBytes);
+  assert.throws(() => C.serialize(s), /8 MB/);
+  assert.equal(JSON.stringify(s), original);
+  s.history.length = 20;
+  assert.ok(Buffer.byteLength(C.serialize(s)) <= C.maximumBytes);
+});

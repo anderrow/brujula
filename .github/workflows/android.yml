@@ -29,6 +29,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Check the local data model
         run: node --test tests/core.test.cjs
+      - name: Check generated browser assets, privacy and verification guards
+        run: |
+          node tools/build-web-app.cjs --check
+          node tools/generate-privacy.cjs --check
+          python -m unittest discover -s tests -p verification_test.py
       - name: Check calendar recurrence
         run: |
           mkdir -p build/calendar-tests
