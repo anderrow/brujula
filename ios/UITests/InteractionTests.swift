@@ -9,6 +9,24 @@ final class InteractionTests: XCTestCase {
 
         let healthLabel = app.buttons["wheel-area-health"]
         XCTAssertTrue(healthLabel.waitForExistence(timeout: 10))
+        let untouched = app.buttons["wheel-area-work"]
+        untouched.tap()
+        let untouchedNote = app.textViews["area-note"]
+        XCTAssertTrue(untouchedNote.exists)
+        XCTAssertEqual(app.staticTexts["editor-score"].label, "—")
+        XCTAssertTrue((untouchedNote.value as? String ?? "").isEmpty)
+        app.buttons["editor-toolbar-done"].tap()
+        XCTAssertTrue(untouched.waitForExistence(timeout: 5))
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(untouched.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "wheel-handle-work").firstMatch.value as? String, "Not rated")
+        untouched.tap()
+        XCTAssertTrue(untouchedNote.exists)
+        XCTAssertEqual(app.staticTexts["editor-score"].label, "—")
+        XCTAssertTrue((untouchedNote.value as? String ?? "").isEmpty)
+        app.buttons["editor-toolbar-done"].tap()
+        XCTAssertTrue(healthLabel.waitForExistence(timeout: 5))
         screenshot("Empty wheel")
         healthLabel.tap()
         let slider = app.sliders["score-slider"]
