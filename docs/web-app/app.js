@@ -27,7 +27,7 @@
       deleteCopy:'This check-in and its notes will be removed from history. Your draft will stay the same. This cannot be undone.', deleted:'Check-in deleted',
       privacyPolicy:'Privacy policy', language:'Language', privacy:'Your private space', privacyCopy:'Everything is saved in the app’s local database. Brújula uses no accounts, ads, analytics, or Internet connection. Automatic cloud backups are disabled.',
       backup:'Look after your memories', backupCopy:'Export a backup before uninstalling the app or moving to another phone. Uninstalling erases local data. Backups include your notes: keep them somewhere private.',
-      export:'Export backup', import:'Restore backup', version:'Brújula 1.2.1 · A place to return to yourself', exported:'Backup exported',
+      export:'Export backup', import:'Restore backup', version:'Brújula 1.3.0 · A place to return to yourself', exported:'Backup exported',
       transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'Could not export the backup. Please try again.', importFailed:'Could not read the backup.', invalidBackup:'This backup is invalid or incompatible with this version.',
       importTitle:'Restore this backup?', importCopy:'This device’s draft, notes and entire history will be replaced with the contents of this backup.', importConfirm:'Restore data', imported:'Backup restored',
