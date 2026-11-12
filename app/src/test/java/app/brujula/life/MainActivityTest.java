@@ -92,9 +92,15 @@ public class MainActivityTest {
         shadowOf(app).grantPermissions(android.Manifest.permission.POST_NOTIFICATIONS);
         JSONObject enabled = Reminders.parse("{\"enabled\":true,\"frequency\":\"daily\",\"hour\":20,\"minute\":0,\"weekday\":1,\"monthDay\":1,\"locale\":\"en\"}");
         assertTrue(Reminders.save(app, enabled));
-        assertFalse(MainActivity.resetState(app, null, "{}"));
+        try (SQLiteDatabase db = stateDatabase()) {
+            assertTrue(MainActivity.writeState(db, "{\"original\":true}", null));
+            db.execSQL("CREATE TRIGGER reject_reset BEFORE INSERT ON state BEGIN SELECT RAISE(FAIL, 'Synthetic write denial'); END");
+            assertFalse(MainActivity.resetState(app, db, "{}"));
+            assertEquals("{\"original\":true}", MainActivity.readState(db));
+        }
         assertTrue(Reminders.settings(app).getBoolean("enabled"));
         assertTrue(Reminders.settings(app).getBoolean("registered"));
+        assertEquals(1, shadowOf(app.getSystemService(android.app.AlarmManager.class)).getScheduledAlarms().size());
     }
 
     @Test public void diskStateSurvivesCloseAndReopen() {
@@ -144,7 +150,7 @@ public class MainActivityTest {
         String export = UUID.randomUUID().toString(), unrelated = UUID.randomUUID().toString();
         BackupTransfer.writeAtomic(new File(directory, export + ".json"), new byte[]{1});
         BackupTransfer.writeAtomic(new File(directory, unrelated + ".json"), new byte[]{2});
-        BackupTransfer.writeAtomic(new File(directory, "export.json"), new JSONObject().put("id", export).toString().getBytes(StandardCharsets.UTF_8));
+        BackupTransfer.writeAtomic(new File(directory, "export.json"), new JSONObject().put("id", export).put("recovery", false).toString().getBytes(StandardCharsets.UTF_8));
         transfer.restorePicker(MainActivity.EXPORT);
         transfer.cancelPicker(MainActivity.IMPORT, export);
         assertTrue(new File(directory, export + ".json").exists());
@@ -218,6 +224,32 @@ public class MainActivityTest {
             assertTrue(result.exists());
             transfer.consume(id);
             assertFalse(result.exists());
+        }
+    }
+
+    @Test public void metadataRetry() throws Exception {
+        Application app = RuntimeEnvironment.getApplication(); BackupTransfer transfer = BackupTransfer.get(app);
+        File directory = new File(app.getNoBackupFilesDir(), "backup-transfer"), result = new File(directory, "result.json");
+        BackupTransfer.writeAtomic(result, "{unreadable metadata".getBytes(StandardCharsets.UTF_8));
+        try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup()) {
+            WebView web = shellWeb(controller.get()); bridgeAction(web, "pageReady");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("unreadable-transfer"));
+            shadowOf(web).getLastEvaluatedJavascriptCallback().onReceiveValue("true");
+            assertTrue(result.exists()); assertFalse(transfer.reserveImport());
+            String id = UUID.randomUUID().toString();
+            BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "notice").put("key", "exported").toString().getBytes(StandardCharsets.UTF_8));
+            bridgeAction(web, "retryTransfer");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("window.nativeNotice"));
+            shadowOf(web).getLastEvaluatedJavascriptCallback().onReceiveValue("true");
+            assertFalse(result.exists());
+            File export = new File(directory, "export.json"), payload = new File(directory, id + ".json");
+            BackupTransfer.writeAtomic(export, "{unreadable export metadata".getBytes(StandardCharsets.UTF_8));
+            BackupTransfer.writeAtomic(payload, "Preserved staged payload".getBytes(StandardCharsets.UTF_8));
+            bridgeAction(web, "retryTransfer");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("unreadable-transfer"));
+            transfer.consume("unreadable-transfer");
+            assertFalse(export.exists()); assertTrue(payload.exists());
+            assertTrue(transfer.reserveImport()); transfer.cancelPicker(MainActivity.IMPORT, "");
         }
     }
 

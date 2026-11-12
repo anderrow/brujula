@@ -237,17 +237,17 @@ public class MainActivity extends Activity {
         } catch (RuntimeException ignored) { return false; }
     }
     void deliverBackup(String id, String script, boolean imported, long token) {
-        if (!backupPageReady() || backups == null || !backups.current(this)) {
+        if (!backupPageReady() || backups == null || !backups.currentDelivery(this, token)) {
             if (backups != null) backups.delivered(id, imported, false, token); return;
         }
         int generation = pageGeneration;
         web.evaluateJavascript(script, result -> {
-            boolean currentPage = generation == pageGeneration && backupPageReady() && backups.current(this);
+            boolean currentPage = generation == pageGeneration && backupPageReady() && backups.currentDelivery(this, token);
             backups.delivered(id, imported, currentPage && "true".equals(result), token);
         });
     }
     void backupStagingFailed() { notifyJs("exportFailed"); }
-    void backupBusy() { notifyJs("transferBusy"); }
+    void backupBusy() { notifyJs("transferBusy"); if (backups != null) backups.dispatch(); }
 
     private void applyReminder(JSONObject config) throws Exception {
         if (config.getBoolean("enabled") && !Reminders.allowed(this)) {

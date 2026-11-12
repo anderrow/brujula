@@ -103,7 +103,7 @@ Reminders start disabled. A local inexact AlarmManager alarm is registered only 
 
 ## Test boundary
 
-No Android device was attached to ADB. This receipt does not attest a physical-device or emulator installation/runtime test. Android scheduling and native-shell tests used Robolectric (including Android 16); Any separately executed browser UI checks must be identified by their own current evidence; this package does not infer their success. Actual notification delivery timing, manufacturer battery restrictions, OS permission dialogs, native SQLite lifecycle, keyboard/insets, document pickers, and installation still require device acceptance.
+This receipt does not attest a physical-device or emulator installation/runtime test. Android scheduling and native-shell tests used Robolectric (including Android 16); any separately executed browser UI checks must be identified by their own current evidence; this package does not infer their success. Actual notification delivery timing, manufacturer battery restrictions, OS permission dialogs, native SQLite lifecycle, keyboard/insets, document pickers, and installation still require device acceptance.
 
 The deliverables are a signed release APK and Android App Bundle. Google Play account setup, public support email, declarations, closed testing where required, pre-launch reports and review remain pending; nothing has been uploaded to Play Console. No test data, build toolchain, signing password, or private keystore is included in it.
 '''

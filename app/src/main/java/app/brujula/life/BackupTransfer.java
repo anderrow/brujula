@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 /** Private staging and background provider I/O; imports live until explicit user disposition. */
 final class BackupTransfer {
+    private static final String UNAVAILABLE = "unreadable-transfer";
     private static BackupTransfer instance;
     static synchronized BackupTransfer get(Context context) {
         Context app = context.getApplicationContext();
@@ -46,7 +47,7 @@ final class BackupTransfer {
                 if (!busy && file("running.json").exists()) {
                     picker = 0;
                     JSONObject running = readRecord("running.json");
-                    if (!readRecord("result.json").has("id")) {
+                    if (!file("result.json").exists()) {
                         notice(running.optString("kind").equals("import") ? "importFailed" : "exportFailed");
                     }
                     file("running.json").delete();
@@ -59,7 +60,7 @@ final class BackupTransfer {
         if (activity.get() == previous) { activity.clear(); delivering = 0; }
     }
     synchronized void pageChanged(MainActivity target) { if (activity.get() == target) delivering = 0; }
-    synchronized boolean current(MainActivity candidate) { return activity.get() == candidate; }
+    synchronized boolean currentDelivery(MainActivity candidate, long token) { return activity.get() == candidate && delivering == token; }
     private File file(String name) { return new File(directory, name); }
     private File payload(String id) {
         if (!id.matches("[a-f0-9-]{36}")) throw new IllegalArgumentException("Invalid transfer identifier");
@@ -78,13 +79,26 @@ final class BackupTransfer {
         try { writeAtomic(file(name), value.toString().getBytes(StandardCharsets.UTF_8)); }
         catch (IOException error) { throw new IllegalStateException("Cannot preserve backup operation", error); }
     }
-    synchronized String pendingExport() { return readRecord("export.json").optString("id", ""); }
+    private boolean validID(String id) { return id.matches("[a-f0-9-]{36}"); }
+    private boolean validResult(JSONObject result) {
+        String kind = result.optString("kind");
+        return validID(result.optString("id")) && ("import".equals(kind)
+            || ("notice".equals(kind) && result.opt("key") instanceof String && !result.optString("key").isEmpty()));
+    }
+    private boolean unreadableExport() {
+        if (!file("export.json").exists()) return false;
+        JSONObject pending = readRecord("export.json");
+        return !validID(pending.optString("id")) || !(pending.opt("recovery") instanceof Boolean);
+    }
+    synchronized String pendingExport() {
+        return unreadableExport() ? UNAVAILABLE : readRecord("export.json").optString("id", "");
+    }
     private synchronized boolean begin() {
-        if (busy || picker != 0 || file("result.json").exists()) return false;
+        if (busy || picker != 0 || file("result.json").exists() || unreadableExport()) return false;
         busy = true; return true;
     }
     synchronized boolean reserveImport() {
-        if (busy || picker != 0 || file("result.json").exists()) return false;
+        if (busy || picker != 0 || file("result.json").exists() || unreadableExport()) return false;
         picker = MainActivity.IMPORT; return true;
     }
     synchronized int pickerRequest() { return picker; }
@@ -98,7 +112,6 @@ final class BackupTransfer {
     }
     private void rejected() {
         main.post(() -> { MainActivity target = activity.get(); if (target != null) target.backupBusy(); });
-        dispatch();
     }
     void export(String text, boolean recovery) {
         if (!begin()) { rejected(); return; }
@@ -182,6 +195,13 @@ final class BackupTransfer {
     }
     synchronized void consume(String id) {
         JSONObject result = readRecord("result.json");
+        if (UNAVAILABLE.equals(id)) {
+            boolean discarded = false;
+            if (file("result.json").exists() && !validResult(result)) { new AtomicFile(file("result.json")).delete(); discarded = true; }
+            if (unreadableExport()) { new AtomicFile(file("export.json")).delete(); discarded = true; }
+            if (discarded) { delivering = 0; picker = 0; }
+            return; // Preserve payloads whose operation metadata cannot be read.
+        }
         if (!id.equals(result.optString("id"))) return;
         if ("import".equals(result.optString("kind"))) payload(id).delete();
         file("result.json").delete(); delivering = 0;
@@ -193,13 +213,20 @@ final class BackupTransfer {
                 target = activity.get();
                 if (target == null || delivering != 0 || !target.backupPageReady()) return;
                 result = readRecord("result.json");
-                if (!result.has("id")) return;
+                if (!validResult(result)) {
+                    if (!file("result.json").exists() && !unreadableExport()) return;
+                    result = new JSONObject();
+                }
                 token = delivering = ++sequence;
             }
-            String id = result.optString("id"); boolean imported = "import".equals(result.optString("kind"));
+            boolean unavailable = !validResult(result);
+            String id = unavailable ? UNAVAILABLE : result.optString("id");
+            boolean imported = unavailable || "import".equals(result.optString("kind"));
             try {
-                if (imported && target.importApplied(id)) { consume(id); return; }
-                String script = imported ? "window.restoreBackup(" + JSONObject.quote(new String(Files.readAllBytes(payload(id).toPath()), StandardCharsets.UTF_8)) + "," + JSONObject.quote(id) + ")" : "(window.nativeNotice(" + JSONObject.quote(result.optString("key")) + "),true)";
+                if (!unavailable && imported && target.importApplied(id)) { consume(id); return; }
+                String script = unavailable ? "window.importUnavailable(" + JSONObject.quote(id) + ")"
+                    : imported ? "window.restoreBackup(" + JSONObject.quote(new String(Files.readAllBytes(payload(id).toPath()), StandardCharsets.UTF_8)) + "," + JSONObject.quote(id) + ")"
+                    : "(window.nativeNotice(" + JSONObject.quote(result.optString("key")) + "),true)";
                 main.post(() -> target.deliverBackup(id, script, imported, token));
             } catch (Exception error) {
                 // Keep the staged result through temporary read failures; retry/cancel is explicit.

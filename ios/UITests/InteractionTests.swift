@@ -103,6 +103,7 @@ final class InteractionTests: XCTestCase {
     }
 
     func testAccessibilityTextKeepsEditingReachable() {
+        continueAfterFailure = false
         let app = XCUIApplication()
         app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         app.launch()
@@ -115,9 +116,11 @@ final class InteractionTests: XCTestCase {
         }
         XCTAssertTrue(health.isHittable)
         health.tap()
-        XCTAssertTrue(app.sliders["score-slider"].waitForExistence(timeout: 5))
+        let slider = app.sliders["score-slider"]
+        XCTAssertTrue(slider.waitForExistence(timeout: 5))
+        slider.adjust(toNormalizedSliderPosition: 0.5)
         screenshot("Largest accessibility text")
-        app.navigationBars.buttons["Done"].tap()
+        app.buttons["editor-toolbar-done"].tap()
         app.terminate()
     }
 

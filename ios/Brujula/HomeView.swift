@@ -65,12 +65,12 @@ struct HomeView: View {
                     case .notes: notes
                     }
                 }
+                navigation
             }
             .id(language)
             .background(Palette.background)
             .foregroundStyle(Palette.ink)
             .toolbar(.hidden, for: .navigationBar)
-            .safeAreaInset(edge: .bottom, spacing: 0) { navigation }
         }
         .sheet(item: $area) { item in
             AreaEditor(area: item, wheel: store.state.draft) { score, note in

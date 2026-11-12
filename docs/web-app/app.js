@@ -431,7 +431,7 @@
   window.importUnavailable=importId=>{
     if(activeImport===importId && sheet.open)return true;
     activeImport=importId;
-    confirmAction('Backup not ready','The staged backup could not be opened. Retry loading it, or cancel this import. Saved reflections have not changed.','Retry loading backup',()=>{
+    confirmAction('Backup not ready','The pending backup could not be opened. Retry loading it, or cancel the pending transfer. Saved reflections have not changed.','Retry loading backup',()=>{
       activeImport=null;closeSheet();native.retryTransfer();
     });
     return true;
