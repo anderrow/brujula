@@ -2749,7 +2749,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Volver a intentar la carga"
+            "value": "Retry loading"
           }
         }
       }
@@ -2766,7 +2766,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Exportar los datos conservados (copia de recuperación)"
+            "value": "Export preserved data (recovery copy)"
           }
         }
       }
@@ -2783,7 +2783,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudieron restaurar algunos avisos. Abre Recordatorios y vuelve a guardar."
+            "value": "Some reminders could not be restored. Open Reminders and save again."
           }
         }
       }

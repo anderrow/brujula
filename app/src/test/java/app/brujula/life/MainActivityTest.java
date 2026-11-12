@@ -41,9 +41,9 @@ public class MainActivityTest {
     public static class TransferActivity extends MainActivity {
         volatile String received;
         @Override boolean backupPageReady() { return true; }
-        @Override void deliverBackup(String id, String script, boolean imported) {
+        @Override void deliverBackup(String id, String script, boolean imported, long token) {
             received = script;
-            BackupTransfer.get(this).delivered(id, imported, true);
+            BackupTransfer.get(this).delivered(id, imported, true, token);
         }
     }
     private void await(java.util.function.BooleanSupplier condition) throws Exception {
@@ -52,6 +52,16 @@ public class MainActivityTest {
             shadowOf(Looper.getMainLooper()).idle(); Thread.sleep(5);
         }
         assertTrue("Background transfer did not reach its expected state", condition.getAsBoolean());
+    }
+    private WebView shellWeb(MainActivity activity) {
+        FrameLayout content = activity.findViewById(android.R.id.content);
+        return (WebView) ((FrameLayout)content.getChildAt(0)).getChildAt(0);
+    }
+    private void bridgeAction(WebView web, String name) throws Exception {
+        Object bridge = shadowOf(web).getJavascriptInterface("BrujulaNative");
+        java.lang.reflect.Method method = bridge.getClass().getDeclaredMethod(name);
+        method.setAccessible(true); method.invoke(bridge);
+        shadowOf(Looper.getMainLooper()).idle();
     }
     private SQLiteDatabase stateDatabase() {
         SQLiteDatabase db = SQLiteDatabase.create(null);
@@ -151,6 +161,8 @@ public class MainActivityTest {
         File result = new File(directory, "result.json"), payload = new File(directory, id + ".json");
         BackupTransfer.writeAtomic(payload, value.getBytes(StandardCharsets.UTF_8));
         BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "import").toString().getBytes(StandardCharsets.UTF_8));
+        // A process can stop after recording completion but before removing its running marker.
+        BackupTransfer.writeAtomic(new File(directory, "running.json"), new JSONObject().put("id", id).put("kind", "import").toString().getBytes(StandardCharsets.UTF_8));
         try (ActivityController<TransferActivity> first = Robolectric.buildActivity(TransferActivity.class).setup()) {
             await(() -> first.get().received != null);
             assertTrue(first.get().received.contains("Preserved import"));
@@ -166,6 +178,46 @@ public class MainActivityTest {
             assertNull(afterCommit.get().received);
             assertFalse(payload.exists());
             assertEquals(value, MainActivity.readState(afterCommit.get().openDatabase()));
+        }
+    }
+
+    @Test public void pageDelivery() throws Exception {
+        Application app = RuntimeEnvironment.getApplication(); BackupTransfer.get(app);
+        File result = new File(app.getNoBackupFilesDir(), "backup-transfer/result.json");
+        String id = UUID.randomUUID().toString();
+        BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "notice").put("key", "exported").toString().getBytes(StandardCharsets.UTF_8));
+        try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup()) {
+            WebView web = shellWeb(controller.get());
+            bridgeAction(web, "pageReady");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().contains("window.nativeNotice"));
+            android.webkit.ValueCallback<String> obsolete = shadowOf(web).getLastEvaluatedJavascriptCallback();
+            shadowOf(web).getWebViewClient().onPageStarted(web, "https://app.brujula.local/index.html", null);
+            bridgeAction(web, "pageReady");
+            await(() -> shadowOf(web).getLastEvaluatedJavascriptCallback() != obsolete);
+            android.webkit.ValueCallback<String> current = shadowOf(web).getLastEvaluatedJavascriptCallback();
+            obsolete.onReceiveValue("true");
+            assertTrue("An obsolete page must not acknowledge the new delivery", result.exists());
+            current.onReceiveValue("true");
+            assertFalse(result.exists());
+        }
+    }
+
+    @Test public void deliveryRetry() throws Exception {
+        Application app = RuntimeEnvironment.getApplication(); BackupTransfer transfer = BackupTransfer.get(app);
+        File directory = new File(app.getNoBackupFilesDir(), "backup-transfer");
+        String id = UUID.randomUUID().toString(); File result = new File(directory, "result.json");
+        BackupTransfer.writeAtomic(result, new JSONObject().put("id", id).put("kind", "import").toString().getBytes(StandardCharsets.UTF_8));
+        try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup()) {
+            WebView web = shellWeb(controller.get()); bridgeAction(web, "pageReady");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().startsWith("window.importUnavailable"));
+            shadowOf(web).getLastEvaluatedJavascriptCallback().onReceiveValue("true");
+            assertTrue(result.exists());
+            BackupTransfer.writeAtomic(new File(directory, id + ".json"), "{}".getBytes(StandardCharsets.UTF_8));
+            bridgeAction(web, "retryTransfer");
+            await(() -> shadowOf(web).getLastEvaluatedJavascript().startsWith("window.restoreBackup"));
+            assertTrue(result.exists());
+            transfer.consume(id);
+            assertFalse(result.exists());
         }
     }
 

@@ -424,13 +424,21 @@
     if(web)candidate.locale='en';
     activeImport=importId;
     confirmAction(t('importTitle'),t('importCopy')+' '+t('importCount')+': '+candidate.history.length+'.',t('importConfirm'),()=>{
-      if(commit(candidate,importId)){activeImport=null;closeSheet();$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;render();toast(t('imported'));}
+      if(commit(candidate,importId)){loaded=true;activeImport=null;closeSheet();$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;render();toast(t('imported'));}
+    });
+    return true;
+  };
+  window.importUnavailable=importId=>{
+    if(activeImport===importId && sheet.open)return true;
+    activeImport=importId;
+    confirmAction('Backup not ready','The staged backup could not be opened. Retry loading it, or cancel this import. Saved reflections have not changed.','Retry loading backup',()=>{
+      activeImport=null;closeSheet();native.retryTransfer();
     });
     return true;
   };
   window.handleBack=()=>{if(sheet.open){closeSheet();return true;}if(tab!=='wheel'){changeTab('wheel');return true;}return false;};
   sheet.addEventListener('cancel',e=>{e.preventDefault();closeSheet();});
-  sheet.addEventListener('close',()=>{if(state)render();});
+  sheet.addEventListener('close',()=>{if(loaded)render();});
   sheet.addEventListener('click',e=>{if(e.target===sheet){const b=sheet.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)closeSheet();}});
   $('#settings').innerHTML=icon('settings');$('#settings').onclick=settings;
   if(!web)$('#reminder-shortcut').onclick=reminderDialog;

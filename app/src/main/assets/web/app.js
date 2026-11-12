@@ -25,7 +25,7 @@
       deleteCopy:'Se eliminará esta evaluación y sus notas del historial. Tu borrador no cambiará. Esta acción no se puede deshacer.', deleted:'Evaluación eliminada',
       privacyPolicy:'Política de privacidad', language:'Idioma', privacy:'Tu espacio privado', privacyCopy:'Todo se guarda en una base de datos local de la aplicación. Brújula no utiliza cuentas, anuncios, analítica ni conexión a Internet. Las copias automáticas en la nube están desactivadas.',
       backup:'Cuida tus recuerdos', backupCopy:'Exporta una copia antes de desinstalar la aplicación o cambiar de teléfono. Al desinstalar se borran los datos locales. La copia contiene tus notas: guárdala en un lugar privado.',
-      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.2.1 · Hecha para volver a ti', exported:'Copia de seguridad exportada',
+      export:'Exportar copia de seguridad', import:'Restaurar copia de seguridad', version:'Brújula 1.2.1 · A place to return to yourself', exported:'Copia de seguridad exportada',
       transferBusy:'Finish or cancel the current backup operation before starting another.',
       exportFailed:'No se pudo exportar la copia. Inténtalo de nuevo.', importFailed:'No se pudo leer la copia de seguridad.', invalidBackup:'La copia no es válida o no es compatible con esta versión.',
       importTitle:'¿Restaurar esta copia?', importCopy:'Se sustituirán el borrador, las notas y todo el historial de este dispositivo por el contenido de la copia.', importConfirm:'Restaurar los datos', imported:'Copia restaurada',
@@ -460,13 +460,21 @@
     if(web)candidate.locale='en';
     activeImport=importId;
     confirmAction(t('importTitle'),t('importCopy')+' '+t('importCount')+': '+candidate.history.length+'.',t('importConfirm'),()=>{
-      if(commit(candidate,importId)){activeImport=null;closeSheet();$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;render();toast(t('imported'));}
+      if(commit(candidate,importId)){loaded=true;activeImport=null;closeSheet();$('#settings').disabled=false;if(!web)$('#reminder-shortcut').disabled=false;render();toast(t('imported'));}
+    });
+    return true;
+  };
+  window.importUnavailable=importId=>{
+    if(activeImport===importId && sheet.open)return true;
+    activeImport=importId;
+    confirmAction('Backup not ready','The staged backup could not be opened. Retry loading it, or cancel this import. Saved reflections have not changed.','Retry loading backup',()=>{
+      activeImport=null;closeSheet();native.retryTransfer();
     });
     return true;
   };
   window.handleBack=()=>{if(sheet.open){closeSheet();return true;}if(tab!=='wheel'){changeTab('wheel');return true;}return false;};
   sheet.addEventListener('cancel',e=>{e.preventDefault();closeSheet();});
-  sheet.addEventListener('close',()=>{if(state)render();});
+  sheet.addEventListener('close',()=>{if(loaded)render();});
   sheet.addEventListener('click',e=>{if(e.target===sheet){const b=sheet.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)closeSheet();}});
   $('#settings').innerHTML=icon('settings');$('#settings').onclick=settings;
   if(!web)$('#reminder-shortcut').onclick=reminderDialog;

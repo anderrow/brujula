@@ -30,7 +30,8 @@ final class BackupTransfer {
         Thread thread = new Thread(r, "Brujula-backup"); thread.setDaemon(true); return thread;
     });
     private WeakReference<MainActivity> activity = new WeakReference<>(null);
-    private boolean busy, delivering;
+    private boolean busy;
+    private long delivering, sequence;
     private int picker;
 
     private BackupTransfer(Context context) {
@@ -39,13 +40,15 @@ final class BackupTransfer {
         if (!directory.exists() && !directory.mkdirs()) throw new IllegalStateException("Backup staging unavailable");
     }
     synchronized void attach(MainActivity next) {
-        activity = new WeakReference<>(next); delivering = false;
+        activity = new WeakReference<>(next); delivering = 0;
         worker.execute(() -> {
             synchronized (this) {
                 if (!busy && file("running.json").exists()) {
                     picker = 0;
                     JSONObject running = readRecord("running.json");
-                    notice(running.optString("kind").equals("import") ? "importFailed" : "exportFailed");
+                    if (!readRecord("result.json").has("id")) {
+                        notice(running.optString("kind").equals("import") ? "importFailed" : "exportFailed");
+                    }
                     file("running.json").delete();
                 }
             }
@@ -53,8 +56,9 @@ final class BackupTransfer {
         });
     }
     synchronized void detach(MainActivity previous) {
-        if (activity.get() == previous) { activity.clear(); delivering = false; }
+        if (activity.get() == previous) { activity.clear(); delivering = 0; }
     }
+    synchronized void pageChanged(MainActivity target) { if (activity.get() == target) delivering = 0; }
     synchronized boolean current(MainActivity candidate) { return activity.get() == candidate; }
     private File file(String name) { return new File(directory, name); }
     private File payload(String id) {
@@ -180,28 +184,32 @@ final class BackupTransfer {
         JSONObject result = readRecord("result.json");
         if (!id.equals(result.optString("id"))) return;
         if ("import".equals(result.optString("kind"))) payload(id).delete();
-        file("result.json").delete(); delivering = false;
+        file("result.json").delete(); delivering = 0;
     }
     void dispatch() {
         worker.execute(() -> {
-            JSONObject result; MainActivity target;
+            JSONObject result; MainActivity target; long token;
             synchronized (this) {
                 target = activity.get();
-                if (target == null || delivering || !target.backupPageReady()) return;
+                if (target == null || delivering != 0 || !target.backupPageReady()) return;
                 result = readRecord("result.json");
                 if (!result.has("id")) return;
-                delivering = true;
+                token = delivering = ++sequence;
             }
             String id = result.optString("id"); boolean imported = "import".equals(result.optString("kind"));
             try {
                 if (imported && target.importApplied(id)) { consume(id); return; }
                 String script = imported ? "window.restoreBackup(" + JSONObject.quote(new String(Files.readAllBytes(payload(id).toPath()), StandardCharsets.UTF_8)) + "," + JSONObject.quote(id) + ")" : "(window.nativeNotice(" + JSONObject.quote(result.optString("key")) + "),true)";
-                main.post(() -> target.deliverBackup(id, script, imported));
-            } catch (Exception error) { synchronized (this) { delivering = false; } notice("importFailed"); }
+                main.post(() -> target.deliverBackup(id, script, imported, token));
+            } catch (Exception error) {
+                // Keep the staged result through temporary read failures; retry/cancel is explicit.
+                main.post(() -> target.deliverBackup(id, "window.importUnavailable(" + JSONObject.quote(id) + ")", true, token));
+            }
         });
     }
-    synchronized void delivered(String id, boolean imported, boolean success) {
-        delivering = false;
+    synchronized void delivered(String id, boolean imported, boolean success, long token) {
+        if (delivering != token) return;
+        delivering = 0;
         if (success && !imported) consume(id);
     }
 }

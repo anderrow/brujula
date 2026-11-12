@@ -124,5 +124,35 @@ async (page) => {
     await app.locator('#recover-save').click();
     check(await app.evaluate(() => window.__exported === window.__raw), 'Oversized recovery export preserves exact original bytes after rejected edits');
   } finally { await oversized.close(); }
+
+  const recovery = await page.context().browser().newContext();
+  try {
+    await recovery.addInitScript(() => {
+      window.BrujulaNative = {
+        read: () => { throw Error('Synthetic initial read failure'); },
+        restoreData: data => { window.__restored = data; return true; },
+        consumeTransfer: id => { window.__cancelled = id; }, write: () => false,
+        readReminders: () => JSON.stringify({enabled: false, canNotify: true}),
+        exportBackup: data => { window.__exported = data; }
+      };
+    });
+    const app = await recovery.newPage(), errors = []; app.on('pageerror', error => errors.push(error.message));
+    await app.goto('http://127.0.0.1:8877/app/src/main/assets/web/');
+    await app.locator('#retry-load').waitFor();
+    await app.evaluate(() => window.importUnavailable('unreadable-import'));
+    await app.locator('#cancel').click();
+    check(await app.evaluate(() => window.__cancelled === 'unreadable-import') && await app.locator('#retry-load').isVisible() && errors.length === 0, 'Cancelling a staged import retains a usable failed-load recovery screen');
+    await app.evaluate(() => {
+      const restored = window.BrujulaCore.initial(); restored.locale = 'en';
+      window.restoreBackup(JSON.stringify(restored), 'retained-import');
+    });
+    await app.locator('#confirm').click();
+    check(await app.getByRole('button', {name: 'Settings', exact: true}).isEnabled(), 'A retained import restores editing after failed initial loading');
+    await app.getByRole('button', {name: 'Health, Not rated', exact: true}).click();
+    await app.getByRole('textbox', {name: 'Your reflection', exact: true}).fill('Unsaved note after recovery import');
+    await app.getByRole('button', {name: 'Done', exact: true}).click();
+    await app.locator('#recover-save').click();
+    check(await app.evaluate(() => JSON.parse(window.__exported).draft.notes.health === 'Unsaved note after recovery import'), 'Recovery export retains failed draft edits after an initial-load recovery import');
+  } finally { await recovery.close(); }
   return {passed: checks.length, checks};
 }

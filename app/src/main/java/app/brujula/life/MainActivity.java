@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
         web.setWebViewClient(new WebViewClient() {
             @Override public void onPageStarted(WebView view, String url, android.graphics.Bitmap icon) {
                 pageReady = false; pageGeneration++;
+                if (backups != null) backups.pageChanged(MainActivity.this);
             }
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) { return true; }
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
@@ -154,6 +155,7 @@ public class MainActivity extends Activity {
             if (backups != null) backups.export(json, recovery); else runOnUiThread(() -> notifyJs("exportFailed"));
         }
         @JavascriptInterface public void retryExport() { if (backups != null) backups.retryExport(); }
+        @JavascriptInterface public void retryTransfer() { if (backups != null) backups.dispatch(); }
         @JavascriptInterface public void importBackup() {
             runOnUiThread(() -> {
                 if (backups == null) { notifyJs("importFailed"); return; }
@@ -234,13 +236,14 @@ public class MainActivity extends Activity {
             return operation.equals(query.simpleQueryForString());
         } catch (RuntimeException ignored) { return false; }
     }
-    void deliverBackup(String id, String script, boolean imported) {
+    void deliverBackup(String id, String script, boolean imported, long token) {
         if (!backupPageReady() || backups == null || !backups.current(this)) {
-            if (backups != null) backups.delivered(id, imported, false); return;
+            if (backups != null) backups.delivered(id, imported, false, token); return;
         }
         int generation = pageGeneration;
         web.evaluateJavascript(script, result -> {
-            if (generation == pageGeneration && backupPageReady() && backups.current(this)) backups.delivered(id, imported, "true".equals(result));
+            boolean currentPage = generation == pageGeneration && backupPageReady() && backups.current(this);
+            backups.delivered(id, imported, currentPage && "true".equals(result), token);
         });
     }
     void backupStagingFailed() { notifyJs("exportFailed"); }
