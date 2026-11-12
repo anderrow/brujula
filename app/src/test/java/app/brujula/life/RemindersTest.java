@@ -153,4 +153,38 @@ public class RemindersTest {
             assertEquals(1, shadowOf(alarms).getScheduledAlarms().size());
         }
     }
+    @Test public void preferenceCommitFailure() throws Exception {
+        assertTrue(Reminders.save(app, config(true, "daily")));
+        java.io.File preferences = new java.io.File(app.getApplicationInfo().dataDir, "shared_prefs/reminders.xml");
+        java.io.File original = new java.io.File(preferences.getParentFile(), "reminders.saved");
+        java.io.File backup = new java.io.File(preferences.getPath() + ".bak");
+        assertTrue(preferences.isFile());
+        java.nio.file.Files.move(preferences.toPath(), original.toPath());
+        assertTrue(preferences.mkdir()); assertTrue(backup.mkdir());
+        java.io.File blocked = new java.io.File(preferences, "block"), blockedBackup = new java.io.File(backup, "block");
+        assertTrue(blocked.createNewFile()); assertTrue(blockedBackup.createNewFile());
+        try {
+            assertFalse(Reminders.save(app, config(false, "weekly")));
+            JSONObject retained = Reminders.settings(app);
+            assertTrue("A rejected preference commit must retain configured intent in memory", retained.getBoolean("enabled"));
+            assertEquals("daily", retained.getString("frequency"));
+            assertTrue(retained.getBoolean("registered"));
+            assertEquals(1, shadowOf(alarms).getScheduledAlarms().size());
+            try (android.database.sqlite.SQLiteDatabase db = android.database.sqlite.SQLiteDatabase.create(null)) {
+                db.execSQL("CREATE TABLE state (id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL)");
+                assertTrue(MainActivity.writeState(db, "{\"original\":true}", null));
+                assertFalse(MainActivity.resetState(app, db, "{}"));
+                assertEquals("{\"original\":true}", MainActivity.readState(db));
+                assertTrue(Reminders.settings(app).getBoolean("enabled"));
+            }
+        } finally {
+            assertTrue(blocked.delete()); assertTrue(preferences.delete());
+            assertTrue(blockedBackup.delete()); assertTrue(backup.delete());
+            java.nio.file.Files.move(original.toPath(), preferences.toPath());
+        }
+        Reminders.reschedule(app);
+        assertTrue(Reminders.settings(app).getBoolean("enabled"));
+        assertTrue(Reminders.settings(app).getBoolean("registered"));
+        assertEquals("daily", Reminders.settings(app).getString("frequency"));
+    }
 }

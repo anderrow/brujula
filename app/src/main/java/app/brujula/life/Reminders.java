@@ -72,7 +72,11 @@ public final class Reminders {
     @SuppressLint("ApplySharedPref")
     public static synchronized boolean save(Context ctx, JSONObject value) {
         String previous = prefs(ctx).getString("config", "{}");
-        if (!prefs(ctx).edit().putString("config", value.toString()).commit()) return false;
+        if (!prefs(ctx).edit().putString("config", value.toString()).commit()) {
+            // A failed disk commit has already changed the in-memory preferences map.
+            prefs(ctx).edit().putString("config", previous).commit();
+            return false;
+        }
         try { reschedule(ctx); return true; }
         catch (Exception e) {
             prefs(ctx).edit().putString("config", previous).commit();
